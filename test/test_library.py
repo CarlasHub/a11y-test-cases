@@ -246,9 +246,14 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("uses: actions/deploy-pages@v5", workflow)
         self.assertIn("path: _site", workflow)
         self.assertIn("https://cuddly-happiness-wny73jk.pages.github.io/", readme)
+        self.assertIn(
+            "**Director of Accessibility at Radancy, owner and reviewer:** "
+            "[Michael Spellacy](mailto:michael.spellacy@radancy.com)",
+            readme,
+        )
         self.assertTrue(
             readme.rstrip().endswith(
-                "**Director of Accessibility at Radancy:** [michael.spellacy@radancy.com](mailto:michael.spellacy@radancy.com)"
+                "**Reviewer:** [Rebecca Hammer](mailto:Rebecca.Hammer@radancy.com)"
             )
         )
 
