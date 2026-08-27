@@ -1,0 +1,16 @@
+{
+  "name": "radancy-a11y-test-case-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Radancy WCAG 2.2 Level A and AA test case manager for website and web-application QA",
+  "scripts": {
+    "build": "python3 scripts/build_site.py",
+    "check:build": "python3 scripts/build_site.py --check",
+    "validate": "python3 scripts/validate_library.py",
+    "test": "python3 -m unittest discover -s test -p 'test_*.py' -v",
+    "test:browser": "node scripts/browser_smoke.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.13.0"
+  }
+}

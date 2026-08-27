@@ -1,0 +1,374 @@
+{
+  "schema_version": "1.0",
+  "library_version": "1.0.0",
+  "standard": "WCAG 2.2",
+  "conformance_level": "AA",
+  "expected_criteria_count": 55,
+  "test_cases": [
+    {
+      "id": "TC-01",
+      "slug": "page-structure-and-language",
+      "title": "Page structure, reading order and language",
+      "summary": "Confirm that each page has a useful title and language, and that its visual structure and reading order are available programmatically.",
+      "affected_users": "People who use screen readers, braille, reading tools, voice control, simplified views or page headings to navigate.",
+      "use_when": [
+        "Run on every sampled page template and language.",
+        "Repeat when responsive layout, page content or the document language changes.",
+        "Include headings, lists, tables, groups, landmarks and instructions whose order affects meaning."
+      ],
+      "prerequisites": [
+        "A browser accessibility-tree or headings inspection tool.",
+        "A screen reader for a representative journey when available.",
+        "The expected page purpose and language."
+      ],
+      "steps": [
+        {"action": "Read the browser-tab title, main heading and visible page purpose.", "expected": "The title identifies the page and distinguishes it from other pages in the sample.", "evidence": "Page URL, browser title and main heading."},
+        {"action": "Inspect headings, landmarks, lists, tables, labels and grouped controls in the accessibility tree or with a structure tool.", "expected": "Visual relationships are represented by appropriate HTML structure and useful labels.", "evidence": "Structure outline or accessibility-tree extract for any material issue."},
+        {"action": "Read the page in DOM or screen-reader order without relying on its visual position.", "expected": "The reading sequence preserves meaning, including in responsive layouts and revealed content. Assess keyboard focus order separately under SC 2.4.3.", "evidence": "The first point where reading order differs materially from the intended order."},
+        {"action": "Inspect the page language and any passages written in another language.", "expected": "The page language is correct, and language changes are identified except for names, technical terms and words adopted into the surrounding language.", "evidence": "The html lang value and any relevant element lang values."}
+      ],
+      "criteria": [
+        {"id": "1.3.1", "title": "Info and Relationships", "level": "A", "anchor": "info-and-relationships", "pass": "Information, structure and relationships conveyed visually are available in text or can be determined programmatically.", "fail": "A heading, group, list, table relationship, label or other meaningful relationship exists only visually.", "not_applicable": "Not applicable is rarely valid for an HTML page; use it only when the selected target contains no visual or programmatic structure to compare.", "specialist": "Escalate complex tables, custom widgets or relationships whose correct semantics are unclear."},
+        {"id": "1.3.2", "title": "Meaningful Sequence", "level": "A", "anchor": "meaningful-sequence", "pass": "When presentation order affects meaning, a correct reading sequence can be programmatically determined.", "fail": "The DOM or assistive-technology reading sequence changes the meaning or separates dependent content.", "not_applicable": "Use only when no sequence on the selected target affects meaning.", "specialist": "Escalate when several reading sequences might reasonably preserve meaning."},
+        {"id": "2.4.2", "title": "Page Titled", "level": "A", "anchor": "page-titled", "pass": "The browser title describes the page topic or purpose.", "fail": "The title is missing, generic for a page with a specific purpose, or materially misleading. A duplicate title is a failure only when it does not describe the topic or purpose of one of the pages.", "not_applicable": "Not applicable is not valid for an in-scope web page.", "specialist": "Escalate only when the item may not meet WCAG's definition of a web page."},
+        {"id": "2.4.6", "title": "Headings and Labels", "level": "AA", "anchor": "headings-and-labels", "pass": "Headings and labels describe their topic or purpose.", "fail": "A heading or label is vague, misleading or does not describe the topic or purpose of the associated content or control.", "not_applicable": "Use only when the selected target contains no headings or labelled controls.", "specialist": "Escalate wording whose adequacy depends on specialised subject matter or legal context."},
+        {"id": "3.1.1", "title": "Language of Page", "level": "A", "anchor": "language-of-page", "pass": "The default human language of the page can be programmatically determined and matches the content.", "fail": "The page language is missing, invalid or identifies the wrong language.", "not_applicable": "Not applicable is not valid for a page containing human-language content.", "specialist": "Escalate mixed-language shells where no default language is clear."},
+        {"id": "3.1.2", "title": "Language of Parts", "level": "AA", "anchor": "language-of-parts", "pass": "Passages or phrases in another language are identified programmatically, except names, technical terms, indeterminate words and adopted words.", "fail": "A material language change is not identified and is pronounced or processed as the page language.", "not_applicable": "The inspected page contains no passage or phrase in a different human language.", "specialist": "Escalate uncertainty about whether a term is a proper name, technical term or adopted expression."}
+      ],
+      "example_targets": ["Home page, search results, detail page, legal page and every supported locale.", "Content cards whose visual headings or grouping must also be exposed structurally."],
+      "common_mistakes": ["Judging heading appearance without inspecting semantics.", "Treating skipped heading levels as an automatic failure without checking whether relationships remain understandable.", "Checking only the visible language selector instead of the programmatic language."]
+    },
+    {
+      "id": "TC-02",
+      "slug": "images-and-visual-text",
+      "title": "Images, icons and visual text",
+      "summary": "Confirm that meaningful non-text content has an equivalent and that decorative content is ignored.",
+      "affected_users": "Blind and low-vision people, people who disable images and people using text-only or braille output.",
+      "use_when": ["Run wherever images, icons, charts, logos, image buttons, CSS images, CAPTCHA or text embedded in images appear."],
+      "prerequisites": ["Rendered page, surrounding content and an accessibility-tree or image inspection tool."],
+      "steps": [
+        {"action": "Inventory meaningful, functional and decorative images and icons in every tested state.", "expected": "Every non-text item is classified by its purpose in context.", "evidence": "Target identifier, screenshot and classification."},
+        {"action": "Compare each meaningful item's accessible alternative with the information or purpose conveyed visually.", "expected": "The alternative provides the same purpose or information without unnecessary duplication.", "evidence": "Accessible name or alternative text and the visual context."},
+        {"action": "Inspect decorative and redundant images with a screen reader or accessibility tree.", "expected": "They do not add noise or hide meaningful information.", "evidence": "Accessibility-tree state for any questionable item."},
+        {"action": "Look for important text presented only as an image.", "expected": "Real text is used whenever the required visual presentation can be achieved with web technology, except when the presentation is essential or customisable.", "evidence": "Screenshot and content comparison."}
+      ],
+      "criteria": [
+        {"id": "1.1.1", "title": "Non-text Content", "level": "A", "anchor": "non-text-content", "pass": "Each non-text item meets the WCAG branch for its purpose: equivalent text, a purpose-identifying name, an appropriate media/test/sensory alternative, accessible CAPTCHA alternatives, or correct decorative treatment.", "fail": "A meaningful or functional item lacks an equivalent, a control name does not describe purpose, or meaningful content is hidden as decorative.", "not_applicable": "The completed sample contains no non-text content, including CSS images or image roles.", "specialist": "Escalate complex charts, CAPTCHA, sensory experiences and tests where a text equivalent could invalidate the purpose."},
+        {"id": "1.4.5", "title": "Images of Text", "level": "AA", "anchor": "images-of-text", "pass": "Text is used when the technologies in use can achieve the required visual presentation; only customisable or essential images of text use the criterion exceptions.", "fail": "Text is presented as an image even though the same visual presentation can be achieved with text and the image is neither customisable nor essential.", "not_applicable": "No image of text appears in the completed sample. Text incidental to a picture containing significant other visual content is not an image of text under WCAG.", "specialist": "Escalate logos, required visual presentations or technical diagrams when essentiality is disputed."}
+      ],
+      "example_targets": ["Logos, decorative banners, profile photographs, icon-only controls, infographics and map markers."],
+      "common_mistakes": ["Accepting a filename as useful alternative text.", "Writing alternatives that repeat adjacent text.", "Assuming an empty alt attribute makes a meaningful image decorative."]
+    },
+    {
+      "id": "TC-03",
+      "slug": "instructions-and-colour",
+      "title": "Instructions and colour meaning",
+      "summary": "Confirm that instructions and states do not depend only on position, shape, sound or colour.",
+      "affected_users": "Blind and low-vision people, people with colour-vision differences and people who interpret spatial instructions differently.",
+      "use_when": ["Run on instructions, required-field indicators, validation states, charts, maps, legends, filters and selected or saved states."],
+      "prerequisites": ["Every default, selected, error and success state in the sample."],
+      "steps": [
+        {"action": "Find instructions that refer to location, shape, size, direction, sound or another sensory characteristic.", "expected": "The instruction also identifies the control or information in a non-sensory way when needed.", "evidence": "Exact instruction and referenced target."},
+        {"action": "View the page without colour or compare all states whose only visible difference may be colour.", "expected": "Text, symbols, patterns, borders or programmatic state provide the same meaning.", "evidence": "Screenshots of each compared state."}
+      ],
+      "criteria": [
+        {"id": "1.3.3", "title": "Sensory Characteristics", "level": "A", "anchor": "sensory-characteristics", "pass": "Instructions needed to understand or operate content do not rely solely on shape, colour, size, visual location, orientation or sound.", "fail": "A user must perceive a sensory characteristic, such as 'use the green button on the right', with no other identifier.", "not_applicable": "No instruction in the completed sample refers to a sensory characteristic.", "specialist": "Escalate when the sensory description may be incidental rather than required."},
+        {"id": "1.4.1", "title": "Use of Color", "level": "A", "anchor": "use-of-color", "pass": "Colour is not the only visual means of conveying information, indicating an action, requesting a response or distinguishing an element.", "fail": "Meaning such as required, selected, error, available or unavailable is conveyed only by colour.", "not_applicable": "No information or state in the completed sample is conveyed through colour.", "specialist": "Escalate charts, maps and complex visualisations when the non-colour alternative is unclear."}
+      ],
+      "example_targets": ["Selected filters, required fields, availability indicators, validation errors, maps and saved-item indicators."],
+      "common_mistakes": ["Treating a contrast measurement as proof that colour is not the only cue.", "Checking only default state and missing error or selected states."]
+    },
+    {
+      "id": "TC-04",
+      "slug": "responsive-layout-and-spacing",
+      "title": "Orientation, text resizing, reflow and spacing",
+      "summary": "Confirm that content remains available and usable when the display rotates, text grows, the viewport narrows and text spacing changes.",
+      "affected_users": "People with low vision, people who magnify content and people who mount a device in one orientation.",
+      "use_when": ["Run on every representative page template and critical user task."],
+      "prerequisites": ["Desktop browser zoom, a 320 CSS-pixel viewport, portrait and landscape device orientations and a text-spacing bookmarklet or equivalent style injection."],
+      "steps": [
+        {"action": "Use the page in portrait and landscape orientation.", "expected": "Content and operation are not restricted to one orientation unless that orientation is essential.", "evidence": "Device, orientation and any lost content or function."},
+        {"action": "Increase text size to 200 percent without using assistive technology.", "expected": "Text grows without losing content or functionality, except captions and images of text.", "evidence": "Zoom or text-size setting and affected target."},
+        {"action": "At 400 percent browser zoom on a 1280 CSS-pixel-wide viewport, or an equivalent 320 CSS-pixel viewport, complete vertically scrolling tasks. Also inspect any horizontally scrolling content at a height equivalent to 256 CSS pixels.", "expected": "Content does not require scrolling in two dimensions and no content or function is lost, except parts that genuinely require a two-dimensional layout.", "evidence": "Viewport width and height, zoom and overflow location."},
+        {"action": "Apply line height 1.5 times font size, paragraph spacing 2 times font size, letter spacing 0.12 times font size and word spacing 0.16 times font size without changing other properties.", "expected": "No text or function is clipped, overlapped or lost.", "evidence": "Applied settings and affected content."}
+      ],
+      "criteria": [
+        {"id": "1.3.4", "title": "Orientation", "level": "AA", "anchor": "orientation", "pass": "The content does not restrict view or operation to portrait or landscape unless a specific orientation is essential.", "fail": "A user cannot view or operate content after rotating the device and the restriction is not essential.", "not_applicable": "Use only when the target has no display-orientation behaviour, such as a non-visual background endpoint.", "specialist": "Escalate claims that an orientation is essential."},
+        {"id": "1.4.4", "title": "Resize Text", "level": "AA", "anchor": "resize-text", "pass": "Text can be resized to 200 percent without loss of content or functionality, excluding captions and images of text.", "fail": "Text, instructions or controls become clipped, overlap, disappear or stop working at 200 percent.", "not_applicable": "Use only when the selected target contains no text to resize.", "specialist": "Escalate when the technology's text-resize method or an exception is uncertain."},
+        {"id": "1.4.10", "title": "Reflow", "level": "AA", "anchor": "reflow", "pass": "Information and functionality remain available without two-dimensional scrolling at 320 CSS pixels wide for vertically scrolling content and at 256 CSS pixels high for horizontally scrolling content, except parts that require a two-dimensional layout for meaning or use.", "fail": "Ordinary page content requires scrolling in two dimensions or content or functionality is lost at either applicable dimension.", "not_applicable": "Use only when the target is not visual web content capable of reflow.", "specialist": "Escalate maps, diagrams, data tables and other content that may require two-dimensional layout."},
+        {"id": "1.4.12", "title": "Text Spacing", "level": "AA", "anchor": "text-spacing", "pass": "Applying the supported WCAG text-spacing values without changing other styles causes no loss of content or functionality. For a language or script that does not use a listed property, test only the properties that exist for that language and script.", "fail": "Text is clipped, hidden, overlaps other content or makes a control unusable after the applicable spacing values are applied.", "not_applicable": "The selected target contains no text in markup that supports any of the listed spacing properties.", "specialist": "Escalate languages, scripts, canvas, SVG or embedded content when the applicable spacing properties or text technology are uncertain."}
+      ],
+      "example_targets": ["Search forms, filter panels, content cards, sticky primary controls, cookie dialogs, navigation menus and registration forms."],
+      "common_mistakes": ["Testing a narrow window without setting or recording the CSS-pixel viewport.", "Using only operating-system magnification instead of browser zoom for reflow.", "Failing content merely because a genuinely two-dimensional table scrolls within its own region."]
+    },
+    {
+      "id": "TC-05",
+      "slug": "contrast",
+      "title": "Text and control contrast",
+      "summary": "Measure whether text and essential visual boundaries have enough contrast in every meaningful state.",
+      "affected_users": "People with low vision, colour-vision differences or reduced contrast sensitivity.",
+      "use_when": ["Run on representative text styles and every control state, including focus, hover, selected, disabled when meaningful and validation error."],
+      "prerequisites": ["A contrast measurement tool that reports foreground, background and ratio.", "Unmodified page colours and no colour-vision simulation during measurement."],
+      "steps": [
+        {"action": "Measure ordinary text and images of text against their actual background.", "expected": "Ordinary text reaches 4.5:1; qualifying large-scale text reaches 3:1; documented WCAG exceptions are handled separately.", "evidence": "Foreground, background, ratio, font size and weight."},
+        {"action": "Measure boundaries and visual states needed to identify or operate controls, plus meaningful graphic parts.", "expected": "Required visual information reaches 3:1 against adjacent colours unless a documented exception applies.", "evidence": "Target, state, adjacent colours and ratio."}
+      ],
+      "criteria": [
+        {"id": "1.4.3", "title": "Contrast (Minimum)", "level": "AA", "anchor": "contrast-minimum", "pass": "Text reaches 4.5:1, or 3:1 for qualifying large-scale text, unless it is incidental, inactive, part of a logo or otherwise covered by the criterion's exception.", "fail": "Applicable text or an image of text is below its required ratio.", "not_applicable": "The selected target contains no visual text or image of text requiring contrast.", "specialist": "Escalate uncertain font-size conversion, anti-aliased sampling, gradients, images or exception claims."},
+        {"id": "1.4.11", "title": "Non-text Contrast", "level": "AA", "anchor": "non-text-contrast", "pass": "Visual information required to identify controls, states and meaningful graphics reaches 3:1 against adjacent colours, unless the appearance is user-agent controlled or essential.", "fail": "A required boundary, state indicator, focus indicator or meaningful graphic part is below 3:1.", "not_applicable": "No required non-text visual information appears in the selected target.", "specialist": "Escalate uncertainty about which visual parts are required to identify or understand the target."}
+      ],
+      "example_targets": ["Search-field borders, filter checkboxes, focus indicators, selected tabs, form errors, charts and map controls."],
+      "common_mistakes": ["Sampling from a compressed screenshot instead of rendered colours.", "Measuring decorative borders that are not required to identify the control.", "Using one measurement for all interactive states."]
+    },
+    {
+      "id": "TC-06",
+      "slug": "hover-and-focus-content",
+      "title": "Content shown on hover or focus",
+      "summary": "Confirm that tooltips, menus and other additional content can be dismissed, reached and kept visible when required.",
+      "affected_users": "People using magnification, keyboard navigation, pointer alternatives or screen readers.",
+      "use_when": ["Run when pointer hover or keyboard focus reveals content that later disappears."],
+      "prerequisites": ["A mouse or trackpad and keyboard."],
+      "steps": [
+        {"action": "Reveal each tooltip, popover, menu or preview using both hover and keyboard focus where available.", "expected": "The same useful content is available for relevant input methods.", "evidence": "Trigger, input method and revealed content."},
+        {"action": "Move the pointer onto the revealed content, dismiss it without moving focus where appropriate, and leave it open without interacting.", "expected": "The content is hoverable, dismissible and persistent until its trigger is removed, the user dismisses it or it is no longer valid, unless a WCAG exception applies.", "evidence": "Exact action and which of the three behaviours failed."}
+      ],
+      "criteria": [
+        {"id": "1.4.13", "title": "Content on Hover or Focus", "level": "AA", "anchor": "content-on-hover-or-focus", "pass": "Author-controlled additional content triggered by hover or focus is dismissible without moving hover or focus unless it communicates an input error or does not obscure or replace other content; hover-triggered content is hoverable; and the content remains until its trigger is removed, the user dismisses it or it is no longer valid.", "fail": "The content covers other information with no qualifying dismissal, disappears when the pointer enters it, or disappears before the user removes the trigger or dismisses it.", "not_applicable": "No author-controlled additional content becomes visible and then hidden because of hover or focus.", "specialist": "Escalate whether content is user-agent controlled or whether the input-error or non-obscuring condition applies."}
+      ],
+      "example_targets": ["Navigation flyouts, location suggestions, help tooltips, share controls and content-card previews."],
+      "common_mistakes": ["Testing hover without keyboard focus.", "Failing content that is controlled entirely by an unmodified browser title tooltip without reviewing the exception."]
+    },
+    {
+      "id": "TC-07",
+      "slug": "keyboard-and-focus",
+      "title": "Keyboard access, focus and bypass",
+      "summary": "Complete every interaction with a keyboard while tracking focus order, visibility and recovery.",
+      "affected_users": "People using keyboards, switch devices, keyboard emulators, screen readers or other sequential input.",
+      "use_when": ["Run on every shared interactive component and complete user task."],
+      "prerequisites": ["Physical keyboard and a clean browser session.", "Pointer parked outside the page content."],
+      "steps": [
+        {"action": "Starting from the browser controls, use Tab and Shift+Tab through the full page and every revealed state.", "expected": "Every function is reachable in a meaningful order, and focus is always visible and not entirely hidden.", "evidence": "Exact key sequence and first unexpected focus target."},
+        {"action": "Use Enter, Space, arrow keys and Escape according to each control's expected keyboard behaviour.", "expected": "All functionality works without a pointer and focus remains predictable when content opens, closes, updates or reports an error.", "evidence": "Control, key, expected operation and actual result."},
+        {"action": "Enter and leave menus, dialogs, autocomplete, carousels, embedded media and third-party content.", "expected": "Focus is never trapped unless a documented method for leaving is provided and usable.", "evidence": "Entry, attempted exit and recovery."},
+        {"action": "Activate the skip link or another bypass mechanism before traversing repeated content.", "expected": "Focus moves to the intended main region or repeated block is otherwise bypassed.", "evidence": "Bypass control and resulting focus target."}
+      ],
+      "criteria": [
+        {"id": "2.1.1", "title": "Keyboard", "level": "A", "anchor": "keyboard", "pass": "All functionality is operable through a keyboard interface without requiring specific timing for individual keystrokes, except functions whose underlying purpose requires path-dependent input.", "fail": "A function requires a mouse, touch or path gesture and has no keyboard operation.", "not_applicable": "The selected target provides no user functionality.", "specialist": "Escalate drawing, handwriting, free-path or other functions that may meet the exception."},
+        {"id": "2.1.2", "title": "No Keyboard Trap", "level": "A", "anchor": "no-keyboard-trap", "pass": "Keyboard focus can move away from every component; any non-standard exit method is communicated to the user.", "fail": "Focus enters a component and cannot be moved away with the keyboard, or the required exit method is not explained.", "not_applicable": "The selected target contains no keyboard-focusable component.", "specialist": "Escalate embedded third-party content when responsibility or an exit mechanism is unclear."},
+        {"id": "2.4.1", "title": "Bypass Blocks", "level": "A", "anchor": "bypass-blocks", "pass": "A mechanism lets users bypass blocks repeated across pages, such as navigation and repeated filters.", "fail": "Keyboard or assistive-technology users must traverse the same substantial repeated block on every page with no bypass method.", "not_applicable": "The page contains no content block repeated across multiple pages.", "specialist": "Escalate single-page applications whose route changes may alter what counts as repeated content."},
+        {"id": "2.4.3", "title": "Focus Order", "level": "A", "anchor": "focus-order", "pass": "When focus order affects meaning or operation, focus moves in an order that preserves both.", "fail": "Focus jumps, enters hidden content, misses revealed controls or reaches controls in an order that makes the task confusing or unusable.", "not_applicable": "The selected target has no focusable component or meaningful focus sequence.", "specialist": "Escalate composite widgets with managed focus patterns."},
+        {"id": "2.4.7", "title": "Focus Visible", "level": "AA", "anchor": "focus-visible", "pass": "Every keyboard-operable control has a mode in which keyboard focus is visible.", "fail": "Focus is absent, indistinguishable or visible only on some interactive controls.", "not_applicable": "The selected target has no keyboard-operable user interface.", "specialist": "Escalate custom focus styling whose visibility cannot be distinguished reliably."},
+        {"id": "2.4.11", "title": "Focus Not Obscured (Minimum)", "level": "AA", "anchor": "focus-not-obscured-minimum", "pass": "When a component receives keyboard focus, it is not entirely hidden by author-created content. If user-opened content obscures it, the focused component can be revealed without advancing focus.", "fail": "Sticky headers, cookie banners, dialogs or other authored content entirely hide the focused component with no qualifying way to reveal it.", "not_applicable": "The selected target has no keyboard-focusable component.", "specialist": "Escalate user-opened or user-repositioned content when the focus-obscuring boundary is unclear."}
+      ],
+      "example_targets": ["Global navigation, language picker, site search, filters, autocomplete, pagination, save control, cookie dialog, video controls and external handoff."],
+      "common_mistakes": ["Using the mouse after focus disappears.", "Counting every nonstandard arrow-key pattern as a WCAG failure without checking whether Tab and activation still operate the function.", "Checking only the homepage."]
+    },
+    {
+      "id": "TC-08",
+      "slug": "character-shortcuts",
+      "title": "Character-key shortcuts",
+      "summary": "Confirm that single-letter, number or punctuation shortcuts do not activate unexpectedly during speech input or typing.",
+      "affected_users": "People using speech recognition, dictation or keyboard input who may trigger controls accidentally.",
+      "use_when": ["Run when the website defines shortcuts activated by a letter, number, punctuation mark or symbol without a modifier key."],
+      "prerequisites": ["Feature shortcut documentation and every relevant editable field or focused component."],
+      "steps": [
+        {"action": "Identify author-defined shortcuts that use only a printable character and test them while focus is outside and inside their component.", "expected": "Each shortcut can be turned off, remapped to include a non-printable key, or is active only while its component has focus.", "evidence": "Shortcut, focus location, configuration and observed action."}
+      ],
+      "criteria": [
+        {"id": "2.1.4", "title": "Character Key Shortcuts", "level": "A", "anchor": "character-key-shortcuts", "pass": "Every author-defined character-only shortcut can be disabled, remapped to use a modifier or non-printable key, or is active only when the associated component has focus.", "fail": "A character-only shortcut remains globally active with no qualifying control.", "not_applicable": "The completed sample contains no author-defined character-only keyboard shortcut.", "specialist": "Escalate shortcuts supplied entirely by the browser, operating system or unmodified assistive technology."}
+      ],
+      "example_targets": ["Custom media players, interactive maps, command menus or advanced search interfaces."],
+      "common_mistakes": ["Testing ordinary access keys or browser shortcuts as though they were authored by the website.", "Assuming no visible shortcut help means no shortcut exists."]
+    },
+    {
+      "id": "TC-09",
+      "slug": "navigation-links-and-help",
+      "title": "Links, navigation and consistent help",
+      "summary": "Confirm that users can identify links, locate pages and rely on repeated navigation and help mechanisms.",
+      "affected_users": "People with cognitive disabilities, screen-reader users and anyone navigating an unfamiliar site.",
+      "use_when": ["Run across at least two pages sharing the same header, footer, navigation, controls or help."],
+      "prerequisites": ["Representative pages, site search, sitemap or other location mechanisms where supplied."],
+      "steps": [
+        {"action": "Review link text with its programmatically associated context and, separately, scan repeated link names.", "expected": "The purpose of each link can be determined from its text or permitted context.", "evidence": "Link text, context and destination."},
+        {"action": "Find each sampled standalone page through at least two available site mechanisms.", "expected": "Pages within a set can be located in more than one way, except process steps or result pages.", "evidence": "Page and each successful location method."},
+        {"action": "Compare repeated navigation, controls and help across representative pages.", "expected": "Repeated navigation stays in the same relative order; components with the same function have consistent identification; qualifying help appears in a consistent order.", "evidence": "Compared pages and inconsistent item."}
+      ],
+      "criteria": [
+        {"id": "2.4.4", "title": "Link Purpose (In Context)", "level": "A", "anchor": "link-purpose-in-context", "pass": "Each link's purpose can be determined from the link text alone or from the link text together with its programmatically determined context, except when the purpose would be ambiguous to users generally.", "fail": "A link such as 'Learn more' has no programmatic context identifying its destination or purpose.", "not_applicable": "The selected target contains no links.", "specialist": "Escalate when the claimed context is visually close but may not be programmatically associated."},
+        {"id": "2.4.5", "title": "Multiple Ways", "level": "AA", "anchor": "multiple-ways", "pass": "More than one way is available to locate each page within a set, except pages that are a result of or step in a process.", "fail": "An ordinary page within a set of pages can be reached through only one locating mechanism.", "not_applicable": "The page is not within a set of pages, or it is a process step or result page covered by the exception.", "specialist": "Escalate uncertainty about the set-of-pages or process-step boundary."},
+        {"id": "3.2.3", "title": "Consistent Navigation", "level": "AA", "anchor": "consistent-navigation", "pass": "Navigation mechanisms repeated across pages occur in the same relative order unless the user initiates the change.", "fail": "Repeated navigation items change relative order between pages without user action.", "not_applicable": "No navigation mechanism repeats across the compared pages.", "specialist": "Escalate personalised navigation or responsive variations whose user initiation is unclear."},
+        {"id": "3.2.4", "title": "Consistent Identification", "level": "AA", "anchor": "consistent-identification", "pass": "Components with the same functionality are identified consistently across the set of pages.", "fail": "The same function uses materially different names, icons or accessible identification without a reason.", "not_applicable": "No same-function component repeats across the compared pages.", "specialist": "Escalate components that look similar but may have different functions."},
+        {"id": "3.2.6", "title": "Consistent Help", "level": "A", "anchor": "consistent-help", "pass": "When contact details, human contact, self-help or automated contact mechanisms repeat across pages, they occur in the same relative order unless the user initiates a change.", "fail": "A qualifying repeated help mechanism moves to a different relative position without user action.", "not_applicable": "No listed help mechanism repeats across the set of pages.", "specialist": "Escalate whether a feature qualifies as one of the criterion's help mechanisms."}
+      ],
+      "example_targets": ["Search results, content categories, sitemap, header and footer navigation, support links, accessibility contact and chatbot."],
+      "common_mistakes": ["Checking link text without its permitted programmatic context.", "Applying Multiple Ways to a search-result page or application step.", "Requiring help to exist when the criterion only controls the order of qualifying help that is provided."]
+    },
+    {
+      "id": "TC-10",
+      "slug": "pointer-touch-and-motion",
+      "title": "Pointer, touch, dragging and motion",
+      "summary": "Confirm that pointer and touch interactions can be completed without complex gestures, accidental activation, dragging or device motion.",
+      "affected_users": "People with limited dexterity, tremor, speech input, alternative pointing devices or mounted devices.",
+      "use_when": ["Run on touch layouts, maps, sliders, carousels, draggable filters, swipe interfaces and motion-controlled features."],
+      "prerequisites": ["Mouse or trackpad, a touch device where touch behaviour exists, and a way to measure CSS-pixel target size."],
+      "steps": [
+        {"action": "Identify multipoint, path-based, dragging and device-motion operations, then try the documented single-pointer alternative.", "expected": "A simple alternative completes the same function unless the complex input is essential or the functionality falls within a documented exception.", "evidence": "Original gesture and alternative control."},
+        {"action": "Press down on controls, move away before release, and release on the target.", "expected": "Activation does not occur on the down event, or the user can abort, undo or reverse it, unless completing on down is essential.", "evidence": "Pointer sequence and resulting action."},
+        {"action": "Measure small pointer targets and the spacing around them in each responsive state.", "expected": "Targets are at least 24 by 24 CSS pixels or meet a documented spacing or other criterion exception.", "evidence": "Target dimensions, spacing and exception if used."}
+      ],
+      "criteria": [
+        {"id": "2.5.1", "title": "Pointer Gestures", "level": "A", "anchor": "pointer-gestures", "pass": "Functionality using multipoint or path-based gestures also works with a single pointer without a path-based gesture, unless the gesture is essential.", "fail": "A user must pinch, draw a path or perform another complex gesture with no simple alternative.", "not_applicable": "No multipoint or path-based author-defined gesture appears in the sample.", "specialist": "Escalate essentiality and unmodified user-agent or assistive-technology gestures."},
+        {"id": "2.5.2", "title": "Pointer Cancellation", "level": "A", "anchor": "pointer-cancellation", "pass": "Single-pointer functions avoid completion on down-event, can be aborted or undone, reverse an up-event action when appropriate, or document why down-event completion is essential.", "fail": "A destructive or consequential action completes immediately on pointer down with no qualifying recovery.", "not_applicable": "The selected target has no author-defined single-pointer operation.", "specialist": "Escalate drag-and-drop, freehand input and controls where down-event completion may be essential."},
+        {"id": "2.5.4", "title": "Motion Actuation", "level": "A", "anchor": "motion-actuation", "pass": "Functionality triggered by device or user motion also works through interface controls, and motion triggering can be disabled, unless motion is essential or supported through an accessibility interface.", "fail": "A user must shake, tilt or gesture at the device with no control alternative or disable option.", "not_applicable": "No author-defined functionality responds to device or user motion.", "specialist": "Escalate camera-based gestures and motion whose purpose may be essential."},
+        {"id": "2.5.7", "title": "Dragging Movements", "level": "AA", "anchor": "dragging-movements", "pass": "Any functionality using dragging can also be achieved by a single pointer without dragging, unless dragging is essential or the function is controlled by the user agent and not modified by the author.", "fail": "A user must drag an item and no button, selection or other non-drag alternative performs the same function.", "not_applicable": "No author-defined dragging movement appears in the sample.", "specialist": "Escalate maps, drawing tools and native controls where essentiality or author control is unclear."},
+        {"id": "2.5.8", "title": "Target Size (Minimum)", "level": "AA", "anchor": "target-size-minimum", "pass": "Pointer targets are at least 24 by 24 CSS pixels, meet the criterion's exact non-overlapping 24 CSS-pixel spacing calculation, or qualify for the equivalent-control, inline, user-agent-control or essential exception.", "fail": "A target is smaller than 24 by 24 CSS pixels, fails the exact spacing calculation and has no applicable exception.", "not_applicable": "The selected target has no author-defined pointer target.", "specialist": "Escalate small inline links, overlapping target-spacing measurements and exception decisions."}
+      ],
+      "example_targets": ["Carousel swipe, map pan and zoom, range sliders, draggable filter chips, save icons, pagination and small close buttons."],
+      "common_mistakes": ["Testing only desktop mouse behaviour.", "Failing every target below 24 pixels without evaluating spacing and other exceptions.", "Treating operating-system gestures as author-defined website gestures."]
+    },
+    {
+      "id": "TC-11",
+      "slug": "form-names-and-instructions",
+      "title": "Form names, instructions and autocomplete",
+      "summary": "Confirm that form controls have understandable visible and programmatic labels, instructions and recognised input purposes.",
+      "affected_users": "People using screen readers, speech input, memory support, autofill or alternative input.",
+      "use_when": ["Run on search, filters, registration, sign-in, account and multi-step forms."],
+      "prerequisites": ["Accessibility-tree inspection and representative form data."],
+      "steps": [
+        {"action": "Inspect every input, select, checkbox, radio button and custom form control in each state.", "expected": "Each control exposes the correct name, role, state and value and has visible instructions where users need them.", "evidence": "Visible label, accessible name, role and state."},
+        {"action": "For controls with a visible text label, compare the visible words with the computed accessible name.", "expected": "The accessible name contains the visible label text, preferably at the beginning.", "evidence": "Exact visible text and computed accessible name."},
+        {"action": "Inspect fields collecting information about the user, such as name, email or telephone number.", "expected": "Supported fields use the correct programmatic input-purpose token, normally an appropriate autocomplete value.", "evidence": "Field purpose and autocomplete value."}
+      ],
+      "criteria": [
+        {"id": "1.3.5", "title": "Identify Input Purpose", "level": "AA", "anchor": "identify-input-purpose", "pass": "The purpose of fields collecting information about the user can be programmatically determined when the field has a purpose listed by WCAG and the technology supports identification.", "fail": "A qualifying personal-information field lacks or uses the wrong recognised input-purpose token.", "not_applicable": "The form collects no information about the user covered by WCAG's input-purpose list.", "specialist": "Escalate fields whose purpose or correct autocomplete token is unclear."},
+        {"id": "2.5.3", "title": "Label in Name", "level": "A", "anchor": "label-in-name", "pass": "For controls with visible text or an image-of-text label, the accessible name contains that visible text.", "fail": "The accessible name omits or replaces the words a speech-input user can see.", "not_applicable": "The selected control has no visible label containing text or images of text.", "specialist": "Escalate split labels, localisation or name computation that produces conflicting visible text."},
+        {"id": "3.3.2", "title": "Labels or Instructions", "level": "A", "anchor": "labels-or-instructions", "pass": "Labels or instructions are provided when content requires user input, including required formats and constraints needed before submission.", "fail": "A user must guess a field's purpose, required status, format or essential constraint.", "not_applicable": "The selected target requires no user input.", "specialist": "Escalate whether an instruction is necessary before input or only useful after an error."},
+        {"id": "4.1.2", "title": "Name, Role, Value", "level": "A", "anchor": "name-role-value", "pass": "For every user-interface component, name and role can be programmatically determined; user-settable states, properties and values can be programmatically set; and changes are available to user agents and assistive technologies.", "fail": "A component has a missing or wrong name or role, or its current state/value is not exposed or updated.", "not_applicable": "The selected target contains no user-interface component.", "specialist": "Escalate custom widgets, shadow DOM, third-party components and conflicting accessibility-tree results."}
+      ],
+      "example_targets": ["Keyword and location search, autocomplete suggestions, range selectors, filter checkboxes, email subscription, account fields and submit controls."],
+      "common_mistakes": ["Using placeholder text as the only label.", "Checking the HTML label but not the computed accessible name.", "Adding autocomplete to organisation-specific fields that are not about the user."]
+    },
+    {
+      "id": "TC-12",
+      "slug": "form-errors-and-status",
+      "title": "Form errors, unexpected changes and status messages",
+      "summary": "Confirm that forms do not change context unexpectedly and that errors and status updates are visible, specific and programmatically available.",
+      "affected_users": "People using screen readers, magnification, keyboard navigation or cognitive support.",
+      "use_when": ["Run on search, filters, autocomplete, subscriptions, sign-in and application forms, including invalid, loading, empty and success states."],
+      "prerequisites": ["Known invalid and valid test data and a screen reader or accessibility-tree/live-region inspection method."],
+      "steps": [
+        {"action": "Move focus through controls without changing values, then change each relevant value without pressing a submit button.", "expected": "Receiving focus does not cause a change of context. Changing a setting does not cause a change of context unless the user was advised of that behaviour before using the control.", "evidence": "Control, focus or input action, prior instruction and unexpected navigation, focus change or major content change."},
+        {"action": "Submit empty, malformed and conflicting values.", "expected": "Automatically detected errors identify the field and describe the error in text; known correction suggestions are provided unless doing so would harm security or purpose.", "evidence": "Entered value, submitted state, error text and association."},
+        {"action": "Trigger loading, result counts, saved-item confirmation, errors and successful submission without moving focus.", "expected": "Status messages are exposed by role or properties so assistive technology can present them without receiving focus.", "evidence": "Trigger, visual message, role or properties and screen-reader observation where tested."}
+      ],
+      "criteria": [
+        {"id": "3.2.1", "title": "On Focus", "level": "A", "anchor": "on-focus", "pass": "Receiving focus does not initiate a change of context.", "fail": "Tabbing to a control submits, opens a new page, moves focus unexpectedly or causes another major context change.", "not_applicable": "The selected target contains no component capable of receiving focus.", "specialist": "Escalate whether a change qualifies as a change of context rather than a local content update."},
+        {"id": "3.2.2", "title": "On Input", "level": "A", "anchor": "on-input", "pass": "Changing a control's setting does not automatically cause a change of context unless the user was advised before using it.", "fail": "Selecting or typing a value unexpectedly navigates, submits or substantially changes context with no prior advice.", "not_applicable": "The selected target contains no user-interface control whose setting can change.", "specialist": "Escalate dynamic filtering or route updates whose context impact is unclear."},
+        {"id": "3.3.1", "title": "Error Identification", "level": "A", "anchor": "error-identification", "pass": "Automatically detected input errors identify the item in error and describe the error in text.", "fail": "An error is shown only by colour or icon, is generic, or is not associated clearly with the affected input.", "not_applicable": "The selected input has no automatically detected error condition in the tested scope.", "specialist": "Escalate server-side rejection that cannot be reproduced safely."},
+        {"id": "3.3.3", "title": "Error Suggestion", "level": "AA", "anchor": "error-suggestion", "pass": "When correction suggestions are known, they are provided unless they would jeopardise security or purpose.", "fail": "The system knows the required correction but reports only that an error occurred.", "not_applicable": "No automatically detected error has a known safe correction suggestion.", "specialist": "Escalate security-sensitive fields or suggestions whose safety is disputed."},
+        {"id": "4.1.3", "title": "Status Messages", "level": "AA", "anchor": "status-messages", "pass": "Qualifying status messages can be programmatically determined through role or properties and presented by assistive technology without receiving focus.", "fail": "A result count, progress, success or error status appears visually but is not exposed, or unnecessary focus movement is the only announcement method.", "not_applicable": "No content change in the completed sample meets the definition of a status message.", "specialist": "Escalate uncertainty about whether content is a status message or a change of context."}
+      ],
+      "example_targets": ["Search autocomplete, filter result count, no-results message, saved-item confirmation, registration validation and submission status."],
+      "common_mistakes": ["Moving focus to every status message instead of using appropriate status semantics.", "Checking error text but not its association with the field.", "Treating every dynamic update as a prohibited context change."]
+    },
+    {
+      "id": "TC-13",
+      "slug": "timeouts-data-and-authentication",
+      "title": "Timeouts, repeated data and authentication",
+      "summary": "Confirm that users can extend time, avoid re-entering information and complete authentication without unnecessary cognitive tests.",
+      "affected_users": "People who need more time, have memory or cognitive disabilities, use assistive technology or experience interruptions.",
+      "use_when": ["Run on sign-in, account settings, registration, multi-step forms, assessments and sessions with inactivity limits."],
+      "prerequisites": ["A safe test account when authentication is in scope and knowledge of configured time limits."],
+      "steps": [
+        {"action": "Identify each content-controlled time limit and approach expiry without completing the task.", "expected": "The user can turn off, adjust or extend the limit as required, or a documented WCAG exception applies.", "evidence": "Limit, warning time, available action and preserved data."},
+        {"action": "Complete a multi-step process that requests the same information more than once.", "expected": "Previously entered information is auto-populated or available for selection unless re-entry is essential, needed for security or no longer valid.", "evidence": "Repeated field, earlier value and available reuse method."},
+        {"action": "Complete authentication using password-manager paste and available alternatives.", "expected": "No cognitive-function test is required unless a qualifying alternative, assistance mechanism, object recognition or personal-content exception is provided.", "evidence": "Authentication step, blocked action and available alternative."},
+        {"action": "Before a legal, financial, test-response or user-controlled data submission, attempt to review and correct the information.", "expected": "The action is reversible, checked for input errors, or confirmed after a review opportunity.", "evidence": "Consequential action and prevention method."}
+      ],
+      "criteria": [
+        {"id": "2.2.1", "title": "Timing Adjustable", "level": "A", "anchor": "timing-adjustable", "pass": "Before encountering each content-set time limit, the user can turn it off or adjust it over a range at least ten times the default; or the user receives at least 20 seconds to extend it with a simple action and can extend it at least ten times. A documented real-time, essential or longer-than-20-hours exception may apply.", "fail": "A user loses the task or data because a content-controlled time limit lacks the required turn-off, adjustment or extension route and no exception applies.", "not_applicable": "No content-controlled time limit exists in the completed sample.", "specialist": "Escalate real-time events, security timeouts, auctions, assessments and claims that timing is essential."},
+        {"id": "3.3.4", "title": "Error Prevention (Legal, Financial, Data)", "level": "AA", "anchor": "error-prevention-legal-financial-data", "pass": "A qualifying legal, financial, test-response or user-controlled data action is reversible, checked for input errors with an opportunity to correct them, or reviewed, confirmed and correctable before finalisation.", "fail": "A qualifying consequential submission becomes final with no reversal, input check and correction opportunity, or review-and-confirm route.", "not_applicable": "The completed process performs none of the transactions or data changes named by the criterion.", "specialist": "Escalate whether a submission, assessment response or account-data change meets the criterion's legal, data or test-response scope."},
+        {"id": "3.3.7", "title": "Redundant Entry", "level": "A", "anchor": "redundant-entry", "pass": "Information previously entered by or provided to the user in the same process is auto-populated or available for selection, unless re-entry is essential, required for security or the information is no longer valid.", "fail": "A user must type the same valid information again in one process with no qualifying reason.", "not_applicable": "The process does not request previously entered or provided information again.", "specialist": "Escalate security confirmation and fields whose apparent duplication may serve a distinct purpose."},
+        {"id": "3.3.8", "title": "Accessible Authentication (Minimum)", "level": "AA", "anchor": "accessible-authentication-minimum", "pass": "Authentication does not require a cognitive-function test unless another method, an assistance mechanism, object recognition or personal content provides a qualifying route.", "fail": "Authentication requires memory, transcription, calculation or puzzle solving and blocks password managers or other qualifying alternatives.", "not_applicable": "No authentication process appears in the completed scope.", "specialist": "Escalate CAPTCHA, one-time codes, security restrictions and whether an alternative meets the criterion."}
+      ],
+      "example_targets": ["Sign-in, account editing, saved items, multi-step submissions, assessments, session expiry and registration."],
+      "common_mistakes": ["Failing every security timeout without evaluating exceptions.", "Treating confirmation of critical information as automatically redundant.", "Testing authentication without trying paste or a password manager."]
+    },
+    {
+      "id": "TC-14",
+      "slug": "automatic-audio-and-moving-content",
+      "title": "Automatic audio and moving content",
+      "summary": "Confirm that users can control automatic sound, movement, blinking, scrolling and updates.",
+      "affected_users": "Screen-reader users, people with attention, vestibular or cognitive disabilities and people who need more time to read.",
+      "use_when": ["Run when audio starts automatically or content moves, blinks, scrolls or updates automatically."],
+      "prerequisites": ["A clean session that has not stored media preferences."],
+      "steps": [
+        {"action": "Load the page and listen for audio that starts without user action.", "expected": "Audio lasting more than three seconds has an independent pause/stop control or an independent volume control.", "evidence": "Audio source, duration and control."},
+        {"action": "Observe carousels, video backgrounds, animations, tickers, result refreshes and other moving or updating content for more than five seconds.", "expected": "Qualifying movement can be paused, stopped or hidden, and qualifying auto-updates can be paused, stopped, hidden or have their update frequency controlled, unless essential.", "evidence": "Content, start behaviour, duration and control."}
+      ],
+      "criteria": [
+        {"id": "1.4.2", "title": "Audio Control", "level": "A", "anchor": "audio-control", "pass": "Audio that starts automatically and plays for more than three seconds can be paused or stopped, or its volume can be controlled independently of the overall system volume.", "fail": "Automatic audio lasts more than three seconds with no qualifying control.", "not_applicable": "No audio starts automatically, or automatic audio does not exceed three seconds.", "specialist": "Escalate multiple simultaneous audio sources or controls whose independence is unclear."},
+        {"id": "2.2.2", "title": "Pause, Stop, Hide", "level": "A", "anchor": "pause-stop-hide", "pass": "Automatically started moving, blinking or scrolling content lasting more than five seconds and presented alongside other content can be paused, stopped or hidden; auto-updating content can be paused, stopped, hidden or have its frequency controlled, unless essential.", "fail": "Qualifying movement or updates continue with no required user control.", "not_applicable": "No content matches the criterion's automatic start, duration, parallel presentation or updating conditions.", "specialist": "Escalate live feeds, progress indicators and content claimed to be essential."}
+      ],
+      "example_targets": ["Background video, carousel, animated statistics, live result counts and automatically rotating featured content."],
+      "common_mistakes": ["Failing a short transition that ends within five seconds.", "Assuming reduced-motion support alone satisfies the pause requirement.", "Testing after a stored preference already stopped the content."]
+    },
+    {
+      "id": "TC-15",
+      "slug": "prerecorded-media",
+      "title": "Prerecorded audio and video",
+      "summary": "Confirm that prerecorded media has accurate alternatives for speech, sounds and important visual information.",
+      "affected_users": "Deaf and hard-of-hearing people, blind and low-vision people and people who cannot play audio or video.",
+      "use_when": ["Run on every prerecorded audio-only, video-only and synchronised media item in the sample."],
+      "prerequisites": ["Access to captions, transcripts, audio description and the complete media item."],
+      "steps": [
+        {"action": "Classify the item as audio-only, video-only or synchronised media, and identify whether it is itself a clearly labelled media alternative for text.", "expected": "The applicable media branch is documented. The media-alternative-for-text exception applies to SC 1.2.1, 1.2.2 and 1.2.3, but not to SC 1.2.5.", "evidence": "Media URL, duration, classification and any applicable exception."},
+        {"action": "Play the full item with captions enabled and compare captions with speech, speaker changes and important sounds.", "expected": "Prerecorded synchronised media has accurate, synchronised captions unless it is a clearly labelled media alternative for text.", "evidence": "Timestamp and missing or inaccurate caption."},
+        {"action": "Review the transcript, media alternative or audio description against important visual information.", "expected": "The applicable Level A and Level AA visual-information alternatives are present and equivalent.", "evidence": "Timestamp, visual information and available alternative."}
+      ],
+      "criteria": [
+        {"id": "1.2.1", "title": "Audio-only and Video-only (Prerecorded)", "level": "A", "anchor": "audio-only-and-video-only-prerecorded", "pass": "Prerecorded audio-only content has an equivalent time-based media alternative, and prerecorded video-only content has an equivalent time-based media alternative or audio track, unless the media is a clearly labelled text alternative.", "fail": "Applicable audio-only or video-only content lacks the required equivalent.", "not_applicable": "The completed sample contains no prerecorded audio-only or video-only content, or the item is a qualifying text alternative.", "specialist": "Escalate whether an alternative conveys equivalent information and purpose."},
+        {"id": "1.2.2", "title": "Captions (Prerecorded)", "level": "A", "anchor": "captions-prerecorded", "pass": "Captions are provided for all prerecorded audio in synchronised media, except when the media is a clearly labelled text alternative.", "fail": "Captions are absent, materially inaccurate, omit important sounds or are not synchronised.", "not_applicable": "The completed sample has no prerecorded synchronised media with audio, or the media is a qualifying text alternative.", "specialist": "Escalate caption-quality judgements in unfamiliar languages or specialist terminology."},
+        {"id": "1.2.3", "title": "Audio Description or Media Alternative (Prerecorded)", "level": "A", "anchor": "audio-description-or-media-alternative-prerecorded", "pass": "Prerecorded synchronised video has either an equivalent time-based media alternative or audio description for important visual information, unless it is a qualifying text alternative.", "fail": "Important visual information is unavailable through either permitted alternative.", "not_applicable": "There is no prerecorded synchronised video requiring visual-information alternatives, or the media is a qualifying text alternative.", "specialist": "Escalate equivalence and whether existing dialogue already conveys the visual information."},
+        {"id": "1.2.5", "title": "Audio Description (Prerecorded)", "level": "AA", "anchor": "audio-description-prerecorded", "pass": "Important visual information in prerecorded synchronised video is provided through audio description or is already available in the main soundtrack.", "fail": "Important visual information in applicable prerecorded synchronised media is not available through the main soundtrack or audio description.", "not_applicable": "The completed sample contains no prerecorded video content in synchronised media. Being a media alternative for text is not an exception to SC 1.2.5.", "specialist": "Escalate whether an audio description is complete, accurately timed and needed."}
+      ],
+      "example_targets": ["Training videos, recorded presentations, demonstrations, interviews and recorded events."],
+      "common_mistakes": ["Treating automatically generated captions as passed without checking accuracy.", "Using a dialogue transcript as proof that visual information is covered.", "Combining Level A 1.2.3 and Level AA 1.2.5 into one result."]
+    },
+    {
+      "id": "TC-16",
+      "slug": "live-media",
+      "title": "Live media captions",
+      "summary": "Confirm that live synchronised media provides accurate captions.",
+      "affected_users": "Deaf and hard-of-hearing people and anyone who cannot use the audio stream.",
+      "use_when": ["Run on live webinars, meetings, presentations or broadcasts containing synchronised audio and video."],
+      "prerequisites": ["Access to the live event or an authorised rehearsal using the same captioning arrangement."],
+      "steps": [
+        {"action": "Join the live event with captions enabled and observe representative speech, names, numbers and important sounds.", "expected": "Captions are present, identify meaningful speakers and sounds, and are accurate and timely enough to follow the event.", "evidence": "Event, platform, timestamp and representative caption observations."}
+      ],
+      "criteria": [
+        {"id": "1.2.4", "title": "Captions (Live)", "level": "AA", "anchor": "captions-live", "pass": "Captions are provided for all live audio content in synchronised media.", "fail": "Applicable live synchronised media has no captions or captions are materially unusable.", "not_applicable": "The completed scope contains no live synchronised media with audio.", "specialist": "Escalate caption accuracy in unfamiliar languages, specialist terminology and high-risk live events."}
+      ],
+      "example_targets": ["Live webinars, streamed events, presentations and live question-and-answer sessions."],
+      "common_mistakes": ["Testing a recording instead of the live caption service.", "Checking only that a caption button exists."]
+    },
+    {
+      "id": "TC-17",
+      "slug": "flashing-content",
+      "title": "Flashing content",
+      "summary": "Identify content that may flash more than three times per second and route it for objective analysis.",
+      "affected_users": "People with photosensitive seizure disorders and people who experience physical reactions to flashing content.",
+      "use_when": ["Run on animation, video, advertising, transitions, loading effects and user-generated media that may flash."],
+      "prerequisites": ["A safe preview and an approved flash-analysis tool operated by a trained reviewer when flashing is suspected."],
+      "steps": [
+        {"action": "Review the inventory for rapid light-dark or saturated-red changes; do not repeatedly watch suspected flashing content.", "expected": "Suspected content is paused and sent for objective analysis rather than judged by eye.", "evidence": "Content identifier, timestamp range and reason for escalation."},
+        {"action": "Analyse suspected content with an approved photosensitive-epilepsy analysis method.", "expected": "Content does not flash more than three times in any one-second period, or the combined flash is below the general and red-flash thresholds.", "evidence": "Tool, version, source file, analysed interval and report."}
+      ],
+      "criteria": [
+        {"id": "2.3.1", "title": "Three Flashes or Below Threshold", "level": "A", "anchor": "three-flashes-or-below-threshold", "pass": "The page contains nothing that flashes more than three times in any one-second period, or the flash is below the general and red-flash thresholds.", "fail": "Objective analysis finds an applicable flash above the frequency and threshold limits.", "not_applicable": "The completed inventory contains no flashing content.", "specialist": "Always escalate suspected flashing for objective analysis; novice visual judgement is not sufficient for a pass."}
+      ],
+      "example_targets": ["Background video, celebratory animation, loading effects, event footage and embedded media."],
+      "common_mistakes": ["Watching suspected flashing repeatedly.", "Passing content by eye without threshold analysis.", "Confusing ordinary motion with rapid flashing."]
+    }
+  ]
+}

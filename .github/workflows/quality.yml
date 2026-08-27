@@ -1,0 +1,38 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned development dependency
+        run: npm ci --ignore-scripts
+
+      - name: Check generated output
+        run: python3 scripts/build_site.py --check
+
+      - name: Validate library
+        run: python3 scripts/validate_library.py
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s test -p 'test_*.py' -v
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/app.js
+          node --check scripts/browser_smoke.mjs

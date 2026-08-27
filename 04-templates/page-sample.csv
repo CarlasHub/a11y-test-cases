@@ -1,0 +1,2 @@
+target_id,target_type,url_or_identifier,template_or_component,journey,state,language,viewport_or_device,selection_reason,in_scope,notes
+PAGE-001,page,,,,default,en,,Required representative page,yes,

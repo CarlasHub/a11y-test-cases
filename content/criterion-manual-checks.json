@@ -1,0 +1,501 @@
+{
+  "schema_version": "1.0",
+  "expected_criteria_count": 55,
+  "checks": [
+    {
+      "criterion_id": "1.1.1",
+      "methods": ["Visual inspection", "Accessibility tree or screen reader", "Code inspection"],
+      "steps": [
+        {"action": "Inventory every image, icon, SVG, canvas item, chart, CAPTCHA and other non-text item in the tested target, including items revealed after interaction.", "expected": "Every non-text item is identified and classified as informative, functional, complex, sensory, test/CAPTCHA or decorative.", "record": "Target, state, classification and screenshot or element reference."},
+        {"action": "Inspect the accessible name or text alternative for each informative, functional, complex, sensory or test item and compare it with the item's purpose in context.", "expected": "The alternative provides the same purpose or information; functional items are named by action, and complex items have an adequate extended equivalent.", "record": "Visible content, computed alternative and any information or purpose that is missing."},
+        {"action": "Inspect decorative or redundant items, then inspect the accessible name of every functional non-text control.", "expected": "Decorative items can be ignored by assistive technology, redundant alternatives do not repeat nearby content unnecessarily, and functional items have names that describe their purpose. Record keyboard operation separately under SC 2.1.1.", "record": "Computed role and name and the first unnecessary or missing text alternative."}
+      ]
+    },
+    {
+      "criterion_id": "1.2.1",
+      "methods": ["Media review", "Transcript comparison"],
+      "steps": [
+        {"action": "Identify each prerecorded audio-only and video-only item and confirm whether it is itself a clearly labelled alternative for text.", "expected": "Every applicable item is classified correctly before an alternative is assessed.", "record": "Media URL, type, duration and alternative-for-text status."},
+        {"action": "For audio-only content, listen to the complete recording while reading its transcript or equivalent alternative.", "expected": "The alternative includes all speech, speaker identification and important non-speech audio needed to convey equivalent information.", "record": "Timestamp and exact omitted, inaccurate or out-of-order information."},
+        {"action": "For video-only content, watch the complete recording while reviewing its text alternative or audio track.", "expected": "The alternative communicates the actions, people, settings, on-screen text and visual changes needed to provide equivalent information.", "record": "Timestamp, visual information and the corresponding alternative."}
+      ]
+    },
+    {
+      "criterion_id": "1.2.2",
+      "methods": ["Complete media playback", "Caption review"],
+      "steps": [
+        {"action": "Identify every prerecorded video with synchronized audio and enable closed captions where they are not always visible.", "expected": "Captions are provided unless the media is a clearly labelled media alternative for text. If the caption control cannot be operated, also record that issue under SC 2.1.1 and SC 4.1.2.", "record": "Media URL, media-alternative status, caption-control name and enabled state."},
+        {"action": "Play the complete media and compare captions with all speech, speakers and important sounds.", "expected": "Captions accurately communicate spoken content, identify speakers when needed and include meaningful sounds.", "record": "Timestamp, spoken or audible content and the caption shown."},
+        {"action": "Check caption timing, order, readability and continued availability after seek, pause, full-screen and responsive changes.", "expected": "Captions are synchronized closely enough to follow, remain readable and do not disappear during supported player states.", "record": "Player state, timestamp and any timing, clipping or availability problem."}
+      ]
+    },
+    {
+      "criterion_id": "1.2.3",
+      "methods": ["Media review", "Audio-description or text-alternative comparison"],
+      "steps": [
+        {"action": "Identify each applicable prerecorded synchronized video and locate its audio description or complete media alternative.", "expected": "At least one permitted alternative is available unless the video is a clearly labelled alternative for text.", "record": "Media URL, alternative type and how it is reached."},
+        {"action": "Watch the complete video and list important visual information not already provided in the main soundtrack.", "expected": "Actions, people, scene changes, on-screen text and other visuals needed to understand the content are identified for comparison.", "record": "Timestamp and each material visual detail not present in the main audio."},
+        {"action": "Compare the identified visual details with the audio description or media alternative from start to finish.", "expected": "The provided alternative communicates the material visual information in a usable sequence.", "record": "Timestamp, expected information and the exact omission or mismatch."}
+      ]
+    },
+    {
+      "criterion_id": "1.2.4",
+      "methods": ["Live-session observation", "Caption review"],
+      "steps": [
+        {"action": "Before an in-scope live synchronized broadcast begins, verify that live captions are scheduled and available to viewers.", "expected": "An operational caption method is present for the live audio content.", "record": "Broadcast, caption method, language and how captions are enabled."},
+        {"action": "During the broadcast, observe representative segments containing ordinary speech, names, numbers, speaker changes and important sounds.", "expected": "Captions appear for the live audio and communicate material content with usable delay and accuracy.", "record": "Observation time, spoken content, displayed caption and delay or material error."},
+        {"action": "Check captions through player state changes such as full-screen, layout changes and reconnecting where these are supported.", "expected": "Captions remain available, readable and associated with the correct live content.", "record": "Player state and any loss, clipping or incorrect association."}
+      ]
+    },
+    {
+      "criterion_id": "1.2.5",
+      "methods": ["Complete media playback", "Audio-description comparison"],
+      "steps": [
+        {"action": "Locate and enable the audio-description version or track for each prerecorded video in synchronized media.", "expected": "Audio description is provided for important visual information that is not already conveyed in the main soundtrack. The media-alternative-for-text exception does not apply to SC 1.2.5. Record an inoperable control separately under SC 2.1.1 and SC 4.1.2.", "record": "Media URL, control or alternative version, activation result and information already available in the main soundtrack."},
+        {"action": "Play the complete video and note important visual information that is not already spoken in the main soundtrack.", "expected": "Material actions, characters, scene changes, on-screen text and other visual information are identified for comparison.", "record": "Timestamp and each material visual detail."},
+        {"action": "Listen to the audio description without watching the screen and compare it with the identified visual details.", "expected": "The description communicates the necessary visual information at an appropriate time without making the main audio unusable.", "record": "Timestamp, description heard and any missing, late or conflicting information."}
+      ]
+    },
+    {
+      "criterion_id": "1.3.1",
+      "methods": ["Visual inspection", "Accessibility tree", "Screen reader"],
+      "steps": [
+        {"action": "Inventory visual headings, landmarks, lists, tables, field labels, field groups, instructions, emphasized text and relationships created by position or formatting.", "expected": "Every meaningful structure or relationship that needs programmatic representation is included in the test inventory.", "record": "Page area, visible relationship and element reference."},
+        {"action": "Inspect each inventoried item in the DOM or accessibility tree, including table header associations and form label or description relationships.", "expected": "HTML semantics or programmatic associations expose the same structure and relationships shown visually.", "record": "Visible presentation, computed role/name/relationship and first mismatch."},
+        {"action": "Read a representative complex section with a screen reader using headings, landmarks, lists, table navigation and form navigation.", "expected": "The announced structure lets the user understand and navigate the same relationships without relying on visual presentation.", "record": "Navigation command, announcement and any relationship that cannot be determined."}
+      ]
+    },
+    {
+      "criterion_id": "1.3.2",
+      "methods": ["DOM-order review", "Screen reader", "Responsive review"],
+      "steps": [
+        {"action": "Identify content where sequence affects meaning or operation, including instructions, form steps, cards, columns and content revealed by controls.", "expected": "Every sequence that could change meaning is included in the review.", "record": "Page area, intended sequence and why order matters."},
+        {"action": "Read the content in DOM or screen-reader order without using its visual position.", "expected": "The programmatic reading sequence preserves meaning and relationships. Assess keyboard focus order separately under SC 2.4.3.", "record": "Announced sequence and the first item that appears too early or too late."},
+        {"action": "Repeat after responsive reordering and after opening or updating dynamic content.", "expected": "Every supported layout and state keeps a meaningful programmatic sequence.", "record": "Viewport or state, visual sequence and programmatic sequence."}
+      ]
+    },
+    {
+      "criterion_id": "1.3.3",
+      "methods": ["Content review", "Keyboard and screen-reader confirmation"],
+      "steps": [
+        {"action": "Search instructions and help text for references that depend on shape, colour, size, visual location, orientation or sound.", "expected": "All instructions using sensory descriptions are identified, including instructions revealed after errors or interaction.", "record": "Exact instruction text and target it describes."},
+        {"action": "Follow each instruction without relying on the referenced sensory characteristic.", "expected": "The target can also be identified by text, accessible name, sequence or another non-sensory description.", "record": "Available non-sensory identifier or the missing information."},
+        {"action": "Confirm the alternative description still identifies one unambiguous target with keyboard and assistive technology.", "expected": "Users can locate and operate the intended target without seeing its position, shape or colour or hearing a cue.", "record": "Method used, identified target and any ambiguity."}
+      ]
+    },
+    {
+      "criterion_id": "1.3.4",
+      "methods": ["Real mobile device or browser emulation", "Portrait and landscape"],
+      "steps": [
+        {"action": "Open each representative page or task in portrait orientation and inventory visible content and available functionality.", "expected": "The page is usable in portrait unless a specific orientation is essential to its function.", "record": "Device or emulation settings, page, content and available controls."},
+        {"action": "Rotate to landscape without reloading and repeat the same content review and task.", "expected": "Content and functionality remain available and usable; the page does not enforce an unnecessary orientation.", "record": "Landscape result, missing content and failed task step."},
+        {"action": "If an orientation is restricted, verify and document why that orientation is essential rather than merely preferred.", "expected": "A restriction is treated as an exception only when the content or function cannot operate in the other orientation.", "record": "Restricted orientation, affected function and evidence for the claimed exception."}
+      ]
+    },
+    {
+      "criterion_id": "1.3.5",
+      "methods": ["Form inventory", "Code or accessibility inspection", "Browser autofill"],
+      "steps": [
+        {"action": "Inventory fields that collect information about the user and map each field to the WCAG input-purpose list where a matching purpose exists.", "expected": "Applicable personal-information fields are distinguished from search, one-off domain data and fields about another person.", "record": "Field label, purpose, ownership and applicable autocomplete token."},
+        {"action": "Inspect the programmatic purpose or autocomplete value for every applicable field.", "expected": "Each field uses a valid token that matches the meaning of the requested information.", "record": "Field element, visible label and actual autocomplete value."},
+        {"action": "As a supporting check, use browser autofill on a representative form and verify the populated value categories before submission.", "expected": "Autofill behaviour is recorded as compatibility evidence only. Determine the WCAG result from whether each applicable input purpose can be programmatically determined; a browser choosing not to autofill is not by itself a failure.", "record": "Browser, field, populated value category and any mismatch; do not save personal values."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.1",
+      "methods": ["Visual review", "Grayscale or colour-filter review"],
+      "steps": [
+        {"action": "Inventory every place where colour indicates meaning, state, category, selection, error, required status or interactive text.", "expected": "Default, hover, focus, selected, disabled, validation and data-visualization states are included.", "record": "Target, state and meaning conveyed by colour."},
+        {"action": "Review each target without distinguishing its colours, using grayscale or a suitable colour-vision filter as support.", "expected": "Text, shape, pattern, iconography, underline or another visual cue provides the same information.", "record": "Non-colour cue or the meaning that becomes unavailable."},
+        {"action": "Operate relevant controls and read charts, statuses and errors using the non-colour cue alone.", "expected": "The user can determine and use the information without colour perception.", "record": "Task attempted, state selected and first ambiguous or unusable result."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.2",
+      "methods": ["Page-load observation", "Keyboard operation"],
+      "steps": [
+        {"action": "Reload the page and listen for audio that begins without a user request; time any automatic audio that continues.", "expected": "Every automatic sound is identified and its duration is known.", "record": "Page, audio source, start behaviour and duration."},
+        {"action": "For automatic audio lasting more than three seconds, locate the pause, stop or independent volume control.", "expected": "A control is available near the start of the interaction and does not depend on changing the system volume.", "record": "Control name, location and whether it is keyboard reachable."},
+        {"action": "Use the control with the keyboard and confirm the audio stops, pauses or becomes independently adjustable.", "expected": "The control works before the audio prevents users from hearing assistive-technology output.", "record": "Key used, control state and audio result."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.3",
+      "methods": ["Contrast analyser", "Manual colour sampling", "State review"],
+      "steps": [
+        {"action": "Inventory visible text and images of text in every meaningful state, including text over images, gradients, placeholders and validation messages.", "expected": "All applicable foreground/background combinations are included; logos and incidental or inactive text are identified separately.", "record": "Text sample, state, size, weight and background."},
+        {"action": "Sample the actual foreground and adjacent background colours at the least favourable readable point and calculate the contrast ratio.", "expected": "Normal text reaches 4.5:1 and qualifying large text reaches 3:1, unless a WCAG exception applies.", "record": "Foreground, background, calculated ratio, text size/weight and threshold."},
+        {"action": "Repeat for hover, focus, selected, error and responsive states and check any automated indeterminate results manually.", "expected": "Text remains above the applicable ratio in every state a user must read.", "record": "State, ratio and screenshot of each confirmed failure or unresolved sample."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.4",
+      "methods": ["Browser text zoom", "Keyboard task review"],
+      "steps": [
+        {"action": "Set the browser to 100% zoom with no separate magnifier, then increase browser zoom to 200%.", "expected": "Text, including control labels and error messages, resizes to 200% using the browser-supported method.", "record": "Browser, viewport, initial zoom and final zoom."},
+        {"action": "Inspect all content and open menus, dialogs, tooltips, validation and other meaningful states at 200%.", "expected": "Text is readable and is not clipped, overlapped, hidden or replaced by an inaccessible alternative.", "record": "Target, state and screenshot of any lost or obscured text."},
+        {"action": "Complete the representative task using only the keyboard while still at 200%.", "expected": "All content and functionality remain available without requiring the tester to reduce text size.", "record": "Task, failed step, focused element and actual result."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.5",
+      "methods": ["Visual and code inspection", "Zoom comparison"],
+      "steps": [
+        {"action": "Inventory images, CSS backgrounds, SVG and canvas content that visibly contain words or letterforms.", "expected": "Every possible image of text is identified, including banners, diagrams, buttons and responsive variants.", "record": "Target, visible wording, implementation type and screenshot."},
+        {"action": "Determine whether the same visual presentation could be created with real text and CSS, or whether the image is customizable or essential to the information.", "expected": "Images of text are used only under the WCAG customizable or essential exceptions, including genuine logos.", "record": "Reason real text is not used and evidence for any claimed exception."},
+        {"action": "Zoom and inspect the suspected item and compare its accessible alternative with the visible wording.", "expected": "Non-exempt wording is implemented as text; exempt items still expose an appropriate text alternative.", "record": "Zoom result, alternative text and exact non-exempt image-of-text failure."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.10",
+      "methods": ["Responsive viewport", "400% browser zoom", "Keyboard task review"],
+      "steps": [
+        {"action": "For horizontal writing, use a 320 CSS-pixel-wide viewport or 400% zoom with a 1280 CSS-pixel-wide browser viewport. For vertical writing, use a 256 CSS-pixel-high viewport or its equivalent zoom setup.", "expected": "The test represents the applicable WCAG reflow dimension without applying a separate screen magnifier.", "record": "Browser, viewport dimensions, zoom and writing direction."},
+        {"action": "Inspect the full page and all opened, error, loading and success states for horizontal scrolling and loss of content.", "expected": "Content reflows into one dimension without requiring horizontal and vertical scrolling, except for content that genuinely requires two-dimensional layout.", "record": "State, scroll dimensions, affected content and any claimed exception."},
+        {"action": "Complete the representative task using keyboard controls at the test width.", "expected": "Text and controls remain visible, understandable and operable without returning to a wider viewport.", "record": "Task, first blocked step, focus target and screenshot."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.11",
+      "methods": ["Contrast analyser", "Manual colour sampling", "Interactive-state review"],
+      "steps": [
+        {"action": "Inventory visual boundaries and states required to identify or operate controls, plus meaningful parts of graphics.", "expected": "Input boundaries, focus indicators, selected states, icons, chart marks and adjacent colours are included where required for understanding.", "record": "Component or graphic, required visual part, state and adjacent colour."},
+        {"action": "Measure the required visual part against each adjacent colour at the least favourable point.", "expected": "Required control and graphic information reaches at least 3:1 unless a WCAG exception applies.", "record": "Foreground, adjacent colour, ratio, state and threshold."},
+        {"action": "Repeat after hover, focus, selection, validation and theme changes; separately identify inactive controls or author-unchanged native controls.", "expected": "Every user-required state remains perceivable, and exceptions are not applied to active custom controls.", "record": "State, result and evidence for any claimed exception."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.12",
+      "methods": ["Text-spacing bookmarklet or stylesheet", "Visual and keyboard review"],
+      "steps": [
+        {"action": "Apply line height of 1.5 times font size, paragraph spacing of 2 times font size, letter spacing of 0.12 times font size and word spacing of 0.16 times font size without changing other styles.", "expected": "All properties used by the content's language and script are set to the WCAG values. A language or script that does not use a listed property is tested with only the properties that exist for it.", "record": "Tool or stylesheet used, language or script, applicable properties and confirmation of applied values."},
+        {"action": "Inspect the page and every opened, validation, tooltip, dialog and responsive state with the spacing applied.", "expected": "No text or control is clipped, overlapped, hidden or made unreadable, and no content disappears.", "record": "Target, state and screenshot of any loss or overlap."},
+        {"action": "Complete the representative task with keyboard while the text-spacing override remains active.", "expected": "All functionality remains available and labels, instructions and values remain associated with their controls.", "record": "Task, failed step and observed layout or operation problem."}
+      ]
+    },
+    {
+      "criterion_id": "1.4.13",
+      "methods": ["Keyboard", "Pointer", "Zoomed-state review"],
+      "steps": [
+        {"action": "Inventory additional content that appears on pointer hover or keyboard focus and is controlled by the page rather than the browser.", "expected": "Tooltips, custom previews, submenus and other applicable hover/focus content are included.", "record": "Trigger, reveal method and displayed content."},
+        {"action": "Reveal each item, attempt to dismiss it without moving pointer or focus, and move the pointer from the trigger onto the additional content.", "expected": "The content can be dismissed without moving focus or hover when required, and pointer-triggered content remains visible while hovered.", "record": "Dismissal key or control, pointer path and actual result."},
+        {"action": "Leave the content visible without dismissing it, then move focus or hover away and repeat at increased zoom.", "expected": "The content persists until the user dismisses it, the trigger condition ends or its information is no longer valid, and it does not prevent access to page content.", "record": "Persistence result, end condition and any content obscured."}
+      ]
+    },
+    {
+      "criterion_id": "2.1.1",
+      "methods": ["Keyboard only", "Component interaction review"],
+      "steps": [
+        {"action": "Put the pointer aside, reload the page and use Tab, Shift+Tab and the expected component keys to reach every interactive function.", "expected": "All functionality is reachable by keyboard except functions whose input path is essential.", "record": "Exact key sequence and first unreachable target or function."},
+        {"action": "Operate every link, button, form control, menu, dialog, disclosure, media control, drag alternative and custom widget using its expected keyboard interaction.", "expected": "Each operation completes once and exposes the same result available to pointer users.", "record": "Control, key, expected action and actual result."},
+        {"action": "Repeat for content added after loading and for opened, error, empty, loading and success states.", "expected": "Dynamic and state-specific functions remain keyboard operable and do not require a mouse.", "record": "State, new control or function and any unavailable keyboard operation."}
+      ]
+    },
+    {
+      "criterion_id": "2.1.2",
+      "methods": ["Keyboard only", "Forward and reverse navigation"],
+      "steps": [
+        {"action": "Tab and Shift+Tab through the complete page, entering every embedded player, menu, dialog, editor and custom widget.", "expected": "Focus can enter and leave each component using keyboard interaction, except while intentionally contained in an open modal that can be closed.", "record": "Component, entry key sequence and attempted exit sequence."},
+        {"action": "Where ordinary Tab or arrow keys do not leave a component, follow any displayed keyboard instruction and test Escape or the documented exit command.", "expected": "A working exit method is available and users are informed when a non-standard method is required.", "record": "Instruction text, exit keys and focus destination."},
+        {"action": "Repeat after validation errors, dynamic updates and nested overlays.", "expected": "No state leaves keyboard focus permanently trapped or lost.", "record": "State, trapped element, keys attempted and last known focus target."}
+      ]
+    },
+    {
+      "criterion_id": "2.1.4",
+      "methods": ["Keyboard", "Shortcut settings review"],
+      "steps": [
+        {"action": "Identify shortcuts that activate using one letter, number, punctuation mark or symbol without a modifier key.", "expected": "All page-defined single-character shortcuts are inventoried; ordinary typing inside inputs is not misclassified.", "record": "Key, function, active context and where the shortcut is documented."},
+        {"action": "With focus in each relevant page context, press the inventoried shortcut and common printable characters.", "expected": "No single-character shortcut triggers unexpectedly while the user is typing or issuing speech commands.", "record": "Focus target, key pressed and triggered function."},
+        {"action": "For each active shortcut, locate and test a method to turn it off, remap it to include a modifier, or restrict it to when the relevant component has focus.", "expected": "At least one permitted control method works and persists for the intended scope.", "record": "Available setting, changed shortcut and retest result."}
+      ]
+    },
+    {
+      "criterion_id": "2.2.1",
+      "methods": ["Timed observation", "Keyboard", "Session warning review"],
+      "steps": [
+        {"action": "Inventory session, page, form, reading and inactivity time limits and identify which limits are controlled by the content.", "expected": "The duration, trigger and consequence of every applicable time limit are known before testing.", "record": "Limit, duration, trigger, consequence and any claimed real-time, essential or over-20-hour exception."},
+        {"action": "Before each limit begins, look for a method to turn it off or adjust it to at least ten times the default where WCAG permits these options.", "expected": "A permitted control is available before the user encounters the limit, unless an exception applies.", "record": "Setting, available range, keyboard result and exception evidence."},
+        {"action": "Allow the limit warning to appear and use the extension control repeatedly.", "expected": "The warning provides at least 20 seconds for a simple action and permits extension at least ten times unless a documented exception applies.", "record": "Warning time, action required, extension count and retained data or session state."}
+      ]
+    },
+    {
+      "criterion_id": "2.2.2",
+      "methods": ["Timed visual observation", "Keyboard operation"],
+      "steps": [
+        {"action": "Observe the page for at least long enough to identify automatic moving, blinking, scrolling and updating content, and record when each item starts and how long it continues.", "expected": "All content that starts automatically, appears with other content and may meet the timing conditions is inventoried.", "record": "Item, behaviour, start time, duration and update frequency."},
+        {"action": "For movement lasting more than five seconds, use the available keyboard control to pause, stop or hide it.", "expected": "Applicable movement stops and remains stopped unless it is essential to the activity.", "record": "Control name, key, stopped content and any claimed essential exception."},
+        {"action": "For automatic updates, use the control to pause, stop, hide or change the update frequency, then interact with the remaining page.", "expected": "Applicable updates are under user control and paused content does not restart unexpectedly.", "record": "Control used, selected frequency or state and restart behaviour."}
+      ]
+    },
+    {
+      "criterion_id": "2.3.1",
+      "methods": ["Timed media review", "Flash-analysis tool", "Specialist review when needed"],
+      "steps": [
+        {"action": "Inventory animations, video, transitions, advertisements, game effects and other content that flashes or changes rapidly.", "expected": "Every possible flash source and its complete duration are identified before a result is assigned.", "record": "Source, state that triggers it, duration and captured media where safe."},
+        {"action": "Review the content frame by frame or at reduced playback speed to identify any period containing more than three flashes in one second.", "expected": "Content with no period above three flashes per second can be distinguished from content requiring threshold analysis.", "record": "Timestamp, one-second interval and observed flash count."},
+        {"action": "If a period exceeds three flashes, analyse the general-flash and red-flash thresholds with an appropriate tool or escalate rather than estimating visually.", "expected": "A pass is recorded only when the measured flashes are below the applicable thresholds; unresolved content receives specialist review.", "record": "Tool, input file, analysis result and reviewer or limitation."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.1",
+      "methods": ["Keyboard", "Landmark and heading inspection"],
+      "steps": [
+        {"action": "Identify every available mechanism for bypassing blocks repeated across pages, such as a skip link, page regions, headings or another supported navigation method.", "expected": "At least one mechanism enables users of its supported input or assistive technology to bypass the repeated block.", "record": "Repeated block, bypass mechanism, supported user method and visible or programmatic label."},
+        {"action": "Use each bypass mechanism with the input method it supports.", "expected": "The mechanism moves navigation to the named destination or otherwise skips the repeated block. For a skip link, focus and subsequent Tab navigation start at the intended location.", "record": "Mechanism, command or activation key, destination and next navigation target."},
+        {"action": "Compare the available bypass mechanism on another page containing the same repeated block.", "expected": "The repeated block can be bypassed on every applicable page in the tested set.", "record": "Compared pages, repeated block and missing or ineffective mechanism."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.2",
+      "methods": ["Browser-title review", "Screen reader or DOM inspection"],
+      "steps": [
+        {"action": "Open every sampled page and read the full title shown by the browser or exposed in the document title element.", "expected": "Each web page has a non-empty programmatic title.", "record": "URL and exact title text."},
+        {"action": "Compare the title with the page purpose, main heading, task step and important state such as an error or confirmation.", "expected": "The title describes the page topic or purpose accurately enough to identify it.", "record": "Title, page purpose and material mismatch."},
+        {"action": "Compare titles across the tested sample and revisit pages using browser history or a screen-reader page list.", "expected": "Each title still describes its page topic or purpose. Duplicate titles are not automatically failures when the pages genuinely share the same topic or purpose.", "record": "Duplicated or ambiguous titles, affected pages and whether each title describes its page."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.3",
+      "methods": ["Tab and Shift+Tab", "Screen-reader or DOM order review"],
+      "steps": [
+        {"action": "List interactive elements in the order a user needs to encounter them to preserve meaning and complete the task.", "expected": "A logical reference order is documented before keyboard order is judged.", "record": "Target list and intended sequence."},
+        {"action": "Use Tab and Shift+Tab through the page and operate controls that add, remove, reorder or reveal focusable content.", "expected": "Focus moves in an order that preserves meaning and operation in both directions and after state changes.", "record": "Exact focus sequence and first unexpected transition."},
+        {"action": "Open menus and dialogs, trigger errors and complete navigation or submission actions while tracking focus.", "expected": "Focus moves to useful destinations and returns logically without skipping required content or moving behind overlays.", "record": "Trigger, focus before and after, and why any transition blocks understanding or operation."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.4",
+      "methods": ["Link inventory", "Screen-reader links list", "Context review"],
+      "steps": [
+        {"action": "Inventory links in default and updated states and record each visible label, accessible name and destination or action.", "expected": "All links, including image and icon links, are available for purpose review.", "record": "Link text/name, surrounding content and destination."},
+        {"action": "Determine each link's purpose from its link text alone or together with its programmatically associated sentence, paragraph, list item, table cell or heading context.", "expected": "Users can determine what each link does or where it goes, except where the purpose is intentionally ambiguous to all users.", "record": "Permitted context and the information that establishes purpose."},
+        {"action": "Review links out of visual context in a screen-reader links list and compare links with the same wording.", "expected": "Available names and programmatic context do not create misleading or conflicting purposes.", "record": "Links-list announcement and any indistinguishable links with different purposes."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.5",
+      "methods": ["Site navigation review", "Search or sitemap review"],
+      "steps": [
+        {"action": "Select representative pages that are not steps in, or results of, a process and record the primary way each page is reached.", "expected": "Applicable pages are separated from process-only pages before assessing multiple ways.", "record": "Page URL, page type and primary navigation path."},
+        {"action": "For each applicable page, find additional locating methods such as site search, sitemap, table of contents, related links or navigation from a landing page.", "expected": "At least two ways are available to locate the page within the set of web pages.", "record": "Page and each distinct locating method."},
+        {"action": "Use each method with keyboard and verify that it reaches the intended page rather than only mentioning it.", "expected": "Both locating methods operate and identify the destination sufficiently.", "record": "Method, key sequence, destination and any unavailable route."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.6",
+      "methods": ["Content inventory", "Context review"],
+      "steps": [
+        {"action": "Inventory visible headings and labels for controls, groups, regions and task steps in every meaningful state.", "expected": "All text that introduces content or identifies a user-interface component is included.", "record": "Heading or label text, target and state."},
+        {"action": "Compare each heading with the content it introduces and each label with the control or information it identifies.", "expected": "The wording describes the topic or purpose accurately and distinguishes similar sections or controls where needed.", "record": "Target purpose and exact vague, misleading or duplicated wording."},
+        {"action": "As a guided review, ask a tester unfamiliar with the page to predict the section topic or control purpose from the heading or label.", "expected": "Use the response to find unclear wording, but determine the WCAG result from whether the heading or label describes its topic or purpose; one tester's prediction is not conformance proof.", "record": "Predicted topic or purpose, actual topic or purpose and the wording reviewed."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.7",
+      "methods": ["Keyboard only", "Default and interactive-state review"],
+      "steps": [
+        {"action": "Use Tab, Shift+Tab, arrow keys and other expected component keys to move focus through every operable element.", "expected": "A visible focus indicator is present whenever a keyboard-operable element has focus.", "record": "Element, key and screenshot of its focused state."},
+        {"action": "Check focus against all backgrounds and in hover, selected, error, disabled-adjacent and responsive states.", "expected": "The indicator remains visually identifiable and is not removed by a component state or background change.", "record": "State, background and first invisible or ambiguous indicator."},
+        {"action": "Move focus into and out of custom widgets, menus, dialogs and content revealed dynamically.", "expected": "Focus remains visible during managed-focus interaction and after focus is moved by script.", "record": "Component, focus sequence and state where the indicator disappears."}
+      ]
+    },
+    {
+      "criterion_id": "2.4.11",
+      "methods": ["Keyboard only", "Overlay and sticky-content review", "Forward and reverse navigation"],
+      "steps": [
+        {"action": "Tab forward through the page while sticky headers, cookie notices, chat controls, drawers and other author-created overlays are present.", "expected": "No focused component is entirely hidden by author-created content.", "record": "Focused component, overlay and screenshot at the failure point."},
+        {"action": "Repeat with Shift+Tab and after opening menus, dialogs, validation messages and responsive navigation.", "expected": "Reverse and state-specific focus targets are also not completely obscured.", "record": "State, reverse focus sequence and obscuring content."},
+        {"action": "Scroll each partially covered target into view using only ordinary keyboard navigation and activate it.", "expected": "Partially visible focus remains usable for this minimum criterion; any completely hidden target is recorded as a failure.", "record": "Visible portion, activation result and whether the target was completely hidden."}
+      ]
+    },
+    {
+      "criterion_id": "2.5.1",
+      "methods": ["Touch or pointer", "Single-pointer alternative review"],
+      "steps": [
+        {"action": "Inventory functions that use multipoint or path-based gestures, including pinch, two-finger movement, swipe paths, drawing and free-form tracing.", "expected": "Every complex pointer gesture and the function it performs are identified.", "record": "Component, gesture, device and resulting function."},
+        {"action": "Complete the same function using a single pointer without following a path, such as tapping a button, choosing a value or using separate zoom controls.", "expected": "A simple alternative performs the same function unless the complex gesture is essential.", "record": "Alternative control, pointer action and result."},
+        {"action": "If no alternative exists, verify whether the path or multipoint input is essential to the function rather than merely the chosen design.", "expected": "Only genuinely essential gestures are treated as exceptions; unresolved claims are escalated.", "record": "Claimed essential purpose and evidence showing why a simple input cannot work."}
+      ]
+    },
+    {
+      "criterion_id": "2.5.2",
+      "methods": ["Mouse or touch pointer", "Cancellation and reversal review"],
+      "steps": [
+        {"action": "On each single-pointer control, press down inside the target, move outside it and release without completing a click.", "expected": "The action does not complete on the down-event, or moving away aborts it before completion.", "record": "Control, pointer sequence and any action triggered."},
+        {"action": "Press down outside a target, move onto it and release, then test drag, selection and drawing functions at their completion point.", "expected": "Controls do not activate unexpectedly, and functions that require a down-event complete on up-event or provide abort/undo behaviour where required.", "record": "Sequence, completion event and cancellation method."},
+        {"action": "For any action that completes on pointer down, immediately try to reverse or undo it and assess any claimed essential down-event exception.", "expected": "The result can be reversed before completion, undone after completion or is demonstrably essential.", "record": "Action, reversal method, final state and exception evidence."}
+      ]
+    },
+    {
+      "criterion_id": "2.5.3",
+      "methods": ["Visible-label inventory", "Accessibility-tree inspection", "Voice-input check where available"],
+      "steps": [
+        {"action": "Inventory user-interface components with visible text or a visible text symbol as their label.", "expected": "Links, buttons, form controls, menu items and custom controls with visible wording are included.", "record": "Control, visible label and state."},
+        {"action": "Inspect the computed accessible name of each inventoried component and compare it with the visible wording.", "expected": "The accessible name contains the visible label words in the same order. Ignore ordinary differences in capitalisation, spacing and punctuation unless they change meaning; symbolic characters used as icons require separate interpretation.", "record": "Visible label, computed name and missing, reordered or interspersed words."},
+        {"action": "Where voice input is available, speak the visible label to operate representative controls.", "expected": "The visible wording identifies the intended control; failures are confirmed against the accessible-name comparison rather than voice software alone.", "record": "Spoken command, selected target and computed-name evidence."}
+      ]
+    },
+    {
+      "criterion_id": "2.5.4",
+      "methods": ["Real device or sensor emulation", "Settings review", "User-interface alternative"],
+      "steps": [
+        {"action": "Inventory functions triggered by device motion or user motion detected by the device, such as shake, tilt, pan or camera-detected gesture.", "expected": "Every motion-actuated function and its trigger are identified.", "record": "Function, required motion, device and state."},
+        {"action": "Perform the same function through an ordinary user-interface control without moving the device or user.", "expected": "A keyboard- and pointer-operable alternative provides the same result unless motion is essential or supported through an accessibility interface.", "record": "Alternative control, operation and result."},
+        {"action": "Find and activate the method that prevents accidental motion activation, then repeat the motion.", "expected": "Users can disable response to motion while retaining the ordinary interface alternative, unless a documented exception applies.", "record": "Setting, state before and after, retest result and exception evidence."}
+      ]
+    },
+    {
+      "criterion_id": "2.5.7",
+      "methods": ["Mouse or touch drag", "Single-pointer alternative"],
+      "steps": [
+        {"action": "Inventory operations that require dragging, including sliders, maps, reorder lists, splitters, drawing controls and drag-and-drop uploads.", "expected": "Every drag action and its final result are identified.", "record": "Component, item moved or value changed, start point and end result."},
+        {"action": "Complete the same result with a single pointer without dragging, using controls such as buttons, menus, direct value entry or select-then-place.", "expected": "A non-dragging alternative performs the same function unless dragging is essential.", "record": "Alternative method, actions and resulting state."},
+        {"action": "If an alternative is absent, test keyboard operation and assess the claimed essential exception separately.", "expected": "Keyboard access is recorded under SC 2.1.1, while SC 2.5.7 passes only with a single-pointer non-drag alternative or a valid essential exception.", "record": "Keyboard result, pointer alternative status and exception evidence."}
+      ]
+    },
+    {
+      "criterion_id": "2.5.8",
+      "methods": ["Browser measurement", "Responsive and state review"],
+      "steps": [
+        {"action": "Inventory pointer targets in each responsive layout and meaningful state, including icon controls, inline links, map markers and controls revealed on hover.", "expected": "Every author-sized target is included and inline, user-agent, equivalent, spacing and essential exceptions are identified for review.", "record": "Target, state, viewport and possible exception."},
+        {"action": "Measure the rendered target width and height in CSS pixels without relying on the visible icon size alone.", "expected": "Each target is at least 24 by 24 CSS pixels, or proceeds to the spacing/exception check.", "record": "Target dimensions and measurement method."},
+        {"action": "For each undersized target, centre a 24 CSS-pixel-diameter circle on its bounding box and compare it with every other target and with the same circle around every other undersized target.", "expected": "The circle does not intersect another target or another undersized target's circle, or the target meets the equivalent-control, inline, user-agent-control or essential exception.", "record": "Target bounding box, circle or spacing measurement, neighbouring targets, exception and final result."}
+      ]
+    },
+    {
+      "criterion_id": "3.1.1",
+      "methods": ["DOM inspection", "Screen-reader pronunciation check"],
+      "steps": [
+        {"action": "Identify the default human language used by the page's main content.", "expected": "The intended language is clear enough to compare with programmatic metadata.", "record": "Page URL, visible language and locale."},
+        {"action": "Inspect the language on the root html element and verify that the language tag is valid and matches the content.", "expected": "The default language can be programmatically determined using a recognized language tag.", "record": "Exact html lang value and any validation or mismatch."},
+        {"action": "As a supporting check, change locale where supported and listen to a representative passage with a screen reader that supports language switching.", "expected": "Use pronunciation as compatibility evidence only. Determine the WCAG result from whether a valid programmatic language matches the page; one screen reader's pronunciation is not by itself a pass or failure.", "record": "Locale, lang value, screen reader and pronunciation observation."}
+      ]
+    },
+    {
+      "criterion_id": "3.1.2",
+      "methods": ["Content-language inventory", "DOM inspection", "Screen reader"],
+      "steps": [
+        {"action": "Review visible content for passages or phrases in a language different from the page default.", "expected": "Material language changes are identified while names, technical terms, indeterminate words and adopted words are separated as possible exceptions.", "record": "Exact passage, page language and passage language."},
+        {"action": "Inspect the nearest element containing each language change for a valid matching language attribute.", "expected": "Each applicable change of human language can be programmatically determined.", "record": "Element, lang value and missing or incorrect language tag."},
+        {"action": "As a supporting check, read representative changed-language content with a screen reader that supports automatic language switching.", "expected": "Use pronunciation as compatibility evidence only. Determine the WCAG result from whether the applicable language change can be programmatically determined.", "record": "Passage, screen reader, pronunciation observation and programmatic language evidence."}
+      ]
+    },
+    {
+      "criterion_id": "3.2.1",
+      "methods": ["Keyboard focus review", "Forward and reverse navigation"],
+      "steps": [
+        {"action": "Use Tab, Shift+Tab and component arrow keys to move focus onto every interactive component without activating it.", "expected": "Receiving focus alone does not submit data, open an unrelated window, navigate, move focus elsewhere or make another unexpected context change.", "record": "Component, focus key and any event triggered on focus."},
+        {"action": "Repeat after validation, filtering, responsive changes and dynamic content updates.", "expected": "State-specific controls remain stable when they merely receive focus.", "record": "State, focused control and context before and after."},
+        {"action": "If any component changes context when it receives focus, repeat the test and confirm that focus alone caused the change.", "expected": "A change of context caused by focus fails SC 3.2.1. Prior warning does not create an exception for this criterion; warning is relevant to changes caused by input under SC 3.2.2.", "record": "Component, focus action, context before and after and any prior warning."}
+      ]
+    },
+    {
+      "criterion_id": "3.2.2",
+      "methods": ["Form and control input review", "Keyboard and pointer"],
+      "steps": [
+        {"action": "Inventory controls where changing a value can update content, submit data, navigate, open a window or move focus.", "expected": "Selects, radio buttons, checkboxes, text fields and custom inputs with change behaviour are included.", "record": "Control, input action and possible context change."},
+        {"action": "Change each value without activating a separate submit or continue control.", "expected": "Input alone does not cause an unexpected change of context; ordinary content updates that preserve context are distinguished from navigation or focus changes.", "record": "Value before and after, focus location and resulting change."},
+        {"action": "Where changing input intentionally changes context, check for instructions provided before the control and repeat with keyboard.", "expected": "Users are advised in advance and can understand the consequence before changing the setting.", "record": "Instruction text, reading/focus order and keyboard result."}
+      ]
+    },
+    {
+      "criterion_id": "3.2.3",
+      "methods": ["Cross-page comparison", "Desktop and responsive navigation review"],
+      "steps": [
+        {"action": "Select at least two pages that repeat global, section, footer, breadcrumb or sidebar navigation.", "expected": "Repeated navigation mechanisms are identified within the same set of web pages.", "record": "Pages and repeated navigation regions."},
+        {"action": "Compare the relative order of each repeated navigation region and the items within it across the selected pages.", "expected": "Repeated mechanisms occur in the same relative order unless the user initiated a change.", "record": "Navigation sequence on each page and exact difference."},
+        {"action": "Repeat in the responsive version and after any user preference that intentionally changes navigation.", "expected": "Consistency is preserved within each comparable presentation, and user-initiated rearrangement is not misreported.", "record": "Viewport or preference, page comparison and result."}
+      ]
+    },
+    {
+      "criterion_id": "3.2.4",
+      "methods": ["Cross-page component inventory", "Accessible-name and visual comparison"],
+      "steps": [
+        {"action": "Inventory components that perform the same function on different pages, including icon controls, links, form controls and repeated status indicators.", "expected": "Equivalent functions within the same set of pages are paired for comparison.", "record": "Pages, component instances and shared function."},
+        {"action": "Compare the visible label, icon meaning, accessible name and announced role of each pair.", "expected": "Components with the same function are identified consistently unless a difference is necessary for the context.", "record": "Visible and programmatic identification on each page."},
+        {"action": "Operate each component with keyboard and assistive technology to confirm that apparently consistent identification leads to the same function.", "expected": "Labels and names neither vary without reason nor conceal materially different actions.", "record": "Operation, resulting action and inconsistent label or function."}
+      ]
+    },
+    {
+      "criterion_id": "3.2.6",
+      "methods": ["Cross-page comparison", "Responsive review"],
+      "steps": [
+        {"action": "Inventory human contact details, human contact mechanisms, self-help options and fully automated contact mechanisms available in the tested page set.", "expected": "Applicable help mechanisms such as phone, email, chat, contact forms and FAQs are identified.", "record": "Help mechanism, label, page and region."},
+        {"action": "Compare the relative order and location in the content of each repeated help mechanism across pages.", "expected": "A help mechanism repeated on several pages appears in the same relative order unless the user initiated a change.", "record": "Page-by-page sequence and first inconsistency."},
+        {"action": "Repeat in responsive layouts and after opening navigation, footer or support panels that contain help.", "expected": "The mechanism remains consistently located within each comparable presentation.", "record": "Viewport, state and location difference."}
+      ]
+    },
+    {
+      "criterion_id": "3.3.1",
+      "methods": ["Invalid form submission", "Keyboard", "Screen reader"],
+      "steps": [
+        {"action": "For each form, submit with required fields empty and then with representative invalid formats, values and combinations.", "expected": "Every detectable input error is triggered and available for review.", "record": "Field, input used, submit action and resulting state."},
+        {"action": "Review the visible error summary, inline messages, icons and field states without relying on colour.", "expected": "Text identifies that an error occurred and identifies the specific item in error.", "record": "Exact error text, affected field and any colour-only indication."},
+        {"action": "Navigate the errors with keyboard and screen reader and inspect each error-to-field association.", "expected": "Users are alerted to the errors and can determine which field each message describes.", "record": "Announcement, focus path, programmatic relationship and first unassociated error."}
+      ]
+    },
+    {
+      "criterion_id": "3.3.2",
+      "methods": ["Form inventory", "Keyboard", "Accessibility-tree inspection"],
+      "steps": [
+        {"action": "Before entering data, inventory every input and the visible label, required indication, format, constraint and task instruction needed to use it.", "expected": "Users receive labels or instructions when content requires their input.", "record": "Field, visible label and available instructions."},
+        {"action": "Inspect each field's accessible name and description and compare them with the persistent visible information.", "expected": "Use programmatic association as supporting evidence for SC 1.3.1 and SC 4.1.2. For SC 3.3.2, determine whether a label or instruction is provided when the content requires user input; placeholder-only wording is not a reliable persistent label.", "record": "Field, visible label or instruction, computed name or description and any missing association."},
+        {"action": "Complete the form without intentionally making an error, using keyboard and the provided instructions only.", "expected": "The required input, format and choice can be understood before submission.", "record": "Field where guessing was required and the missing or unclear instruction."}
+      ]
+    },
+    {
+      "criterion_id": "3.3.3",
+      "methods": ["Invalid form submission", "Error-message review"],
+      "steps": [
+        {"action": "Enter values with known corrections, such as an invalid date, unavailable choice, malformed email or value outside an allowed range.", "expected": "The system detects representative errors for which a correction can be known.", "record": "Field, invalid value pattern and detected error."},
+        {"action": "Read the associated error and identify whether it states how to correct the problem or provides valid options.", "expected": "A specific correction suggestion is provided when known, unless it would jeopardize security or the purpose of the content.", "record": "Exact error text and the correction information provided or missing."},
+        {"action": "Follow the suggestion using keyboard and resubmit.", "expected": "The suggestion is accurate, usable and resolves the stated error without introducing a different ambiguity.", "record": "Correction entered, resubmit result and any misleading guidance."}
+      ]
+    },
+    {
+      "criterion_id": "3.3.4",
+      "methods": ["End-to-end submission", "Review, correction and reversal review"],
+      "steps": [
+        {"action": "Identify submissions that create legal commitments, financial transactions, changes to user-controlled data or test responses.", "expected": "Only transactions within the criterion's scope proceed to error-prevention testing.", "record": "Process, submission consequence and data affected."},
+        {"action": "Complete the process with a deliberate but safe error and inspect all review, validation and confirmation stages before final submission.", "expected": "At least one permitted safeguard is available: the submission is reversible; entered data is checked and can be corrected; or the information can be reviewed, confirmed and corrected before finalising.", "record": "Input, review screen, detected error, correction path and safeguard used."},
+        {"action": "After safe test submission, attempt the documented reversal or correction route where that route is the provided safeguard.", "expected": "At least one permitted safeguard—reversible submission, checked/correctable data, or review/confirmation—works for the complete process.", "record": "Safeguard used, time limit if any and final state; never use a real transaction."}
+      ]
+    },
+    {
+      "criterion_id": "3.3.7",
+      "methods": ["End-to-end process", "Repeated-information inventory"],
+      "steps": [
+        {"action": "Complete a multi-step process with safe data and record every item of information entered by the user.", "expected": "A reference list exists for identifying repeated requests within the same process.", "record": "Step, field label and non-sensitive description of entered information."},
+        {"action": "Continue through the process and identify any request for information already supplied during that process.", "expected": "Repeated requests are distinguished from confirmation, security-essential re-entry and information that is no longer valid.", "record": "Original field, repeated field and reason given for repetition."},
+        {"action": "At each non-exempt repeated request, use the available prepopulation or selection method.", "expected": "Previously supplied information is automatically populated or available for selection without retyping.", "record": "Reuse method, keyboard result and any data that had to be entered again."}
+      ]
+    },
+    {
+      "criterion_id": "3.3.8",
+      "methods": ["Authentication flow", "Password manager and paste", "Alternative-method review"],
+      "steps": [
+        {"action": "Inventory every cognitive task required for authentication, including remembering/transcribing secrets, solving problems, recognizing objects or reproducing non-text content.", "expected": "Each authentication step and any permitted exception mechanism can be assessed separately.", "record": "Step, requested cognitive task and available alternatives."},
+        {"action": "Use password-manager autofill and copy/paste for passwords and one-time codes, including codes received on another device where safe.", "expected": "The flow does not block mechanisms that reduce memory and transcription demands.", "record": "Method, field, blocked action and actual result; do not record credentials or codes."},
+        {"action": "For puzzles, object recognition or transcription tasks, use a non-cognitive alternative, an assisting mechanism or authentication based on user-provided content.", "expected": "Authentication can be completed without a prohibited cognitive-function test unless a WCAG exception applies.", "record": "Challenge, alternative or mechanism, completion result and exception evidence."}
+      ]
+    },
+    {
+      "criterion_id": "4.1.2",
+      "methods": ["Accessibility tree", "Keyboard", "Screen reader"],
+      "steps": [
+        {"action": "Inventory form controls, links, buttons and custom widgets in their default and changed states.", "expected": "Every user-interface component and its possible states are included in the semantic review.", "record": "Component, implementation type and states."},
+        {"action": "Inspect each component's computed name, role, value, state and programmatic relationships before and after interaction.", "expected": "Assistive technology can determine the component's identity and current state, and user-settable changes update programmatically.", "record": "Visible label/state and computed properties before and after."},
+        {"action": "Operate representative native and every custom component with keyboard and a screen reader.", "expected": "The announced role and interaction match the visible component, and state or value changes are communicated accurately.", "record": "Keys, announcements, actual change and first missing or incorrect property."}
+      ]
+    },
+    {
+      "criterion_id": "4.1.3",
+      "methods": ["Screen reader", "Dynamic-state review", "Accessibility-tree inspection"],
+      "steps": [
+        {"action": "Trigger status messages that report success, results, loading, progress, cart changes, validation or errors without taking focus.", "expected": "All non-modal messages that meet the WCAG status-message definition are identified.", "record": "Trigger, visible message, focus position and message purpose."},
+        {"action": "Keep keyboard focus on the initiating control and listen with a screen reader that supports the implemented status semantics as each status appears or changes.", "expected": "Use the announcement as compatibility evidence. A qualifying status can be presented without receiving focus; one screen reader's silence is not by itself enough to assign the WCAG result.", "record": "Focus before and after, screen reader, exact announcement and timing."},
+        {"action": "Inspect the message role or properties and repeat rapid, repeated and error states.", "expected": "The role or properties allow assistive technology to determine and present the status without receiving focus. Record disruptive or duplicate announcements as usability or compatibility findings unless another success criterion is failed.", "record": "Role or properties, update sequence and missing, repeated or interruptive announcement."}
+      ]
+    }
+  ]
+}

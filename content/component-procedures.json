@@ -1,0 +1,289 @@
+{
+  "schema_version": "2.0",
+  "procedures": [
+    {
+      "id": "CP-01",
+      "slug": "page-structure-headings-and-language",
+      "title": "Page structure, headings, landmarks and language",
+      "summary": "Check the basic structure that lets users understand and navigate a page without relying on its visual layout.",
+      "applies_to": ["Every page template", "Headings and content sections", "Lists, groups and landmarks", "Pages or passages in multiple languages"],
+      "criteria": ["1.3.1", "1.3.2", "2.4.1", "2.4.2", "2.4.6", "3.1.1", "3.1.2"],
+      "what_should_happen": ["The browser title and main heading identify the page purpose.", "Headings describe their sections and form a meaningful outline.", "Landmarks, lists, groups and relationships shown visually are available programmatically.", "Reading order preserves meaning at every viewport.", "The page language and material language changes are identified programmatically."],
+      "how_to_test": [
+        {"action": "Open the page and compare the browser-tab title, visible main heading and page purpose.", "expected": "The browser title describes the page topic or purpose, and the main heading describes the main content. Duplicate titles are not automatically failures when the pages genuinely share the same topic or purpose.", "record": "URL, browser title, main heading, page purpose and any mismatch."},
+        {"action": "List every visible heading in order, then inspect the programmatic heading outline.", "expected": "Visible headings are exposed as headings, use descriptive text and represent the same section structure.", "record": "First missing, empty, misleading or incorrectly represented heading."},
+        {"action": "Inspect header, navigation, main, complementary regions and footer using landmarks or the accessibility tree.", "expected": "Major page regions have appropriate semantics and repeated regions can be bypassed.", "record": "Landmark list, duplicate labels and missing main or navigation regions."},
+        {"action": "Inspect visible lists, tables, field groups, labels and related instructions.", "expected": "Each visual relationship has equivalent HTML structure or programmatic association.", "record": "Target, visible relationship and computed structure."},
+        {"action": "Read the page in DOM or screen-reader order without using visual position.", "expected": "The order remains understandable and dependent content is not separated from its trigger or label.", "record": "The first item read in an unexpected or meaning-changing order."},
+        {"action": "Inspect the html language and any substantial passage written in another language.", "expected": "The default language is correct and language changes are marked except for valid WCAG exceptions.", "record": "Visible language, html lang value and relevant element lang values."}
+      ],
+      "record": ["Page URL and template", "Title and heading outline", "Landmark list", "Reading-order issue", "Language values"],
+      "common_failures": ["A styled paragraph is used instead of a heading", "Several pages share a generic title", "Content order differs from visual order", "A language selector changes text but not the page language"],
+      "specialist_review": "Escalate complex tables, nested applications and mixed-language content when the correct semantic structure is unclear."
+    },
+    {
+      "id": "CP-02",
+      "slug": "navigation-menus-breadcrumbs-and-skip-links",
+      "title": "Navigation, menus, breadcrumbs and skip links",
+      "summary": "Check that users can bypass repeated content and move through navigation using keyboard and assistive technology.",
+      "applies_to": ["Headers and footers", "Desktop and mobile menus", "Mega menus and submenus", "Breadcrumbs, side navigation and pagination"],
+      "criteria": ["1.3.1", "2.1.1", "2.1.2", "2.4.1", "2.4.3", "2.4.4", "2.4.7", "3.2.3", "4.1.2"],
+      "what_should_happen": ["A keyboard user can bypass repeated navigation.", "Every menu trigger exposes its name, role and expanded state.", "All destinations are reachable in a logical order with visible focus.", "Menus close predictably without losing focus or trapping the user.", "Current-page and selected states are available without relying only on colour."],
+      "how_to_test": [
+        {"action": "Reload the page and press Tab once.", "expected": "A skip link or equivalent bypass mechanism becomes available before repeated navigation.", "record": "First focus target and visible skip-link text."},
+        {"action": "Activate the skip link with Enter.", "expected": "Focus moves to the intended main content and subsequent Tab navigation starts there.", "record": "Focused element after activation."},
+        {"action": "Reload and Tab through every navigation trigger, link and submenu control.", "expected": "All items are reachable in a meaningful order and every focus indicator is visible.", "record": "Exact key sequence and first skipped or unexpected target."},
+        {"action": "Open each menu with Enter and, for button-style triggers, Space.", "expected": "The correct menu opens and the trigger exposes its expanded state.", "record": "Trigger name, role and state before and after opening."},
+        {"action": "Navigate forward and backward through the opened menu, then press Escape.", "expected": "Focus remains logical, the menu closes when expected and focus returns to its trigger.", "record": "Forward order, reverse order and focus after Escape."},
+        {"action": "Repeat at a narrow viewport and compare the navigation on a second page.", "expected": "Mobile navigation remains keyboard operable and repeated navigation keeps the same relative order.", "record": "Viewport, page comparison and any changed order or unavailable control."}
+      ],
+      "record": ["Skip-link result", "Navigation focus order", "Trigger states", "Escape result", "Desktop/mobile differences"],
+      "common_failures": ["Submenus work only on hover", "The mobile menu leaves focus behind it", "Expanded state is not exposed", "Escape closes the menu but loses focus"],
+      "specialist_review": "Escalate application-style menu bars when managed focus and arrow-key expectations are uncertain."
+    },
+    {
+      "id": "CP-03",
+      "slug": "links-buttons-icons-and-custom-controls",
+      "title": "Links, buttons, icons and custom controls",
+      "summary": "Check that interactive controls are identifiable, operable and correctly exposed in every state.",
+      "applies_to": ["Text and image links", "Buttons and icon buttons", "Toggles, switches and custom widgets", "Embedded and third-party controls"],
+      "criteria": ["1.1.1", "1.4.1", "2.1.1", "2.4.3", "2.4.4", "2.4.7", "2.5.3", "4.1.2"],
+      "what_should_happen": ["Links describe their destination or purpose in context.", "Buttons describe the action they perform.", "Visible text is included in the accessible name.", "Role, state and value are programmatically available.", "Every control works by keyboard and displays visible focus."],
+      "how_to_test": [
+        {"action": "Inventory links, buttons, icon controls, toggles and custom widgets in default and changed states.", "expected": "Every interactive item has a clear purpose and no meaningful control is missing from the inventory.", "record": "Control text, location, state and screenshot."},
+        {"action": "Inspect each control's accessible name, role, value and state.", "expected": "The computed information matches the visible purpose and current state.", "record": "Visible label and computed accessibility properties."},
+        {"action": "Read links out of visual context using a links list or accessibility tree.", "expected": "Each destination can be determined from link text or permitted programmatic context.", "record": "Ambiguous link text and available context."},
+        {"action": "Reach every control with Tab and Shift+Tab.", "expected": "Focus order is logical and each focused control has a visible indicator.", "record": "First unreachable, hidden or unexpectedly ordered control."},
+        {"action": "Activate links with Enter and buttons with Enter and Space.", "expected": "The expected action occurs once, using the correct keyboard interaction.", "record": "Control, key and actual result."},
+        {"action": "Change toggles, switches or selected controls and inspect them again.", "expected": "Visible and programmatic states update consistently and do not rely only on colour.", "record": "State before and after activation."}
+      ],
+      "record": ["Control inventory", "Visible and accessible names", "Role and state", "Keyboard result", "Focus issue"],
+      "common_failures": ["An icon button is announced only as button", "A div responds to clicks but not keyboard", "Visible text is absent from the accessible name", "Selected state changes only by colour"],
+      "specialist_review": "Escalate complex composite widgets and third-party controls when their expected pattern or ownership is unclear."
+    },
+    {
+      "id": "CP-04",
+      "slug": "forms-labels-validation-and-submission",
+      "title": "Forms, labels, validation and submission",
+      "summary": "Check that users can understand, complete, correct and submit forms without guessing.",
+      "applies_to": ["Contact and registration forms", "Checkout and application forms", "Settings and profile forms", "File upload and multi-step forms"],
+      "criteria": ["1.3.1", "1.3.5", "2.1.1", "2.4.3", "2.4.6", "2.5.3", "3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.7", "4.1.2", "4.1.3"],
+      "what_should_happen": ["Every field has a persistent label and clear instructions.", "Required status and constraints are explained before submission.", "Errors identify the field, problem and known correction.", "Focus moves to useful error feedback and entered data is preserved when safe.", "Success and status messages are visible and announced."],
+      "how_to_test": [
+        {"action": "Before entering data, review every label, required marker, instruction and format example.", "expected": "Users can determine what to enter without relying on placeholder text or triggering an error.", "record": "Field, label, instructions and missing requirement."},
+        {"action": "Tab through the complete form and inspect each field's accessible name, description and state.", "expected": "Focus order is logical and programmatic information matches the visible form.", "record": "Focus order and computed field properties."},
+        {"action": "Inspect autocomplete values on fields collecting personal information.", "expected": "Supported personal-data fields use tokens matching their purpose.", "record": "Field purpose and autocomplete value."},
+        {"action": "Submit the form empty, then with invalid formats and conflicting values.", "expected": "Specific text errors appear, identify each affected field and do not rely only on colour.", "record": "Input used, error text and associated field."},
+        {"action": "Navigate from the error summary or submit result to every invalid field and correct it.", "expected": "Focus reaches the correct field, errors update accurately and valid data remains available.", "record": "Focus destination and state after correction."},
+        {"action": "Complete review and submission using only the keyboard.", "expected": "Important data can be reviewed and corrected, submission works and the final status is announced.", "record": "Review mechanism, submit result and announcement."}
+      ],
+      "record": ["Field labels and names", "Required and autocomplete states", "Error inputs and messages", "Focus after error", "Submission status"],
+      "common_failures": ["Placeholder text is the only label", "Errors say only Invalid", "Focus remains on Submit while errors appear elsewhere", "Success is visible but not announced"],
+      "specialist_review": "Escalate legal, financial, assessment and identity forms when error-prevention requirements are uncertain."
+    },
+    {
+      "id": "CP-05",
+      "slug": "dialogs-modals-popovers-and-tooltips",
+      "title": "Dialogs, modals, popovers and tooltips",
+      "summary": "Check that layered content opens, operates and closes predictably without hiding or losing keyboard focus.",
+      "applies_to": ["Modal dialogs", "Cookie and consent banners", "Popovers and non-modal panels", "Tooltips and hover/focus content"],
+      "criteria": ["1.4.13", "2.1.1", "2.1.2", "2.4.3", "2.4.7", "2.4.11", "4.1.2", "4.1.3"],
+      "what_should_happen": ["Focus moves to a logical place when a modal opens.", "Tab and Shift+Tab remain within a modal until it closes.", "Dismissible content closes using Escape and a clearly named control.", "Focus returns to the trigger after closing.", "Tooltips and popovers are hoverable, persistent and dismissible when WCAG requires."],
+      "how_to_test": [
+        {"action": "Use Tab to reach the control that opens the layered content and activate it with Enter or Space.", "expected": "The content opens and a modal moves focus to a logical element inside it.", "record": "Trigger name and first focused element."},
+        {"action": "Press Tab through every control in the modal and continue after the final control.", "expected": "Controls are reached in logical order and focus cycles within the modal instead of reaching the background page.", "record": "Forward focus order and where focus goes after the last control."},
+        {"action": "Press Shift+Tab repeatedly from the first control.", "expected": "Reverse focus order remains inside the modal and reaches controls in reverse logical order.", "record": "Reverse order and any background target reached."},
+        {"action": "At every focus stop, inspect visibility and obstruction.", "expected": "A visible indicator identifies focus and the focused control is not completely hidden.", "record": "Control and screenshot of any invisible or obscured focus."},
+        {"action": "Press Escape, then reopen and use the visible close control with Enter and Space.", "expected": "Dismissible content closes by expected methods and the close control has a clear accessible name.", "record": "Escape result, close-control name and keyboard result."},
+        {"action": "After each close method, identify the focused element.", "expected": "Focus returns to the trigger or another documented logical destination.", "record": "Focus destination after closing."},
+        {"action": "For hover or focus content, reveal it, move the pointer onto it and attempt dismissal without moving focus.", "expected": "Applicable content remains available, can be hovered and can be dismissed under the WCAG conditions.", "record": "Trigger method and which persistence, hover or dismissal behaviour failed."},
+        {"action": "Inspect dialog role, accessible name, descriptions and any status messages.", "expected": "The layer and its controls expose correct semantics and important updates are announced.", "record": "Role, name, descriptions and announced message."}
+      ],
+      "record": ["Trigger and layer type", "Initial focus", "Forward and reverse order", "Close methods", "Return focus", "Role and name"],
+      "common_failures": ["Focus stays behind a modal", "Tab escapes the modal", "Escape does nothing", "Focus returns to the page start", "An icon close button has no name"],
+      "specialist_review": "Escalate nested layers and third-party overlays when the intended modal behaviour or ownership is unclear."
+    },
+    {
+      "id": "CP-06",
+      "slug": "tabs-accordions-and-disclosures",
+      "title": "Tabs, accordions and disclosure controls",
+      "summary": "Check that expandable and tabbed content exposes its state, relationships and keyboard behaviour.",
+      "applies_to": ["Accordions and FAQs", "Tab interfaces", "Show more controls", "Expandable navigation or filter groups"],
+      "criteria": ["1.3.1", "1.3.2", "2.1.1", "2.4.3", "2.4.6", "2.4.7", "4.1.2"],
+      "what_should_happen": ["Triggers have clear names and expose expanded or selected state.", "Enter or Space operates button-style disclosures.", "Supported tab arrow-key behaviour is consistent.", "Hidden content is removed from normal focus order.", "Triggers and controlled panels are programmatically associated."],
+      "how_to_test": [
+        {"action": "Tab to each trigger and inspect its name, role and initial state.", "expected": "The trigger is visibly focused, clearly named and exposes collapsed, expanded or selected state.", "record": "Trigger properties before activation."},
+        {"action": "Activate disclosure and accordion triggers with Enter and Space.", "expected": "The correct content opens or closes and state changes programmatically.", "record": "Key used and state before and after."},
+        {"action": "Tab through opened content, then close it and continue tabbing.", "expected": "Visible controls are reachable and controls in collapsed content are not focusable.", "record": "First hidden control reached or visible control skipped."},
+        {"action": "For tabs, use arrow keys, Home and End where the widget supports the standard pattern.", "expected": "Focus and selection move consistently and the corresponding panel is presented.", "record": "Keys, focused tab, selected tab and visible panel."},
+        {"action": "Use Shift+Tab to leave the component and return to it.", "expected": "Focus enters and leaves predictably without becoming trapped.", "record": "Entry and exit targets."},
+        {"action": "Inspect trigger-to-panel relationships and read the component in DOM order.", "expected": "Each trigger controls the correct panel and the reading sequence remains meaningful.", "record": "Control relationship and first order issue."}
+      ],
+      "record": ["Trigger properties", "Activation keys", "Focus order", "Tab selection", "Control relationships"],
+      "common_failures": ["A clickable heading is not keyboard operable", "Collapsed content remains focusable", "Selected tab is not announced", "Activation loses focus"],
+      "specialist_review": "Escalate composite widgets when automatic versus manual activation or managed focus is uncertain."
+    },
+    {
+      "id": "CP-07",
+      "slug": "tables-lists-and-grouped-content",
+      "title": "Tables, lists and grouped content",
+      "summary": "Check that structured information preserves its relationships when read programmatically.",
+      "applies_to": ["Data tables", "Comparison tables", "Ordered and unordered lists", "Definition lists, radio groups and checkbox groups"],
+      "criteria": ["1.3.1", "1.3.2", "2.4.6", "4.1.2"],
+      "what_should_happen": ["Data tables identify captions and header relationships.", "Layout tables do not expose misleading data-table semantics.", "Visible lists are represented as lists.", "Grouped controls have an understandable group label.", "Reading order preserves the relationship between labels, headers and values."],
+      "how_to_test": [
+        {"action": "Identify every visible table, list and grouped set of controls on the page.", "expected": "Each item can be classified by its actual information purpose.", "record": "Target, type and screenshot."},
+        {"action": "Inspect data-table caption, row headers, column headers and cell associations.", "expected": "Headers are programmatically associated with the cells they describe.", "record": "Caption, header structure and first incorrect cell association."},
+        {"action": "Navigate the table with a screen reader or accessibility tree reading method.", "expected": "Users can determine the relevant headers for each data cell.", "record": "Cell and announced headers."},
+        {"action": "Inspect tables used only for visual layout.", "expected": "Layout structure does not create false header or data relationships.", "record": "Table role and misleading announcement."},
+        {"action": "Compare every visual list with the DOM or accessibility tree.", "expected": "List boundaries and item counts are programmatically available when they convey structure.", "record": "Visible list and computed role or item count."},
+        {"action": "Inspect related radio buttons, checkboxes and fields as a group.", "expected": "The group has a programmatic label and each control has its individual label.", "record": "Group label and control names."}
+      ],
+      "record": ["Structure inventory", "Table captions and headers", "Cell announcements", "List semantics", "Group labels"],
+      "common_failures": ["Headers are styled bold but use data cells", "A layout table announces meaningless coordinates", "A visual list uses only div elements", "A radio group has no group label"],
+      "specialist_review": "Escalate complex multi-level headers and interactive grids when association rules are unclear."
+    },
+    {
+      "id": "CP-08",
+      "slug": "search-autocomplete-filters-and-results",
+      "title": "Search, autocomplete, filters and results",
+      "summary": "Check query entry, suggestions, filtering and result updates using keyboard and assistive technology.",
+      "applies_to": ["Site and catalogue search", "Autocomplete and comboboxes", "Filters and sorting", "Pagination, load more and result counts"],
+      "criteria": ["1.3.1", "1.4.1", "2.1.1", "2.4.3", "2.4.6", "2.4.7", "2.5.3", "3.2.2", "3.3.2", "4.1.2", "4.1.3"],
+      "what_should_happen": ["Search fields and filters have clear labels.", "Suggestions are keyboard reachable and programmatically identified.", "Filters update without unexpected context changes.", "Selected states do not rely only on colour.", "Loading, counts, empty results and errors are announced appropriately."],
+      "how_to_test": [
+        {"action": "Tab to search and filter controls and inspect their names, roles and states.", "expected": "Every control is clearly labelled and programmatic information matches the visible interface.", "record": "Control label and computed properties."},
+        {"action": "Type a partial query and wait for suggestions without moving focus.", "expected": "Suggestions appear without stealing focus and the number or availability is communicated.", "record": "Typed value, focus location and announcement."},
+        {"action": "Use arrow keys to review suggestions, Enter to choose one and Escape to dismiss them.", "expected": "The active suggestion is identified, selection works and dismissal preserves valid input.", "record": "Key sequence, active option and resulting value."},
+        {"action": "Apply and remove each filter using only the keyboard.", "expected": "Controls work, selected states update and focus remains predictable.", "record": "Filter, state before and after, and focus position."},
+        {"action": "Trigger result updates, empty results, invalid input and loading where available.", "expected": "Useful status or error information is visible and programmatically announced.", "record": "State triggered, visible message and announcement."},
+        {"action": "Use pagination or Load more and then continue keyboard navigation.", "expected": "New content is available and focus moves or remains at a logical location.", "record": "Activation control, new content and focus position."}
+      ],
+      "record": ["Control properties", "Suggestion behaviour", "Filter states", "Status announcements", "Focus after updates"],
+      "common_failures": ["Suggestions require a mouse", "Active suggestion is not announced", "Filtering moves focus to the page start", "Result updates are silent"],
+      "specialist_review": "Escalate custom comboboxes when autocomplete mode, active option or keyboard pattern is unclear."
+    },
+    {
+      "id": "CP-09",
+      "slug": "images-icons-svg-charts-and-canvas",
+      "title": "Images, icons, SVG, charts and canvas",
+      "summary": "Check that non-text content has an equivalent appropriate to its purpose.",
+      "applies_to": ["Content and decorative images", "Logos and iconography", "Charts, diagrams and maps", "SVG, canvas and image buttons"],
+      "criteria": ["1.1.1", "1.3.1", "1.4.1", "1.4.3", "1.4.5", "1.4.11", "2.5.3"],
+      "what_should_happen": ["Informative images have concise equivalent alternatives.", "Decorative images are ignored by assistive technology.", "Functional images and icons are named by purpose.", "Complex graphics provide the same data or conclusion accessibly.", "Information and states do not rely only on colour."],
+      "how_to_test": [
+        {"action": "Inventory images, icons, SVG, canvas, charts and background images in every tested state.", "expected": "Each non-text item is classified as informative, functional, decorative or complex.", "record": "Target, classification and screenshot."},
+        {"action": "Compare each informative item's alternative text with its visual purpose and surrounding text.", "expected": "The alternative communicates equivalent information without unnecessary duplication.", "record": "Visible content, alternative text and missing information."},
+        {"action": "Inspect decorative and redundant items in the accessibility tree.", "expected": "They do not add noise or create empty focusable controls.", "record": "Computed role/name for questionable items."},
+        {"action": "Inspect icon buttons, linked images and image controls.", "expected": "Their accessible names describe the action or destination and include visible wording where present.", "record": "Visible icon/label and accessible name."},
+        {"action": "Review charts, diagrams and maps without relying on colour or visual position.", "expected": "Labels, patterns, text or an accessible data alternative communicate the same information.", "record": "Visual conclusion and available non-visual equivalent."},
+        {"action": "Measure applicable text, graphic parts and required control boundaries against adjacent colours.", "expected": "Required WCAG contrast ratios are met in all meaningful states.", "record": "Foreground, background, ratio and tested state."}
+      ],
+      "record": ["Non-text inventory", "Alternative text", "Decorative treatment", "Functional names", "Complex-data alternative", "Contrast measurements"],
+      "common_failures": ["Alt text repeats nearby text", "A meaningful CSS image has no alternative", "Chart data is available only by colour", "An icon control has no name"],
+      "specialist_review": "Escalate complex visualizations, CAPTCHA and sensory content when an equivalent may affect the purpose."
+    },
+    {
+      "id": "CP-10",
+      "slug": "carousels-animation-and-dynamic-updates",
+      "title": "Carousels, animation and dynamic updates",
+      "summary": "Check movement controls, hidden-slide focus, live updates and user control of changing content.",
+      "applies_to": ["Carousels and sliders", "Animations and video backgrounds", "Tickers and auto-refresh", "Toasts, banners, loading and infinite scroll"],
+      "criteria": ["1.1.1", "1.4.1", "2.1.1", "2.2.2", "2.4.3", "2.4.7", "4.1.2", "4.1.3"],
+      "what_should_happen": ["Applicable automatic movement can be paused, stopped or hidden.", "Controls are named, keyboard operable and visibly focused.", "Hidden slides are not in the focus order.", "Automatic changes do not move focus unexpectedly.", "Important updates are announced without excessive interruption."],
+      "how_to_test": [
+        {"action": "Reload and observe the page without interaction for at least ten seconds.", "expected": "Every automatically moving or updating item can be identified and timed.", "record": "Item, start behaviour and duration."},
+        {"action": "Reach and operate pause, stop or hide controls using Enter and Space.", "expected": "Applicable movement stops and remains stopped until the user restarts it.", "record": "Control name, key and content that did or did not stop."},
+        {"action": "Use keyboard controls to move through every carousel item.", "expected": "Previous, next and selection controls work and expose the current item.", "record": "Control names, keys and current-item state."},
+        {"action": "Tab through the component while different items are visible.", "expected": "Only visible operable content receives focus and focus order remains logical.", "record": "Hidden item reached or visible control skipped."},
+        {"action": "Leave focus in the component while an automatic change occurs.", "expected": "Focus is not moved or lost and the user is not repeatedly interrupted.", "record": "Focus before and after the update."},
+        {"action": "Trigger loading, a toast, refreshed data or added content.", "expected": "Important status is announced without moving focus unnecessarily.", "record": "Trigger, visible message, announcement and focus position."}
+      ],
+      "record": ["Moving-content inventory", "Pause result", "Control names", "Hidden focus", "Update announcement"],
+      "common_failures": ["Pause works only on hover", "Hidden slides remain focusable", "Rotation moves focus", "Toasts are visible but silent"],
+      "specialist_review": "Escalate essential motion and high-frequency live data when exceptions or announcement strategy are uncertain."
+    },
+    {
+      "id": "CP-11",
+      "slug": "audio-video-captions-and-media-controls",
+      "title": "Audio, video, captions and media controls",
+      "summary": "Check media alternatives and keyboard operation from the beginning to the end of the content.",
+      "applies_to": ["Audio-only content", "Prerecorded video", "Live streams", "Custom and embedded media players"],
+      "criteria": ["1.2.1", "1.2.2", "1.2.3", "1.2.4", "1.2.5", "1.4.2", "2.1.1", "2.2.2", "2.4.7"],
+      "what_should_happen": ["Automatic audio can be controlled when required.", "Prerecorded speech and sounds have accurate synchronized captions.", "Important visuals have the required alternative or audio description.", "Live synchronized media provides captions.", "Media controls work by keyboard and display visible focus."],
+      "how_to_test": [
+        {"action": "Classify the media as audio-only, video-only, synchronized prerecorded or synchronized live.", "expected": "The correct WCAG alternative requirements can be selected.", "record": "Media URL, type, duration and whether it is itself an alternative."},
+        {"action": "Reload and check whether audio starts without user action.", "expected": "Audio continuing beyond three seconds has a pause, stop or independent volume control.", "record": "Autoplay duration and available control."},
+        {"action": "Tab to every player control and operate it with expected keyboard keys.", "expected": "Playback, captions, volume and full-screen functions are reachable, named and visibly focused.", "record": "Control, accessible name, key and result."},
+        {"action": "Play the complete prerecorded item with captions enabled.", "expected": "Captions include speech, speakers and important sounds with usable timing.", "record": "Timestamp and exact omission or timing problem."},
+        {"action": "Review the content without seeing the screen, then compare the transcript or audio description.", "expected": "Important visual information is communicated by the required alternative.", "record": "Missing visual information and available alternative."},
+        {"action": "For live media, observe a representative sample of speech, names, numbers and sounds.", "expected": "Live captions are present, timely and sufficiently accurate for the content.", "record": "Observation time and material caption error."}
+      ],
+      "record": ["Media classification", "Autoplay behaviour", "Control results", "Caption timestamps", "Missing visual alternative", "Live sample"],
+      "common_failures": ["Captions omit speakers or sounds", "Controls disappear from keyboard focus", "A transcript is treated as sufficient for every video requirement", "Autoplay audio lacks independent control"],
+      "specialist_review": "Escalate caption quality, audio-description timing and language accuracy when media expertise is required."
+    },
+    {
+      "id": "CP-12",
+      "slug": "pointer-touch-dragging-and-target-size",
+      "title": "Pointer, touch, dragging and target size",
+      "summary": "Check that pointer and touch actions do not require precision, complex gestures or accidental activation.",
+      "applies_to": ["Drag and drop", "Sliders and maps", "Swipe and multipoint gestures", "Small buttons, links and adjacent controls"],
+      "criteria": ["2.1.1", "2.5.1", "2.5.2", "2.5.4", "2.5.7", "2.5.8"],
+      "what_should_happen": ["Complex gestures have a simple alternative unless essential.", "Dragging has a non-dragging alternative unless exempt.", "Pointer actions can be cancelled or undone where required.", "Motion-controlled functions have user-interface alternatives.", "Targets meet minimum size or a documented exception."],
+      "how_to_test": [
+        {"action": "Inventory swipe, pinch, path, drag, motion and precision-dependent operations.", "expected": "Every complex interaction and its purpose are identified.", "record": "Component, gesture and intended result."},
+        {"action": "Complete each path-based or multipoint action using one pointer without a path.", "expected": "A simple control completes the same function unless the gesture is essential.", "record": "Original gesture, alternative and result."},
+        {"action": "Complete each drag operation without dragging.", "expected": "Buttons, menus, fields or another method provide the same result unless exempt.", "record": "Dragged item and alternative method."},
+        {"action": "Press down on a control, move away and release outside it; then press outside and release on it.", "expected": "The action does not trigger unexpectedly and can be aborted or undone as required.", "record": "Pointer sequence and actual activation."},
+        {"action": "Trigger any function controlled by device motion and disable motion access where possible.", "expected": "An ordinary interface control performs the same function and motion can be disabled unless essential.", "record": "Motion action, alternative and setting."},
+        {"action": "Measure small targets and spacing in each responsive state.", "expected": "Targets are at least 24 by 24 CSS pixels or satisfy a documented WCAG exception.", "record": "Target dimensions, spacing and claimed exception."}
+      ],
+      "record": ["Gesture inventory", "Simple alternatives", "Cancellation result", "Motion alternative", "Target measurements"],
+      "common_failures": ["A slider works only by dragging", "A map requires pinch zoom", "Controls activate on pointer down", "Small adjacent icons do not meet size or spacing"],
+      "specialist_review": "Escalate claimed essential gestures and target-size exceptions when the boundary is uncertain."
+    },
+    {
+      "id": "CP-13",
+      "slug": "authentication-timeouts-and-multi-step-processes",
+      "title": "Authentication, timeouts and multi-step processes",
+      "summary": "Check sign-in, session limits, repeated information, uploads, review and final submission.",
+      "applies_to": ["Sign-in and account creation", "One-time codes and CAPTCHA", "Timed sessions", "Multi-step processes, uploads and final submission"],
+      "criteria": ["2.1.1", "2.2.1", "2.4.2", "2.4.3", "3.3.1", "3.3.3", "3.3.4", "3.3.7", "3.3.8", "4.1.3"],
+      "what_should_happen": ["Users can extend or control applicable time limits.", "Authentication supports password managers, paste and accessible alternatives.", "Information already supplied is not unnecessarily requested again.", "Errors preserve progress and identify corrections.", "Important submissions can be reviewed and corrected as required."],
+      "how_to_test": [
+        {"action": "Start the complete process in a clean session and record every step, page title and initial focus target.", "expected": "Each step has a clear purpose and focus begins at a logical location.", "record": "Step sequence, titles and focus targets."},
+        {"action": "Use password-manager fill and paste in authentication fields.", "expected": "Users can complete authentication without unnecessary memory or transcription barriers.", "record": "Method attempted and any blocked action."},
+        {"action": "Identify CAPTCHA, puzzle or cognitive requirements and use the supplied alternative.", "expected": "An accessible method exists that does not depend on prohibited cognitive-function tests unless an exception applies.", "record": "Challenge and alternative route."},
+        {"action": "Approach every content-controlled timeout without completing the task.", "expected": "Users receive warning and can extend, adjust or turn off the limit where WCAG requires.", "record": "Timeout length, warning time and extension result."},
+        {"action": "Enter information early, continue and check whether it is requested again.", "expected": "Previously supplied information is populated or selectable unless a valid exception applies.", "record": "Repeated field and available reuse method."},
+        {"action": "Trigger upload, validation and server errors, then return to a previous step.", "expected": "Errors are specific, focus is useful and safely entered information is preserved.", "record": "Error, focus destination and lost data."},
+        {"action": "Review, correct and submit authorized test data using only the keyboard.", "expected": "Required safeguards exist and final success or failure is announced.", "record": "Review route, correction result and final announcement."}
+      ],
+      "record": ["Step sequence", "Authentication methods", "Timeout controls", "Repeated data", "Error recovery", "Review and submission"],
+      "common_failures": ["Paste is blocked", "Timeout warning cannot be extended", "Information must be retyped", "Returning to correct data loses progress", "Submission status is silent"],
+      "specialist_review": "Escalate identity checks, legal safeguards and security exceptions when ownership or applicability is unclear."
+    },
+    {
+      "id": "CP-14",
+      "slug": "responsive-zoom-orientation-and-text-spacing",
+      "title": "Responsive layout, zoom, orientation and text spacing",
+      "summary": "Check that content remains readable and operable when users enlarge, rotate or restyle it.",
+      "applies_to": ["Every representative page", "Sticky headers and banners", "Responsive navigation and forms", "Tables and other potentially two-dimensional regions"],
+      "criteria": ["1.3.4", "1.4.4", "1.4.10", "1.4.12", "2.4.11", "2.5.8"],
+      "what_should_happen": ["Content works in portrait and landscape unless essential.", "Text resizes to 200 percent without loss.", "At the WCAG reflow viewport, ordinary content does not require horizontal page scrolling.", "Text-spacing overrides do not clip or overlap content.", "Focused controls remain at least partly visible and targets remain usable."],
+      "how_to_test": [
+        {"action": "Record browser, operating system, viewport and zoom before changing anything.", "expected": "The environment can be reproduced by another tester.", "record": "Browser version, viewport, zoom and device orientation."},
+        {"action": "Complete the main task in portrait and landscape on a device supporting both.", "expected": "Content and controls remain available in both orientations unless one is essential.", "record": "Orientation and missing or blocked function."},
+        {"action": "Increase text size to 200 percent without using operating-system magnification as a substitute.", "expected": "Text remains readable and all content and functionality remain available.", "record": "Clipped, overlapping or missing target."},
+        {"action": "Use a 1280 CSS-pixel viewport at 400 percent zoom, or an equivalent 320 CSS-pixel viewport, and complete the task.", "expected": "Ordinary content reflows to one-dimensional scrolling; valid two-dimensional regions scroll within their own area.", "record": "Horizontal page scroll and the content causing it."},
+        {"action": "Apply line height 1.5, paragraph spacing 2, letter spacing 0.12 and word spacing 0.16 times font size.", "expected": "No text, labels, controls or messages are clipped, hidden or overlapped.", "record": "Affected target and screenshot."},
+        {"action": "Tab through the page at the narrow viewport with sticky content and banners visible.", "expected": "Focused components are not completely obscured and remain operable.", "record": "Focused target and obstructing content."},
+        {"action": "Measure controls whose size or spacing changes responsively.", "expected": "Targets continue to meet minimum size or a documented exception.", "record": "Viewport, target dimensions and exception."}
+      ],
+      "record": ["Environment", "Orientation results", "Resize issue", "Reflow issue", "Spacing issue", "Obscured focus", "Target dimensions"],
+      "common_failures": ["Mobile controls disappear at high zoom", "Text overlaps buttons", "Sticky banners cover focused controls", "Spacing overrides clip labels"],
+      "specialist_review": "Escalate maps, complex tables and content claiming essential orientation or two-dimensional-layout exceptions."
+    }
+  ]
+}

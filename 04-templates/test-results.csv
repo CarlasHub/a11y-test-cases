@@ -1,0 +1,2 @@
+test_run_id,test_case_id,wcag_sc,target_id,state,environment,execution_status,criterion_outcome,action,expected_result,actual_result,evidence_reference,issue_id,limitation,tester,test_date,reviewer,review_date
+RUN-001,TC-01,2.4.2,PAGE-001,default,Desktop keyboard,not_started,,,,,,,,,,,
