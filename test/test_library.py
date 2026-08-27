@@ -247,7 +247,7 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("https://cuddly-happiness-wny73jk.pages.github.io/", readme)
         self.assertTrue(
             readme.rstrip().endswith(
-                "**Main contact for questions:** [Carla Gonçalves](mailto:carla.goncalves@radancy.com)"
+                "**Director of Accessibility at Radancy:** [Carla Gonçalves](mailto:carla.goncalves@radancy.com)"
             )
         )
 

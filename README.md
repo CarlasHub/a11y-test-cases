@@ -130,4 +130,4 @@ Pushes to `main` run the quality workflow and publish the generated static manag
 
 For internal standards, delivery guidance and supporting material, see [Accessibility at Radancy](https://tmpww.sharepoint.com/sites/delivery/SitePages/Accessibility.aspx).
 
-**Main contact for questions:** [Carla Gonçalves](mailto:carla.goncalves@radancy.com)
+**Director of Accessibility at Radancy:** [Carla Gonçalves](mailto:carla.goncalves@radancy.com)
