@@ -5,7 +5,7 @@
 
 Use the manager to select, organise and run accessibility test cases for websites and web applications.
 
-**[Open the Radancy accessibility test case manager](https://radancy-pe.github.io/a11y-test-cases/)**
+**[Open the Radancy accessibility test case manager](https://cuddly-happiness-wny73jk.pages.github.io/)**
 
 ## What this repository provides
 
@@ -21,7 +21,7 @@ Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
 
 ## How to use the manager
 
-1. Open the [published manager](https://radancy-pe.github.io/a11y-test-cases/).
+1. Open the [published manager](https://cuddly-happiness-wny73jk.pages.github.io/).
 2. Agree the pages, components, states, languages, environments and complete user journeys in scope.
 3. Search or filter the catalogue for components present in the test target.
 4. Add the relevant component procedures and WCAG groups to **My test plan**.

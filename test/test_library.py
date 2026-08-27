@@ -244,7 +244,7 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("uses: actions/upload-pages-artifact@v5", workflow)
         self.assertIn("uses: actions/deploy-pages@v5", workflow)
         self.assertIn("path: _site", workflow)
-        self.assertIn("https://radancy-pe.github.io/a11y-test-cases/", readme)
+        self.assertIn("https://cuddly-happiness-wny73jk.pages.github.io/", readme)
         self.assertTrue(
             readme.rstrip().endswith(
                 "**Main contact for questions:** [Carla Gonçalves](mailto:carla.goncalves@radancy.com)"
