@@ -246,15 +246,24 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("uses: actions/deploy-pages@v5", workflow)
         self.assertIn("path: _site", workflow)
         self.assertIn("https://cuddly-happiness-wny73jk.pages.github.io/", readme)
-        self.assertIn(
-            "**Director of Accessibility at Radancy, owner and reviewer:** "
-            "[Michael Spellacy](mailto:michael.spellacy@radancy.com)",
-            readme,
-        )
         self.assertTrue(
             readme.rstrip().endswith(
-                "**Reviewer:** [Rebecca Hammer](mailto:Rebecca.Hammer@radancy.com)"
+                "[Accessibility at Radancy](https://tmpww.sharepoint.com/sites/delivery/SitePages/Accessibility.aspx)."
             )
+        )
+        self.assertNotIn("michael.spellacy@radancy.com", readme)
+        self.assertNotIn("Rebecca.Hammer@radancy.com", readme)
+
+    def test_repository_codeowners_are_configured(self) -> None:
+        codeowners = (ROOT / ".github" / "CODEOWNERS").read_text(encoding="utf-8")
+        self.assertIn(
+            "# Repository owners: @carla-goncalves_radancy and @mspellac_radancy",
+            codeowners,
+        )
+        self.assertIn("# Accessibility reviewer: @rhammer_radancy", codeowners)
+        self.assertIn(
+            "* @carla-goncalves_radancy @mspellac_radancy @rhammer_radancy",
+            codeowners,
         )
 
     def test_component_procedure_references_are_valid(self) -> None:

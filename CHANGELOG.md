@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added Michael Spellacy as owner and reviewer and Rebecca Hammer as reviewer in the README contact section.
+- Removed individual contact details from the README and configured repository owners and accessibility review through GitHub permissions and CODEOWNERS.
 - Replaced the README contact with the Director of Accessibility at Radancy and removed the repeated two-line page footer.
 - Added automated GitHub Pages publishing for the generated manager and required download asset.
 - Reworked the README with a live-site link, usage guide, result model, repository map, contributor workflow, assessment boundary and Radancy accessibility contact details.

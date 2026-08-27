@@ -129,7 +129,3 @@ Pushes to `main` run the quality workflow and publish the generated static manag
 ## Accessibility at Radancy
 
 For internal standards, delivery guidance and supporting material, see [Accessibility at Radancy](https://tmpww.sharepoint.com/sites/delivery/SitePages/Accessibility.aspx).
-
-**Director of Accessibility at Radancy, owner and reviewer:** [Michael Spellacy](mailto:michael.spellacy@radancy.com)
-
-**Reviewer:** [Rebecca Hammer](mailto:Rebecca.Hammer@radancy.com)
