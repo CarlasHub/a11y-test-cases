@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Replaced the README contact with the Director of Accessibility at Radancy and removed the repeated two-line page footer.
 - Added automated GitHub Pages publishing for the generated manager and required download asset.
 - Reworked the README with a live-site link, usage guide, result model, repository map, contributor workflow, assessment boundary and Radancy accessibility contact details.
 - Reviewed all 55 Level A and Level AA criterion titles, levels and fragment identifiers against the official WCAG 2.2 specification and locked that metadata in validation.

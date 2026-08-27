@@ -104,8 +104,7 @@ input:focus-visible,
 }
 
 .header-inner,
-main,
-.site-footer {
+main {
   width: min(100% - 2rem, var(--content-width));
   margin-inline: auto;
 }
@@ -926,17 +925,6 @@ td {
 th {
   background: var(--surface);
   font-weight: 700;
-}
-
-.site-footer {
-  border-top: 0.0625rem solid var(--line);
-  padding-block: 2rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.site-footer p {
-  max-width: var(--text-width);
 }
 
 /* Test selection and focused reading */
@@ -1956,8 +1944,7 @@ body {
   background: #fbfafc;
 }
 
-.library-workspace main,
-.library-workspace .site-footer {
+.library-workspace main {
   width: auto;
   margin: 0;
 }
@@ -2205,15 +2192,6 @@ body {
   padding: 0.8rem 0.9rem;
 }
 
-.site-footer {
-  margin: 0 clamp(1rem, 2.5vw, 2rem);
-  padding-block: 1.5rem 2rem;
-}
-
-.site-footer p {
-  margin-block: 0.2rem;
-}
-
 @media (max-width: 72rem) {
   .test-picker-card {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -2449,7 +2427,6 @@ body {
 
 @media print {
   .site-header,
-  .site-footer,
   .test-actions,
   .case-pagination,
   .skip-link {

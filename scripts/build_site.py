@@ -15,7 +15,7 @@ DATA_PATH = ROOT / "content" / "test-cases.json"
 PROCEDURES_PATH = ROOT / "content" / "component-procedures.json"
 MANUAL_CHECKS_PATH = ROOT / "content" / "criterion-manual-checks.json"
 INDEX_PATH = ROOT / "index.html"
-ASSET_VERSION = "20260827-content-review"
+ASSET_VERSION = "20260827-footer-cleanup"
 
 
 THEMES = {
@@ -305,10 +305,6 @@ def page_shell(content: str) -> str:
         <main id="main-content" tabindex="-1">
 {content}
         </main>
-        <footer class="site-footer">
-          <p><strong>Radancy accessibility test case manager.</strong> Results apply only to the pages, components, states and environments recorded for the test run.</p>
-          <p><a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> is the normative source for success-criterion requirements.</p>
-        </footer>
       </div>
     </div>
   </div>

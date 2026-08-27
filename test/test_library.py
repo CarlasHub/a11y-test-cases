@@ -158,8 +158,9 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn('class="library-workspace"', homepage)
         self.assertIn('id="plan-progress" max="31" value="0"', homepage)
         self.assertIn('<details class="selection-panel" aria-labelledby="selection-title" open>', homepage)
-        self.assertIn('href="assets/styles.css?v=20260827-content-review"', homepage)
-        self.assertIn('src="assets/app.js?v=20260827-content-review"', homepage)
+        self.assertIn('href="assets/styles.css?v=20260827-footer-cleanup"', homepage)
+        self.assertIn('src="assets/app.js?v=20260827-footer-cleanup"', homepage)
+        self.assertNotIn('class="site-footer"', homepage)
         self.assertIn("WCAG 2.2</a> contains the normative requirements", homepage)
         self.assertEqual(31, homepage.count("data-test-card"))
         self.assertEqual(14, homepage.count('data-test-kind="component"'))
@@ -247,7 +248,7 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("https://cuddly-happiness-wny73jk.pages.github.io/", readme)
         self.assertTrue(
             readme.rstrip().endswith(
-                "**Director of Accessibility at Radancy:** [Carla Gonçalves](mailto:carla.goncalves@radancy.com)"
+                "**Director of Accessibility at Radancy:** [michael.spellacy@radancy.com](mailto:michael.spellacy@radancy.com)"
             )
         )
 
