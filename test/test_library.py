@@ -257,10 +257,13 @@ class LibraryValidationTests(unittest.TestCase):
     def test_repository_codeowners_are_configured(self) -> None:
         codeowners = (ROOT / ".github" / "CODEOWNERS").read_text(encoding="utf-8")
         self.assertIn(
-            "# Repository owners: @carla-goncalves_radancy and @mspellac_radancy",
+            "# Repository co-owners and reviewers:",
             codeowners,
         )
-        self.assertIn("# Accessibility reviewer: @rhammer_radancy", codeowners)
+        self.assertIn(
+            "# @carla-goncalves_radancy, @mspellac_radancy and @rhammer_radancy",
+            codeowners,
+        )
         self.assertIn(
             "* @carla-goncalves_radancy @mspellac_radancy @rhammer_radancy",
             codeowners,

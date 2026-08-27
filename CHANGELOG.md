@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Configured Carla Gonçalves, Michael Spellacy and Rebecca Hammer as repository co-owners and CODEOWNERS reviewers.
 - Removed individual contact details from the README and configured repository owners and accessibility review through GitHub permissions and CODEOWNERS.
 - Replaced the README contact with the Director of Accessibility at Radancy and removed the repeated two-line page footer.
 - Added automated GitHub Pages publishing for the generated manager and required download asset.
