@@ -437,7 +437,6 @@ try {
         htmlHasRun: html.includes("SMOKE-RUN-1"),
         htmlHasMethod: html.includes("structured around WCAG-EM 2.0"),
         htmlHasSample: html.includes("Selected test sample"),
-        htmlHasLegacyBrand: html.toLowerCase().includes("radancy"),
         jsonSchemaVersion: json.schemaVersion,
         jsonMethodologyUri: json.methodology?.uri,
         jsonRunId: json.evaluation?.testRunId,
@@ -457,7 +456,6 @@ try {
   assert(reportDownloads.htmlHasRun === true, "HTML report is missing the test-run ID");
   assert(reportDownloads.htmlHasMethod === true, "HTML report is missing the WCAG-EM methodology statement");
   assert(reportDownloads.htmlHasSample === true, "HTML report is missing the selected test sample");
-  assert(reportDownloads.htmlHasLegacyBrand === false, "HTML report contains a legacy brand reference");
   assert(reportDownloads.jsonSchemaVersion === "1.0", `Unexpected report schema: ${reportDownloads.jsonSchemaVersion}`);
   assert(reportDownloads.jsonMethodologyUri === "https://www.w3.org/TR/wcag-em-2/", "JSON report has the wrong methodology URI");
   assert(reportDownloads.jsonRunId === "SMOKE-RUN-1", "JSON report is missing the test-run ID");

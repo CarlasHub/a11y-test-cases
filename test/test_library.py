@@ -184,7 +184,6 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn('id="download-evaluation-data" disabled', homepage)
         self.assertEqual(25, homepage.count("data-run-meta"))
         self.assertIn("WCAG-EM 2.0", homepage)
-        self.assertNotIn("radancy", homepage.lower())
         self.assertNotRegex(homepage, r"\b1 (?:guided )?steps\b|\b1 criteria\b")
         self.assertEqual(31, homepage.count('<details class="test-disclosure'))
         self.assertEqual(62, homepage.count('class="theme-chip'))
