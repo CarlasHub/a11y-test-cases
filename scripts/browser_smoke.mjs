@@ -159,7 +159,9 @@ try {
     openTestLinks: document.querySelectorAll(".open-test").length,
     componentPickerCards: document.querySelectorAll('[data-test-kind="component"]').length,
     wcagPickerCards: document.querySelectorAll('[data-test-kind="wcag"]').length,
+    pickerHeadings: document.querySelectorAll("[data-test-card] h3[data-test-title]").length,
     selectionControls: document.querySelectorAll("[data-test-select]").length,
+    copyButtonLabel: document.querySelector("#copy-test-plan")?.textContent.trim(),
     planProgressMaximum: document.querySelector("#plan-progress")?.max,
     planProgressValue: document.querySelector("#plan-progress")?.value,
     planPanelOpen: document.querySelector(".selection-panel")?.open,
@@ -194,7 +196,9 @@ try {
   assert(desktop.openTestLinks === 31, `Expected 31 direct test links, found ${desktop.openTestLinks}`);
   assert(desktop.componentPickerCards === 14, `Expected 14 component picker cards, found ${desktop.componentPickerCards}`);
   assert(desktop.wcagPickerCards === 17, `Expected 17 WCAG picker cards, found ${desktop.wcagPickerCards}`);
+  assert(desktop.pickerHeadings === 31, `Expected 31 level-three picker headings, found ${desktop.pickerHeadings}`);
   assert(desktop.selectionControls === 31, `Expected 31 test selection controls, found ${desktop.selectionControls}`);
+  assert(desktop.copyButtonLabel === "Copy test plan", `Unexpected copy action label: ${desktop.copyButtonLabel}`);
   assert(desktop.planProgressMaximum === 31, `Expected test-plan progress maximum 31, found ${desktop.planProgressMaximum}`);
   assert(desktop.planProgressValue === 0, `Expected empty test-plan progress, found ${desktop.planProgressValue}`);
   assert(desktop.planPanelOpen === true, "Desktop test-plan panel should start open");
@@ -246,10 +250,19 @@ try {
     document.querySelector("#select-visible-tests").click();
     const selectedCount = document.querySelector("#selection-count").textContent.trim();
     const selectedLinks = document.querySelectorAll("#selection-list a").length;
+    const removeButtons = document.querySelectorAll("#selection-list [data-remove-test]").length;
+    const firstRemove = document.querySelector("#selection-list [data-remove-test]");
+    const firstRemoveLabel = firstRemove?.getAttribute("aria-label") || "";
     const copyEnabled = !document.querySelector("#copy-test-plan").disabled;
     const storedCount = JSON.parse(localStorage.getItem("carlashub-a11y-selected-tests") || "[]").length;
     const progressValue = document.querySelector("#plan-progress").value;
     const progressText = document.querySelector("#plan-progress-text").textContent.trim();
+    const removedId = firstRemove?.dataset.removeTest;
+    firstRemove?.focus();
+    firstRemove?.click();
+    const countAfterRemove = document.querySelector("#selection-count").textContent.trim();
+    const removedCheckboxChecked = document.querySelector('[data-test-select][value="' + removedId + '"]')?.checked;
+    const removeFocusRetained = document.activeElement?.matches("[data-remove-test]") || false;
     document.querySelector("#clear-test-plan").click();
     const clearedCount = document.querySelector("#selection-count").textContent.trim();
     const clearedProgress = document.querySelector("#plan-progress").value;
@@ -262,10 +275,15 @@ try {
       wcagFormMatches,
       selectedCount,
       selectedLinks,
+      removeButtons,
+      firstRemoveLabel,
       copyEnabled,
       storedCount,
       progressValue,
       progressText,
+      countAfterRemove,
+      removedCheckboxChecked,
+      removeFocusRetained,
       clearedCount,
       clearedProgress,
       restoredMatches: document.querySelectorAll("[data-test-card]:not([hidden])").length
@@ -277,10 +295,15 @@ try {
   assert(filtering.wcagFormMatches === 3, `Expected 3 form-themed WCAG groups, found ${filtering.wcagFormMatches}`);
   assert(filtering.selectedCount === "3", `Expected 3 selected tests, found ${filtering.selectedCount}`);
   assert(filtering.selectedLinks === 3, `Expected 3 selected-test links, found ${filtering.selectedLinks}`);
+  assert(filtering.removeButtons === 3, `Expected 3 remove controls, found ${filtering.removeButtons}`);
+  assert(filtering.firstRemoveLabel.endsWith("from test plan"), `Unexpected remove label: ${filtering.firstRemoveLabel}`);
   assert(filtering.copyEnabled === true, "Copy action should be enabled for a non-empty plan");
   assert(filtering.storedCount === 3, `Expected 3 stored test selections, found ${filtering.storedCount}`);
   assert(filtering.progressValue === 3, `Expected progress value 3, found ${filtering.progressValue}`);
   assert(filtering.progressText === "3 of 31 selected", `Unexpected progress text: ${filtering.progressText}`);
+  assert(filtering.countAfterRemove === "2", `Expected 2 tests after individual removal, found ${filtering.countAfterRemove}`);
+  assert(filtering.removedCheckboxChecked === false, "Removing a plan item did not clear its catalogue checkbox");
+  assert(filtering.removeFocusRetained === true, "Focus was not retained after removing a plan item");
   assert(filtering.clearedCount === "0", "Clear action did not empty the test plan");
   assert(filtering.clearedProgress === 0, "Clear action did not reset test-plan progress");
   assert(filtering.restoredMatches === 31, "Reset filters did not restore all picker cards");

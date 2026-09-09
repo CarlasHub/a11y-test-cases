@@ -171,6 +171,10 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertEqual(31, homepage.count('name="selected-tests"'))
         self.assertEqual(31, homepage.count('class="open-test"'))
         self.assertEqual(31, homepage.count('class="picker-card-identity"'))
+        self.assertEqual(31, homepage.count("<h3 data-test-title>"))
+        self.assertNotIn("<h4 data-test-title>", homepage)
+        self.assertIn('id="copy-test-plan" disabled>Copy test plan</button>', homepage)
+        self.assertNotRegex(homepage, r"\b1 (?:guided )?steps\b|\b1 criteria\b")
         self.assertEqual(31, homepage.count('<details class="test-disclosure'))
         self.assertEqual(62, homepage.count('class="theme-chip'))
         self.assertIn('id="test-search"', homepage)
@@ -212,6 +216,7 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("box-shadow", stylesheet)
 
         script = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
+        self.assertIn('removeButton.dataset.removeTest = identifier', script)
         self.assertIn('tabList.setAttribute("role", "tablist")', script)
         self.assertIn('tab.setAttribute("role", "tab")', script)
         self.assertIn('panels[index].setAttribute("role", "tabpanel")', script)

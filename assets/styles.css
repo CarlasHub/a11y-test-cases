@@ -1207,19 +1207,19 @@ button.filter-chip[aria-pressed="true"] {
   text-transform: uppercase;
 }
 
-.test-picker-card h4 {
+.test-picker-card h3 {
   margin-block: 0.75rem 0.4rem;
   font-family: inherit;
   font-size: 1.05rem;
   line-height: 1.35;
 }
 
-.test-picker-card h4 a {
+.test-picker-card h3 a {
   color: var(--ink);
   text-decoration: none;
 }
 
-.test-picker-card h4 a:hover {
+.test-picker-card h3 a:hover {
   color: var(--accent-strong);
   text-decoration: underline;
 }
@@ -1303,8 +1303,26 @@ button.filter-chip[aria-pressed="true"] {
   font-size: 0.86rem;
 }
 
+.selection-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.5rem;
+}
+
 .selection-list li + li {
   margin-top: 0.55rem;
+}
+
+.selection-list a {
+  overflow-wrap: anywhere;
+}
+
+.plan-remove-button {
+  min-height: 2rem;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.76rem;
+  line-height: 1.2;
 }
 
 .selection-actions,
@@ -1915,6 +1933,18 @@ body {
   color: var(--paper);
 }
 
+.library-sidebar .plan-remove-button {
+  border-color: rgba(255, 255, 255, 0.42);
+  color: var(--paper);
+  background: transparent;
+}
+
+.library-sidebar .plan-remove-button:hover {
+  border-color: var(--paper);
+  color: var(--accent-strong);
+  background: #e8f0fe;
+}
+
 .library-sidebar .selection-actions button {
   min-height: 2.45rem;
   border-color: var(--paper);
@@ -2088,7 +2118,7 @@ body {
   text-align: center;
 }
 
-.test-picker-card h4 {
+.test-picker-card h3 {
   margin: 0 0 0.18rem;
   font-size: 1rem;
 }

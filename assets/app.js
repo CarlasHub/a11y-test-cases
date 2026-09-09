@@ -22,6 +22,7 @@
   const mobilePlanMedia = window.matchMedia("(max-width: 36rem)");
 
   const normalize = (value) => value.trim().toLocaleLowerCase();
+  const getCardTitle = (card) => card.querySelector("[data-test-title]")?.textContent.trim() || "";
 
   const activateStepTab = (deck, nextTab, { focus = false } = {}) => {
     const tabs = Array.from(deck.querySelectorAll("[data-step-tab]"));
@@ -134,7 +135,7 @@
 
   const buildPlanText = () => cards
     .filter((card) => selectedTests.has(card.dataset.testId))
-    .map((card) => `${card.dataset.testId} — ${card.querySelector("h4")?.textContent.trim() || ""}`)
+    .map((card) => `${card.dataset.testId} — ${getCardTitle(card)}`)
     .join("\n");
 
   const updateSelection = ({ announce = false } = {}) => {
@@ -143,11 +144,19 @@
     selectionList.replaceChildren();
     const selectedCards = cards.filter((card) => selectedTests.has(card.dataset.testId));
     selectedCards.forEach((card) => {
+      const identifier = card.dataset.testId;
+      const title = getCardTitle(card);
       const item = document.createElement("li");
       const link = document.createElement("a");
       link.href = card.dataset.testTarget;
-      link.textContent = `${card.dataset.testId} — ${card.querySelector("h4")?.textContent.trim() || ""}`;
-      item.append(link);
+      link.textContent = `${identifier} — ${title}`;
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "plan-remove-button";
+      removeButton.dataset.removeTest = identifier;
+      removeButton.textContent = "Remove";
+      removeButton.setAttribute("aria-label", `Remove ${identifier} — ${title} from test plan`);
+      item.append(link, removeButton);
       selectionList.append(item);
     });
 
@@ -246,6 +255,21 @@
     selectVisibleButton?.addEventListener("click", () => {
       cards.filter((card) => !card.hidden).forEach((card) => selectedTests.add(card.dataset.testId));
       updateSelection({ announce: true });
+    });
+
+    selectionList?.addEventListener("click", (event) => {
+      const removeButton = event.target.closest?.("[data-remove-test]");
+      if (!removeButton) return;
+      const removeButtons = Array.from(selectionList.querySelectorAll("[data-remove-test]"));
+      const buttonIndex = removeButtons.indexOf(removeButton);
+      selectedTests.delete(removeButton.dataset.removeTest);
+      updateSelection({ announce: true });
+      const remainingButtons = Array.from(selectionList.querySelectorAll("[data-remove-test]"));
+      if (remainingButtons.length > 0) {
+        remainingButtons[Math.min(buttonIndex, remainingButtons.length - 1)].focus();
+      } else {
+        selectionPanel?.querySelector("summary")?.focus();
+      }
     });
 
     clearButton?.addEventListener("click", () => {

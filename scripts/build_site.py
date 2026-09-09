@@ -83,6 +83,11 @@ def escape(value: object) -> str:
     return html.escape(str(value), quote=True)
 
 
+def count_label(count: int, singular: str, plural: str | None = None) -> str:
+    label = singular if count == 1 else (plural or f"{singular}s")
+    return f"{count} {label}"
+
+
 def load_json(path: Path) -> dict:
     with path.open(encoding="utf-8") as source:
         return json.load(source)
@@ -128,13 +133,13 @@ def render_picker_card(
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">{escape(identifier)}</span>
             <div>
-              <h4><a href="#{escape(target)}">{escape(title)}</a></h4>
+              <h3 data-test-title><a href="#{escape(target)}">{escape(title)}</a></h3>
               <p id="{description_id}">{escape(summary)}</p>
             </div>
           </div>
           <div class="picker-card-details">
             {theme_chip(theme)}
-            <span class="picker-card-meta">{escape(kind_label)} · {step_count} steps · {criterion_count} criteria</span>
+            <span class="picker-card-meta">{escape(kind_label)} · {count_label(step_count, "step")} · {count_label(criterion_count, "criterion", "criteria")}</span>
           </div>
           <div class="picker-card-actions">
             <label class="picker-select" for="{control_id}">
@@ -301,7 +306,7 @@ def page_shell(content: str) -> str:
             <p id="selection-empty">Add tests from the catalogue. Your choices are saved in this browser.</p>
             <ol class="selection-list" id="selection-list"></ol>
             <div class="selection-actions">
-              <button type="button" id="copy-test-plan" disabled>Copy test IDs</button>
+              <button type="button" id="copy-test-plan" disabled>Copy test plan</button>
               <button class="secondary-action" type="button" id="clear-test-plan" disabled>Clear</button>
             </div>
             <p class="selection-feedback" id="selection-feedback" role="status" aria-live="polite"></p>
@@ -398,7 +403,7 @@ def render_component_procedures(library: dict, component_library: dict) -> str:
           <span class="summary-identity">{escape(procedure['id'])}</span>
           <h3 class="summary-title">{escape(procedure['title'])}</h3>
           {theme_chip(theme)}
-          <span class="summary-meta">{len(procedure['how_to_test'])} steps · {len(procedure['criteria'])} criteria</span>
+          <span class="summary-meta">{count_label(len(procedure['how_to_test']), "step")} · {count_label(len(procedure['criteria']), "criterion", "criteria")}</span>
         </summary>
         <article class="component-procedure">
         <div class="procedure-header">
@@ -512,7 +517,7 @@ def render_wcag_test_group(test_case: dict, manual_checks: dict[str, dict]) -> s
           <span class="summary-identity">{escape(test_case['id'])}</span>
           <h3 class="summary-title">{escape(test_case['title'])}</h3>
           {theme_chip(theme)}
-          <span class="summary-meta">{len(test_case['steps'])} guided steps · {len(test_case['criteria'])} criteria</span>
+          <span class="summary-meta">{count_label(len(test_case['steps']), "guided step")} · {count_label(len(test_case['criteria']), "criterion", "criteria")}</span>
         </summary>
         <article class="wcag-test-group">
         <div class="group-header">
