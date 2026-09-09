@@ -15,7 +15,7 @@ DATA_PATH = ROOT / "content" / "test-cases.json"
 PROCEDURES_PATH = ROOT / "content" / "component-procedures.json"
 MANUAL_CHECKS_PATH = ROOT / "content" / "criterion-manual-checks.json"
 INDEX_PATH = ROOT / "index.html"
-ASSET_VERSION = "20260909-carlashub-blue"
+ASSET_VERSION = "20260909-workflow"
 
 
 THEMES = {
@@ -124,12 +124,13 @@ def render_picker_card(
     theme: str,
     step_count: int,
     criterion_count: int,
+    criteria: list[str],
     search_text: str,
 ) -> str:
     control_id = f"pick-{identifier.lower()}"
     kind_label = "Component" if kind == "component" else "WCAG group"
     description_id = f"{control_id}-description"
-    return f"""        <article class="test-picker-card theme-{escape(theme)}" data-test-card data-test-id="{escape(identifier)}" data-test-kind="{escape(kind)}" data-test-theme="{escape(theme)}" data-test-target="#{escape(target)}" data-search-text="{escape(search_text.lower())}">
+    return f"""        <article class="test-picker-card theme-{escape(theme)}" data-test-card data-test-id="{escape(identifier)}" data-test-kind="{escape(kind)}" data-test-theme="{escape(theme)}" data-test-target="#{escape(target)}" data-test-criteria="{escape(','.join(criteria))}" data-search-text="{escape(search_text.lower())}">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">{escape(identifier)}</span>
             <div>
@@ -174,6 +175,7 @@ def render_test_picker(library: dict, component_library: dict) -> str:
                 theme=theme,
                 step_count=len(procedure["how_to_test"]),
                 criterion_count=len(procedure["criteria"]),
+                criteria=procedure["criteria"],
                 search_text=searchable,
             )
         )
@@ -199,6 +201,7 @@ def render_test_picker(library: dict, component_library: dict) -> str:
                 theme=theme,
                 step_count=len(test_case["steps"]),
                 criterion_count=len(test_case["criteria"]),
+                criteria=[criterion["id"] for criterion in test_case["criteria"]],
                 search_text=searchable,
             )
         )
@@ -244,7 +247,10 @@ def render_test_picker(library: dict, component_library: dict) -> str:
         <div class="picker-results">
           <div class="picker-results-header">
             <p class="results-status" id="test-picker-status" role="status" aria-live="polite">31 tests shown</p>
-            <button class="text-action" type="button" id="select-visible-tests">Add all shown</button>
+            <div class="visible-selection-actions">
+              <button class="text-action" type="button" id="select-visible-tests">Add all shown</button>
+              <button class="text-action" type="button" id="remove-visible-tests" disabled>Remove shown</button>
+            </div>
           </div>
           <div class="test-picker-grid" id="test-picker-grid">
 {chr(10).join(cards)}
@@ -288,8 +294,9 @@ def page_shell(content: str) -> str:
           <nav class="sidebar-group" aria-labelledby="library-nav-title">
             <h2 id="library-nav-title">Test case manager</h2>
             <ul class="site-nav">
-              <li><a href="#choose-tests">Choose tests <span>31</span></a></li>
               <li><a href="#before-testing">Before testing</a></li>
+              <li><a href="#choose-tests">Choose tests <span>31</span></a></li>
+              <li><a href="#run-test-plan">Run test plan</a></li>
               <li><a href="#component-procedures">Component procedures <span>14</span></a></li>
               <li><a href="#wcag-test-groups">WCAG test groups <span>17</span></a></li>
               <li><a href="04-templates/test-results.csv">Results CSV</a></li>
@@ -305,9 +312,20 @@ def page_shell(content: str) -> str:
             <p class="progress-text" id="plan-progress-text">0 of 31 selected</p>
             <p id="selection-empty">Add tests from the catalogue. Your choices are saved in this browser.</p>
             <ol class="selection-list" id="selection-list"></ol>
+            <p class="coverage-summary" id="coverage-summary">0 of 55 criteria represented</p>
+            <details class="coverage-gaps">
+              <summary id="coverage-gaps-summary">55 criteria not yet represented</summary>
+              <ul id="coverage-gaps-list"></ul>
+              <p>Representation is a planning aid, not proof of WCAG conformance.</p>
+            </details>
             <div class="selection-actions">
+              <a class="start-testing is-disabled" id="start-testing" href="#run-test-plan" aria-disabled="true">Start testing</a>
               <button type="button" id="copy-test-plan" disabled>Copy test plan</button>
-              <button class="secondary-action" type="button" id="clear-test-plan" disabled>Clear</button>
+              <button class="secondary-action" type="button" id="export-test-plan" disabled>Export CSV</button>
+              <label class="import-test-plan" for="import-test-plan">Import CSV</label>
+              <input class="visually-hidden" type="file" id="import-test-plan" accept=".csv,text/csv">
+              <button class="secondary-action" type="button" id="clear-test-plan" disabled>Clear plan</button>
+              <button class="text-action" type="button" id="undo-clear-test-plan" hidden>Undo clear</button>
             </div>
             <p class="selection-feedback" id="selection-feedback" role="status" aria-live="polite"></p>
           </details>
@@ -594,8 +612,6 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
       <p class="scope-note"><strong>Scope:</strong> all active WCAG 2.2 Level A and Level AA success criteria. Level AAA is outside this manager.</p>
     </section>
 
-{render_test_picker(library, component_library)}
-
     <section class="before-testing" id="before-testing" aria-labelledby="before-testing-title">
       <h2 id="before-testing-title">Before testing</h2>
       <ol>
@@ -610,6 +626,17 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
         <p><a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> contains the normative requirements. W3C <a href="https://www.w3.org/WAI/WCAG22/Understanding/">Understanding documents</a>, <a href="https://www.w3.org/WAI/WCAG22/quickref/">How to Meet WCAG</a> and the <a href="https://www.w3.org/WAI/ARIA/apg/">ARIA Authoring Practices Guide</a> are informative guidance.</p>
         <p>Use the actions in this manager to collect evidence. They are not the only valid test methods, and completing one technique does not by itself prove that a success criterion passes. Assign the result from the success criterion's requirement and all applicable content in the recorded test scope.</p>
       </div>
+      <form class="run-metadata" id="run-metadata">
+        <h3>Set up this test run</h3>
+        <p>These details are saved only in this browser and included in copied or exported results.</p>
+        <div class="metadata-grid">
+          <label>Test run ID<input type="text" data-run-meta="testRunId" autocomplete="off"></label>
+          <label>Target ID or URL<input type="text" data-run-meta="targetId" autocomplete="url"></label>
+          <label>Release, state or scope<input type="text" data-run-meta="state" autocomplete="off"></label>
+          <label>Environment<input type="text" data-run-meta="environment" placeholder="Browser, device, input and assistive technology"></label>
+          <label>Tester<input type="text" data-run-meta="tester" autocomplete="name"></label>
+        </div>
+      </form>
       <div class="result-guidance">
         <h3>Record outcome and progress separately</h3>
         <dl>
@@ -620,6 +647,51 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
           <div><dt>Not started, in progress or blocked — execution status</dt><dd>Use the status that describes the unfinished work. Do not assign a criterion outcome.</dd></div>
         </dl>
         <p><a href="04-templates/test-results.csv">Open the results CSV template</a></p>
+      </div>
+    </section>
+
+{render_test_picker(library, component_library)}
+
+    <section class="test-runner" id="run-test-plan" aria-labelledby="run-test-plan-title">
+      <header class="section-introduction">
+        <p class="eyebrow">Selected test workflow</p>
+        <h2 id="run-test-plan-title">Run your test plan</h2>
+        <p id="run-plan-summary">Choose at least one test to start a guided run.</p>
+      </header>
+      <div class="runner-empty" id="runner-empty">
+        <p>Your selected tests will appear here in a repeatable sequence.</p>
+        <a class="secondary-action" href="#choose-tests">Choose tests</a>
+      </div>
+      <div class="runner-workspace" id="runner-workspace" hidden>
+        <nav class="runner-navigation" aria-label="Test run navigation">
+          <button class="secondary-action" type="button" id="previous-run-test">Previous</button>
+          <label for="current-run-test">Current test</label>
+          <select id="current-run-test"></select>
+          <button class="secondary-action" type="button" id="next-run-test">Next</button>
+        </nav>
+        <article class="runner-card">
+          <p class="runner-position" id="runner-position"></p>
+          <h3 id="runner-test-title" tabindex="-1"></h3>
+          <p><a id="runner-procedure-link" href="#page-title">Open the full procedure</a></p>
+          <label for="runner-status">Execution status</label>
+          <select id="runner-status">
+            <option value="not_started">Not started</option>
+            <option value="in_progress">In progress</option>
+            <option value="blocked">Blocked</option>
+            <option value="needs_review">Needs specialist review</option>
+            <option value="complete">Complete</option>
+          </select>
+          <fieldset class="criterion-outcomes" id="criterion-outcomes">
+            <legend>Criterion outcomes</legend>
+          </fieldset>
+          <div class="runner-fields">
+            <label for="runner-actual-result">Actual result<textarea id="runner-actual-result" rows="4"></textarea></label>
+            <label for="runner-evidence-reference">Evidence reference<input type="text" id="runner-evidence-reference"></label>
+            <label for="runner-issue-id">Issue ID<input type="text" id="runner-issue-id"></label>
+            <label for="runner-limitation">Limitation or blocker<textarea id="runner-limitation" rows="2"></textarea></label>
+          </div>
+          <p class="runner-feedback" id="runner-feedback" role="status" aria-live="polite"></p>
+        </article>
       </div>
     </section>
 

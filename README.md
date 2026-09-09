@@ -14,7 +14,8 @@ Use the manager to select, organise and run accessibility test cases for website
 - A criterion-level manual check for all 55 active WCAG 2.2 Level A and Level AA success criteria.
 - 165 structured manual steps, each with an action, expected result and evidence instruction.
 - Search, type filters and colour-coded theme filters.
-- A browser-saved test plan with selection progress and direct links to each test.
+- A browser-saved, coverage-aware test plan with a guided runner, result fields and direct links to each test.
+- CSV export and import for sharing a plan or continuing a test run in another browser.
 - Reusable scope, result, issue and summary templates.
 
 Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
@@ -23,11 +24,12 @@ Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
 
 1. Open the [published manager](https://carlashub.github.io/a11y-test-cases/).
 2. Agree the pages, components, states, languages, environments and complete user journeys in scope.
-3. Search or filter the catalogue for components present in the test target.
-4. Add the relevant component procedures and WCAG groups to **My test plan**.
-5. Open each selected test and follow its numbered steps in order.
-6. Record the action, expected result, actual result and evidence for every applicable target.
-7. Record a separate outcome for every completed WCAG success criterion.
+3. Complete **Set up this test run** so copied and exported results identify the target, state and environment.
+4. Search or filter the catalogue for components present in the test target.
+5. Add the relevant component procedures and WCAG groups to **My test plan**, then review its criterion coverage.
+6. Choose **Start testing** and follow each selected procedure's numbered steps in order.
+7. Record an actual result, evidence and a separate outcome for every applicable WCAG success criterion.
+8. Export the results CSV to share, review or continue the run in another browser; use **Import CSV** to restore it.
 
 Read [Start here](START-HERE.md) before beginning a formal test run. Use [Choose pages and journeys](01-test-setup/choose-pages-and-journeys.md) to define the sample and [Test environments](01-test-setup/test-environments.md) to record reproducible browser, device and assistive-technology coverage.
 
@@ -110,7 +112,7 @@ The browser smoke test needs a local server and Chromium remote-debugging endpoi
 npm run test:browser -- --url http://127.0.0.1:4173 --cdp http://127.0.0.1:9222
 ```
 
-The browser test checks desktop and mobile layout, keyboard behaviour, the test picker, saved plan, step tabs, disclosures, horizontal overflow, the browser accessibility tree and automated axe rules. It does not replace manual keyboard testing or testing with a real screen reader.
+The browser test checks desktop and mobile layout, keyboard behaviour, the test picker, coverage-aware planning, undo, the guided runner, saved results, same-hash disclosures, step tabs, horizontal overflow, the browser accessibility tree and automated axe rules. It does not replace manual keyboard testing or testing with a real screen reader.
 
 ## Publishing
 

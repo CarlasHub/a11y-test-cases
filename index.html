@@ -13,8 +13,8 @@
   <link rel="canonical" href="https://carlashub.github.io/a11y-test-cases/">
   <title>Accessibility test case manager | CarlasHub</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css?v=20260909-carlashub-blue">
-  <script src="assets/app.js?v=20260909-carlashub-blue" defer></script>
+  <link rel="stylesheet" href="assets/styles.css?v=20260909-workflow">
+  <script src="assets/app.js?v=20260909-workflow" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -29,8 +29,9 @@
           <nav class="sidebar-group" aria-labelledby="library-nav-title">
             <h2 id="library-nav-title">Test case manager</h2>
             <ul class="site-nav">
-              <li><a href="#choose-tests">Choose tests <span>31</span></a></li>
               <li><a href="#before-testing">Before testing</a></li>
+              <li><a href="#choose-tests">Choose tests <span>31</span></a></li>
+              <li><a href="#run-test-plan">Run test plan</a></li>
               <li><a href="#component-procedures">Component procedures <span>14</span></a></li>
               <li><a href="#wcag-test-groups">WCAG test groups <span>17</span></a></li>
               <li><a href="04-templates/test-results.csv">Results CSV</a></li>
@@ -46,9 +47,20 @@
             <p class="progress-text" id="plan-progress-text">0 of 31 selected</p>
             <p id="selection-empty">Add tests from the catalogue. Your choices are saved in this browser.</p>
             <ol class="selection-list" id="selection-list"></ol>
+            <p class="coverage-summary" id="coverage-summary">0 of 55 criteria represented</p>
+            <details class="coverage-gaps">
+              <summary id="coverage-gaps-summary">55 criteria not yet represented</summary>
+              <ul id="coverage-gaps-list"></ul>
+              <p>Representation is a planning aid, not proof of WCAG conformance.</p>
+            </details>
             <div class="selection-actions">
+              <a class="start-testing is-disabled" id="start-testing" href="#run-test-plan" aria-disabled="true">Start testing</a>
               <button type="button" id="copy-test-plan" disabled>Copy test plan</button>
-              <button class="secondary-action" type="button" id="clear-test-plan" disabled>Clear</button>
+              <button class="secondary-action" type="button" id="export-test-plan" disabled>Export CSV</button>
+              <label class="import-test-plan" for="import-test-plan">Import CSV</label>
+              <input class="visually-hidden" type="file" id="import-test-plan" accept=".csv,text/csv">
+              <button class="secondary-action" type="button" id="clear-test-plan" disabled>Clear plan</button>
+              <button class="text-action" type="button" id="undo-clear-test-plan" hidden>Undo clear</button>
             </div>
             <p class="selection-feedback" id="selection-feedback" role="status" aria-live="polite"></p>
           </details>
@@ -68,6 +80,44 @@
         <li><strong>55</strong><span>Level A and AA criteria</span></li>
       </ul>
       <p class="scope-note"><strong>Scope:</strong> all active WCAG 2.2 Level A and Level AA success criteria. Level AAA is outside this manager.</p>
+    </section>
+
+    <section class="before-testing" id="before-testing" aria-labelledby="before-testing-title">
+      <h2 id="before-testing-title">Before testing</h2>
+      <ol>
+        <li>Agree the website or web application, release, languages, pages, components, states and user journeys in scope.</li>
+        <li>Record the real browsers, devices, viewport sizes, input methods and assistive technologies available.</li>
+        <li>Use safe test data. Do not put real user information, credentials or unnecessary personal data in evidence.</li>
+        <li>Run an automated pre-check, then complete every applicable manual procedure below.</li>
+        <li>Save enough evidence for another tester to identify the target and repeat the result.</li>
+      </ol>
+      <div class="source-guidance">
+        <h3>Requirements and guidance</h3>
+        <p><a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> contains the normative requirements. W3C <a href="https://www.w3.org/WAI/WCAG22/Understanding/">Understanding documents</a>, <a href="https://www.w3.org/WAI/WCAG22/quickref/">How to Meet WCAG</a> and the <a href="https://www.w3.org/WAI/ARIA/apg/">ARIA Authoring Practices Guide</a> are informative guidance.</p>
+        <p>Use the actions in this manager to collect evidence. They are not the only valid test methods, and completing one technique does not by itself prove that a success criterion passes. Assign the result from the success criterion's requirement and all applicable content in the recorded test scope.</p>
+      </div>
+      <form class="run-metadata" id="run-metadata">
+        <h3>Set up this test run</h3>
+        <p>These details are saved only in this browser and included in copied or exported results.</p>
+        <div class="metadata-grid">
+          <label>Test run ID<input type="text" data-run-meta="testRunId" autocomplete="off"></label>
+          <label>Target ID or URL<input type="text" data-run-meta="targetId" autocomplete="url"></label>
+          <label>Release, state or scope<input type="text" data-run-meta="state" autocomplete="off"></label>
+          <label>Environment<input type="text" data-run-meta="environment" placeholder="Browser, device, input and assistive technology"></label>
+          <label>Tester<input type="text" data-run-meta="tester" autocomplete="name"></label>
+        </div>
+      </form>
+      <div class="result-guidance">
+        <h3>Record outcome and progress separately</h3>
+        <dl>
+          <div><dt>Pass — criterion outcome</dt><dd>Every applicable target and state completed for that criterion met the requirement.</dd></div>
+          <div><dt>Fail — criterion outcome</dt><dd>At least one applicable target failed. Record the exact target, state, action and result.</dd></div>
+          <div><dt>Not applicable — criterion outcome</dt><dd>The completed inventory contains no content or function to which the criterion applies. Do not use this when testing was blocked or incomplete.</dd></div>
+          <div><dt>Needs specialist review — execution status</dt><dd>Do not assign a completed criterion outcome until the evidence has been reviewed.</dd></div>
+          <div><dt>Not started, in progress or blocked — execution status</dt><dd>Use the status that describes the unfinished work. Do not assign a criterion outcome.</dd></div>
+        </dl>
+        <p><a href="04-templates/test-results.csv">Open the results CSV template</a></p>
+      </div>
     </section>
 
     <section class="test-picker-shell" id="choose-tests" aria-labelledby="test-picker-title">
@@ -105,10 +155,13 @@
         <div class="picker-results">
           <div class="picker-results-header">
             <p class="results-status" id="test-picker-status" role="status" aria-live="polite">31 tests shown</p>
-            <button class="text-action" type="button" id="select-visible-tests">Add all shown</button>
+            <div class="visible-selection-actions">
+              <button class="text-action" type="button" id="select-visible-tests">Add all shown</button>
+              <button class="text-action" type="button" id="remove-visible-tests" disabled>Remove shown</button>
+            </div>
           </div>
           <div class="test-picker-grid" id="test-picker-grid">
-        <article class="test-picker-card theme-structure" data-test-card data-test-id="CP-01" data-test-kind="component" data-test-theme="structure" data-test-target="#procedure-page-structure-headings-and-language" data-search-text="cp-01 page structure, headings, landmarks and language check the basic structure that lets users understand and navigate a page without relying on its visual layout. every page template headings and content sections lists, groups and landmarks pages or passages in multiple languages 1.3.1 1.3.2 2.4.1 2.4.2 2.4.6 3.1.1 3.1.2">
+        <article class="test-picker-card theme-structure" data-test-card data-test-id="CP-01" data-test-kind="component" data-test-theme="structure" data-test-target="#procedure-page-structure-headings-and-language" data-test-criteria="1.3.1,1.3.2,2.4.1,2.4.2,2.4.6,3.1.1,3.1.2" data-search-text="cp-01 page structure, headings, landmarks and language check the basic structure that lets users understand and navigate a page without relying on its visual layout. every page template headings and content sections lists, groups and landmarks pages or passages in multiple languages 1.3.1 1.3.2 2.4.1 2.4.2 2.4.6 3.1.1 3.1.2">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-01</span>
             <div>
@@ -128,7 +181,7 @@
             <a class="open-test" href="#procedure-page-structure-headings-and-language">Open test<span class="visually-hidden"> CP-01 Page structure, headings, landmarks and language</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-02" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-navigation-menus-breadcrumbs-and-skip-links" data-search-text="cp-02 navigation, menus, breadcrumbs and skip links check that users can bypass repeated content and move through navigation using keyboard and assistive technology. headers and footers desktop and mobile menus mega menus and submenus breadcrumbs, side navigation and pagination 1.3.1 2.1.1 2.1.2 2.4.1 2.4.3 2.4.4 2.4.7 3.2.3 4.1.2">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-02" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-navigation-menus-breadcrumbs-and-skip-links" data-test-criteria="1.3.1,2.1.1,2.1.2,2.4.1,2.4.3,2.4.4,2.4.7,3.2.3,4.1.2" data-search-text="cp-02 navigation, menus, breadcrumbs and skip links check that users can bypass repeated content and move through navigation using keyboard and assistive technology. headers and footers desktop and mobile menus mega menus and submenus breadcrumbs, side navigation and pagination 1.3.1 2.1.1 2.1.2 2.4.1 2.4.3 2.4.4 2.4.7 3.2.3 4.1.2">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-02</span>
             <div>
@@ -148,7 +201,7 @@
             <a class="open-test" href="#procedure-navigation-menus-breadcrumbs-and-skip-links">Open test<span class="visually-hidden"> CP-02 Navigation, menus, breadcrumbs and skip links</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-03" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-links-buttons-icons-and-custom-controls" data-search-text="cp-03 links, buttons, icons and custom controls check that interactive controls are identifiable, operable and correctly exposed in every state. text and image links buttons and icon buttons toggles, switches and custom widgets embedded and third-party controls 1.1.1 1.4.1 2.1.1 2.4.3 2.4.4 2.4.7 2.5.3 4.1.2">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-03" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-links-buttons-icons-and-custom-controls" data-test-criteria="1.1.1,1.4.1,2.1.1,2.4.3,2.4.4,2.4.7,2.5.3,4.1.2" data-search-text="cp-03 links, buttons, icons and custom controls check that interactive controls are identifiable, operable and correctly exposed in every state. text and image links buttons and icon buttons toggles, switches and custom widgets embedded and third-party controls 1.1.1 1.4.1 2.1.1 2.4.3 2.4.4 2.4.7 2.5.3 4.1.2">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-03</span>
             <div>
@@ -168,7 +221,7 @@
             <a class="open-test" href="#procedure-links-buttons-icons-and-custom-controls">Open test<span class="visually-hidden"> CP-03 Links, buttons, icons and custom controls</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-forms" data-test-card data-test-id="CP-04" data-test-kind="component" data-test-theme="forms" data-test-target="#procedure-forms-labels-validation-and-submission" data-search-text="cp-04 forms, labels, validation and submission check that users can understand, complete, correct and submit forms without guessing. contact and registration forms checkout and application forms settings and profile forms file upload and multi-step forms 1.3.1 1.3.5 2.1.1 2.4.3 2.4.6 2.5.3 3.3.1 3.3.2 3.3.3 3.3.4 3.3.7 4.1.2 4.1.3">
+        <article class="test-picker-card theme-forms" data-test-card data-test-id="CP-04" data-test-kind="component" data-test-theme="forms" data-test-target="#procedure-forms-labels-validation-and-submission" data-test-criteria="1.3.1,1.3.5,2.1.1,2.4.3,2.4.6,2.5.3,3.3.1,3.3.2,3.3.3,3.3.4,3.3.7,4.1.2,4.1.3" data-search-text="cp-04 forms, labels, validation and submission check that users can understand, complete, correct and submit forms without guessing. contact and registration forms checkout and application forms settings and profile forms file upload and multi-step forms 1.3.1 1.3.5 2.1.1 2.4.3 2.4.6 2.5.3 3.3.1 3.3.2 3.3.3 3.3.4 3.3.7 4.1.2 4.1.3">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-04</span>
             <div>
@@ -188,7 +241,7 @@
             <a class="open-test" href="#procedure-forms-labels-validation-and-submission">Open test<span class="visually-hidden"> CP-04 Forms, labels, validation and submission</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-05" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-dialogs-modals-popovers-and-tooltips" data-search-text="cp-05 dialogs, modals, popovers and tooltips check that layered content opens, operates and closes predictably without hiding or losing keyboard focus. modal dialogs cookie and consent banners popovers and non-modal panels tooltips and hover/focus content 1.4.13 2.1.1 2.1.2 2.4.3 2.4.7 2.4.11 4.1.2 4.1.3">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-05" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-dialogs-modals-popovers-and-tooltips" data-test-criteria="1.4.13,2.1.1,2.1.2,2.4.3,2.4.7,2.4.11,4.1.2,4.1.3" data-search-text="cp-05 dialogs, modals, popovers and tooltips check that layered content opens, operates and closes predictably without hiding or losing keyboard focus. modal dialogs cookie and consent banners popovers and non-modal panels tooltips and hover/focus content 1.4.13 2.1.1 2.1.2 2.4.3 2.4.7 2.4.11 4.1.2 4.1.3">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-05</span>
             <div>
@@ -208,7 +261,7 @@
             <a class="open-test" href="#procedure-dialogs-modals-popovers-and-tooltips">Open test<span class="visually-hidden"> CP-05 Dialogs, modals, popovers and tooltips</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-06" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-tabs-accordions-and-disclosures" data-search-text="cp-06 tabs, accordions and disclosure controls check that expandable and tabbed content exposes its state, relationships and keyboard behaviour. accordions and faqs tab interfaces show more controls expandable navigation or filter groups 1.3.1 1.3.2 2.1.1 2.4.3 2.4.6 2.4.7 4.1.2">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-06" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-tabs-accordions-and-disclosures" data-test-criteria="1.3.1,1.3.2,2.1.1,2.4.3,2.4.6,2.4.7,4.1.2" data-search-text="cp-06 tabs, accordions and disclosure controls check that expandable and tabbed content exposes its state, relationships and keyboard behaviour. accordions and faqs tab interfaces show more controls expandable navigation or filter groups 1.3.1 1.3.2 2.1.1 2.4.3 2.4.6 2.4.7 4.1.2">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-06</span>
             <div>
@@ -228,7 +281,7 @@
             <a class="open-test" href="#procedure-tabs-accordions-and-disclosures">Open test<span class="visually-hidden"> CP-06 Tabs, accordions and disclosure controls</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-structure" data-test-card data-test-id="CP-07" data-test-kind="component" data-test-theme="structure" data-test-target="#procedure-tables-lists-and-grouped-content" data-search-text="cp-07 tables, lists and grouped content check that structured information preserves its relationships when read programmatically. data tables comparison tables ordered and unordered lists definition lists, radio groups and checkbox groups 1.3.1 1.3.2 2.4.6 4.1.2">
+        <article class="test-picker-card theme-structure" data-test-card data-test-id="CP-07" data-test-kind="component" data-test-theme="structure" data-test-target="#procedure-tables-lists-and-grouped-content" data-test-criteria="1.3.1,1.3.2,2.4.6,4.1.2" data-search-text="cp-07 tables, lists and grouped content check that structured information preserves its relationships when read programmatically. data tables comparison tables ordered and unordered lists definition lists, radio groups and checkbox groups 1.3.1 1.3.2 2.4.6 4.1.2">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-07</span>
             <div>
@@ -248,7 +301,7 @@
             <a class="open-test" href="#procedure-tables-lists-and-grouped-content">Open test<span class="visually-hidden"> CP-07 Tables, lists and grouped content</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-08" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-search-autocomplete-filters-and-results" data-search-text="cp-08 search, autocomplete, filters and results check query entry, suggestions, filtering and result updates using keyboard and assistive technology. site and catalogue search autocomplete and comboboxes filters and sorting pagination, load more and result counts 1.3.1 1.4.1 2.1.1 2.4.3 2.4.6 2.4.7 2.5.3 3.2.2 3.3.2 4.1.2 4.1.3">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-08" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-search-autocomplete-filters-and-results" data-test-criteria="1.3.1,1.4.1,2.1.1,2.4.3,2.4.6,2.4.7,2.5.3,3.2.2,3.3.2,4.1.2,4.1.3" data-search-text="cp-08 search, autocomplete, filters and results check query entry, suggestions, filtering and result updates using keyboard and assistive technology. site and catalogue search autocomplete and comboboxes filters and sorting pagination, load more and result counts 1.3.1 1.4.1 2.1.1 2.4.3 2.4.6 2.4.7 2.5.3 3.2.2 3.3.2 4.1.2 4.1.3">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-08</span>
             <div>
@@ -268,7 +321,7 @@
             <a class="open-test" href="#procedure-search-autocomplete-filters-and-results">Open test<span class="visually-hidden"> CP-08 Search, autocomplete, filters and results</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-visual" data-test-card data-test-id="CP-09" data-test-kind="component" data-test-theme="visual" data-test-target="#procedure-images-icons-svg-charts-and-canvas" data-search-text="cp-09 images, icons, svg, charts and canvas check that non-text content has an equivalent appropriate to its purpose. content and decorative images logos and iconography charts, diagrams and maps svg, canvas and image buttons 1.1.1 1.3.1 1.4.1 1.4.3 1.4.5 1.4.11 2.5.3">
+        <article class="test-picker-card theme-visual" data-test-card data-test-id="CP-09" data-test-kind="component" data-test-theme="visual" data-test-target="#procedure-images-icons-svg-charts-and-canvas" data-test-criteria="1.1.1,1.3.1,1.4.1,1.4.3,1.4.5,1.4.11,2.5.3" data-search-text="cp-09 images, icons, svg, charts and canvas check that non-text content has an equivalent appropriate to its purpose. content and decorative images logos and iconography charts, diagrams and maps svg, canvas and image buttons 1.1.1 1.3.1 1.4.1 1.4.3 1.4.5 1.4.11 2.5.3">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-09</span>
             <div>
@@ -288,7 +341,7 @@
             <a class="open-test" href="#procedure-images-icons-svg-charts-and-canvas">Open test<span class="visually-hidden"> CP-09 Images, icons, SVG, charts and canvas</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-media" data-test-card data-test-id="CP-10" data-test-kind="component" data-test-theme="media" data-test-target="#procedure-carousels-animation-and-dynamic-updates" data-search-text="cp-10 carousels, animation and dynamic updates check movement controls, hidden-slide focus, live updates and user control of changing content. carousels and sliders animations and video backgrounds tickers and auto-refresh toasts, banners, loading and infinite scroll 1.1.1 1.4.1 2.1.1 2.2.2 2.4.3 2.4.7 4.1.2 4.1.3">
+        <article class="test-picker-card theme-media" data-test-card data-test-id="CP-10" data-test-kind="component" data-test-theme="media" data-test-target="#procedure-carousels-animation-and-dynamic-updates" data-test-criteria="1.1.1,1.4.1,2.1.1,2.2.2,2.4.3,2.4.7,4.1.2,4.1.3" data-search-text="cp-10 carousels, animation and dynamic updates check movement controls, hidden-slide focus, live updates and user control of changing content. carousels and sliders animations and video backgrounds tickers and auto-refresh toasts, banners, loading and infinite scroll 1.1.1 1.4.1 2.1.1 2.2.2 2.4.3 2.4.7 4.1.2 4.1.3">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-10</span>
             <div>
@@ -308,7 +361,7 @@
             <a class="open-test" href="#procedure-carousels-animation-and-dynamic-updates">Open test<span class="visually-hidden"> CP-10 Carousels, animation and dynamic updates</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-media" data-test-card data-test-id="CP-11" data-test-kind="component" data-test-theme="media" data-test-target="#procedure-audio-video-captions-and-media-controls" data-search-text="cp-11 audio, video, captions and media controls check media alternatives and keyboard operation from the beginning to the end of the content. audio-only content prerecorded video live streams custom and embedded media players 1.2.1 1.2.2 1.2.3 1.2.4 1.2.5 1.4.2 2.1.1 2.2.2 2.4.7">
+        <article class="test-picker-card theme-media" data-test-card data-test-id="CP-11" data-test-kind="component" data-test-theme="media" data-test-target="#procedure-audio-video-captions-and-media-controls" data-test-criteria="1.2.1,1.2.2,1.2.3,1.2.4,1.2.5,1.4.2,2.1.1,2.2.2,2.4.7" data-search-text="cp-11 audio, video, captions and media controls check media alternatives and keyboard operation from the beginning to the end of the content. audio-only content prerecorded video live streams custom and embedded media players 1.2.1 1.2.2 1.2.3 1.2.4 1.2.5 1.4.2 2.1.1 2.2.2 2.4.7">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-11</span>
             <div>
@@ -328,7 +381,7 @@
             <a class="open-test" href="#procedure-audio-video-captions-and-media-controls">Open test<span class="visually-hidden"> CP-11 Audio, video, captions and media controls</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-12" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-pointer-touch-dragging-and-target-size" data-search-text="cp-12 pointer, touch, dragging and target size check that pointer and touch actions do not require precision, complex gestures or accidental activation. drag and drop sliders and maps swipe and multipoint gestures small buttons, links and adjacent controls 2.1.1 2.5.1 2.5.2 2.5.4 2.5.7 2.5.8">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="CP-12" data-test-kind="component" data-test-theme="interaction" data-test-target="#procedure-pointer-touch-dragging-and-target-size" data-test-criteria="2.1.1,2.5.1,2.5.2,2.5.4,2.5.7,2.5.8" data-search-text="cp-12 pointer, touch, dragging and target size check that pointer and touch actions do not require precision, complex gestures or accidental activation. drag and drop sliders and maps swipe and multipoint gestures small buttons, links and adjacent controls 2.1.1 2.5.1 2.5.2 2.5.4 2.5.7 2.5.8">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-12</span>
             <div>
@@ -348,7 +401,7 @@
             <a class="open-test" href="#procedure-pointer-touch-dragging-and-target-size">Open test<span class="visually-hidden"> CP-12 Pointer, touch, dragging and target size</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-forms" data-test-card data-test-id="CP-13" data-test-kind="component" data-test-theme="forms" data-test-target="#procedure-authentication-timeouts-and-multi-step-processes" data-search-text="cp-13 authentication, timeouts and multi-step processes check sign-in, session limits, repeated information, uploads, review and final submission. sign-in and account creation one-time codes and captcha timed sessions multi-step processes, uploads and final submission 2.1.1 2.2.1 2.4.2 2.4.3 3.3.1 3.3.3 3.3.4 3.3.7 3.3.8 4.1.3">
+        <article class="test-picker-card theme-forms" data-test-card data-test-id="CP-13" data-test-kind="component" data-test-theme="forms" data-test-target="#procedure-authentication-timeouts-and-multi-step-processes" data-test-criteria="2.1.1,2.2.1,2.4.2,2.4.3,3.3.1,3.3.3,3.3.4,3.3.7,3.3.8,4.1.3" data-search-text="cp-13 authentication, timeouts and multi-step processes check sign-in, session limits, repeated information, uploads, review and final submission. sign-in and account creation one-time codes and captcha timed sessions multi-step processes, uploads and final submission 2.1.1 2.2.1 2.4.2 2.4.3 3.3.1 3.3.3 3.3.4 3.3.7 3.3.8 4.1.3">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-13</span>
             <div>
@@ -368,7 +421,7 @@
             <a class="open-test" href="#procedure-authentication-timeouts-and-multi-step-processes">Open test<span class="visually-hidden"> CP-13 Authentication, timeouts and multi-step processes</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-visual" data-test-card data-test-id="CP-14" data-test-kind="component" data-test-theme="visual" data-test-target="#procedure-responsive-zoom-orientation-and-text-spacing" data-search-text="cp-14 responsive layout, zoom, orientation and text spacing check that content remains readable and operable when users enlarge, rotate or restyle it. every representative page sticky headers and banners responsive navigation and forms tables and other potentially two-dimensional regions 1.3.4 1.4.4 1.4.10 1.4.12 2.4.11 2.5.8">
+        <article class="test-picker-card theme-visual" data-test-card data-test-id="CP-14" data-test-kind="component" data-test-theme="visual" data-test-target="#procedure-responsive-zoom-orientation-and-text-spacing" data-test-criteria="1.3.4,1.4.4,1.4.10,1.4.12,2.4.11,2.5.8" data-search-text="cp-14 responsive layout, zoom, orientation and text spacing check that content remains readable and operable when users enlarge, rotate or restyle it. every representative page sticky headers and banners responsive navigation and forms tables and other potentially two-dimensional regions 1.3.4 1.4.4 1.4.10 1.4.12 2.4.11 2.5.8">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">CP-14</span>
             <div>
@@ -388,7 +441,7 @@
             <a class="open-test" href="#procedure-responsive-zoom-orientation-and-text-spacing">Open test<span class="visually-hidden"> CP-14 Responsive layout, zoom, orientation and text spacing</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-structure" data-test-card data-test-id="TC-01" data-test-kind="wcag" data-test-theme="structure" data-test-target="#test-page-structure-and-language" data-search-text="tc-01 page structure, reading order and language confirm that each page has a useful title and language, and that its visual structure and reading order are available programmatically. people who use screen readers, braille, reading tools, voice control, simplified views or page headings to navigate. 1.3.1 1.3.2 2.4.2 2.4.6 3.1.1 3.1.2 info and relationships meaningful sequence page titled headings and labels language of page language of parts">
+        <article class="test-picker-card theme-structure" data-test-card data-test-id="TC-01" data-test-kind="wcag" data-test-theme="structure" data-test-target="#test-page-structure-and-language" data-test-criteria="1.3.1,1.3.2,2.4.2,2.4.6,3.1.1,3.1.2" data-search-text="tc-01 page structure, reading order and language confirm that each page has a useful title and language, and that its visual structure and reading order are available programmatically. people who use screen readers, braille, reading tools, voice control, simplified views or page headings to navigate. 1.3.1 1.3.2 2.4.2 2.4.6 3.1.1 3.1.2 info and relationships meaningful sequence page titled headings and labels language of page language of parts">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-01</span>
             <div>
@@ -408,7 +461,7 @@
             <a class="open-test" href="#test-page-structure-and-language">Open test<span class="visually-hidden"> TC-01 Page structure, reading order and language</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-02" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-images-and-visual-text" data-search-text="tc-02 images, icons and visual text confirm that meaningful non-text content has an equivalent and that decorative content is ignored. blind and low-vision people, people who disable images and people using text-only or braille output. 1.1.1 1.4.5 non-text content images of text">
+        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-02" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-images-and-visual-text" data-test-criteria="1.1.1,1.4.5" data-search-text="tc-02 images, icons and visual text confirm that meaningful non-text content has an equivalent and that decorative content is ignored. blind and low-vision people, people who disable images and people using text-only or braille output. 1.1.1 1.4.5 non-text content images of text">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-02</span>
             <div>
@@ -428,7 +481,7 @@
             <a class="open-test" href="#test-images-and-visual-text">Open test<span class="visually-hidden"> TC-02 Images, icons and visual text</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-03" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-instructions-and-colour" data-search-text="tc-03 instructions and colour meaning confirm that instructions and states do not depend only on position, shape, sound or colour. blind and low-vision people, people with colour-vision differences and people who interpret spatial instructions differently. 1.3.3 1.4.1 sensory characteristics use of color">
+        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-03" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-instructions-and-colour" data-test-criteria="1.3.3,1.4.1" data-search-text="tc-03 instructions and colour meaning confirm that instructions and states do not depend only on position, shape, sound or colour. blind and low-vision people, people with colour-vision differences and people who interpret spatial instructions differently. 1.3.3 1.4.1 sensory characteristics use of color">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-03</span>
             <div>
@@ -448,7 +501,7 @@
             <a class="open-test" href="#test-instructions-and-colour">Open test<span class="visually-hidden"> TC-03 Instructions and colour meaning</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-04" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-responsive-layout-and-spacing" data-search-text="tc-04 orientation, text resizing, reflow and spacing confirm that content remains available and usable when the display rotates, text grows, the viewport narrows and text spacing changes. people with low vision, people who magnify content and people who mount a device in one orientation. 1.3.4 1.4.4 1.4.10 1.4.12 orientation resize text reflow text spacing">
+        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-04" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-responsive-layout-and-spacing" data-test-criteria="1.3.4,1.4.4,1.4.10,1.4.12" data-search-text="tc-04 orientation, text resizing, reflow and spacing confirm that content remains available and usable when the display rotates, text grows, the viewport narrows and text spacing changes. people with low vision, people who magnify content and people who mount a device in one orientation. 1.3.4 1.4.4 1.4.10 1.4.12 orientation resize text reflow text spacing">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-04</span>
             <div>
@@ -468,7 +521,7 @@
             <a class="open-test" href="#test-responsive-layout-and-spacing">Open test<span class="visually-hidden"> TC-04 Orientation, text resizing, reflow and spacing</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-05" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-contrast" data-search-text="tc-05 text and control contrast measure whether text and essential visual boundaries have enough contrast in every meaningful state. people with low vision, colour-vision differences or reduced contrast sensitivity. 1.4.3 1.4.11 contrast (minimum) non-text contrast">
+        <article class="test-picker-card theme-visual" data-test-card data-test-id="TC-05" data-test-kind="wcag" data-test-theme="visual" data-test-target="#test-contrast" data-test-criteria="1.4.3,1.4.11" data-search-text="tc-05 text and control contrast measure whether text and essential visual boundaries have enough contrast in every meaningful state. people with low vision, colour-vision differences or reduced contrast sensitivity. 1.4.3 1.4.11 contrast (minimum) non-text contrast">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-05</span>
             <div>
@@ -488,7 +541,7 @@
             <a class="open-test" href="#test-contrast">Open test<span class="visually-hidden"> TC-05 Text and control contrast</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-06" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-hover-and-focus-content" data-search-text="tc-06 content shown on hover or focus confirm that tooltips, menus and other additional content can be dismissed, reached and kept visible when required. people using magnification, keyboard navigation, pointer alternatives or screen readers. 1.4.13 content on hover or focus">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-06" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-hover-and-focus-content" data-test-criteria="1.4.13" data-search-text="tc-06 content shown on hover or focus confirm that tooltips, menus and other additional content can be dismissed, reached and kept visible when required. people using magnification, keyboard navigation, pointer alternatives or screen readers. 1.4.13 content on hover or focus">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-06</span>
             <div>
@@ -508,7 +561,7 @@
             <a class="open-test" href="#test-hover-and-focus-content">Open test<span class="visually-hidden"> TC-06 Content shown on hover or focus</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-07" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-keyboard-and-focus" data-search-text="tc-07 keyboard access, focus and bypass complete every interaction with a keyboard while tracking focus order, visibility and recovery. people using keyboards, switch devices, keyboard emulators, screen readers or other sequential input. 2.1.1 2.1.2 2.4.1 2.4.3 2.4.7 2.4.11 keyboard no keyboard trap bypass blocks focus order focus visible focus not obscured (minimum)">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-07" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-keyboard-and-focus" data-test-criteria="2.1.1,2.1.2,2.4.1,2.4.3,2.4.7,2.4.11" data-search-text="tc-07 keyboard access, focus and bypass complete every interaction with a keyboard while tracking focus order, visibility and recovery. people using keyboards, switch devices, keyboard emulators, screen readers or other sequential input. 2.1.1 2.1.2 2.4.1 2.4.3 2.4.7 2.4.11 keyboard no keyboard trap bypass blocks focus order focus visible focus not obscured (minimum)">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-07</span>
             <div>
@@ -528,7 +581,7 @@
             <a class="open-test" href="#test-keyboard-and-focus">Open test<span class="visually-hidden"> TC-07 Keyboard access, focus and bypass</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-08" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-character-shortcuts" data-search-text="tc-08 character-key shortcuts confirm that single-letter, number or punctuation shortcuts do not activate unexpectedly during speech input or typing. people using speech recognition, dictation or keyboard input who may trigger controls accidentally. 2.1.4 character key shortcuts">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-08" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-character-shortcuts" data-test-criteria="2.1.4" data-search-text="tc-08 character-key shortcuts confirm that single-letter, number or punctuation shortcuts do not activate unexpectedly during speech input or typing. people using speech recognition, dictation or keyboard input who may trigger controls accidentally. 2.1.4 character key shortcuts">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-08</span>
             <div>
@@ -548,7 +601,7 @@
             <a class="open-test" href="#test-character-shortcuts">Open test<span class="visually-hidden"> TC-08 Character-key shortcuts</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-09" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-navigation-links-and-help" data-search-text="tc-09 links, navigation and consistent help confirm that users can identify links, locate pages and rely on repeated navigation and help mechanisms. people with cognitive disabilities, screen-reader users and anyone navigating an unfamiliar site. 2.4.4 2.4.5 3.2.3 3.2.4 3.2.6 link purpose (in context) multiple ways consistent navigation consistent identification consistent help">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-09" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-navigation-links-and-help" data-test-criteria="2.4.4,2.4.5,3.2.3,3.2.4,3.2.6" data-search-text="tc-09 links, navigation and consistent help confirm that users can identify links, locate pages and rely on repeated navigation and help mechanisms. people with cognitive disabilities, screen-reader users and anyone navigating an unfamiliar site. 2.4.4 2.4.5 3.2.3 3.2.4 3.2.6 link purpose (in context) multiple ways consistent navigation consistent identification consistent help">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-09</span>
             <div>
@@ -568,7 +621,7 @@
             <a class="open-test" href="#test-navigation-links-and-help">Open test<span class="visually-hidden"> TC-09 Links, navigation and consistent help</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-10" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-pointer-touch-and-motion" data-search-text="tc-10 pointer, touch, dragging and motion confirm that pointer and touch interactions can be completed without complex gestures, accidental activation, dragging or device motion. people with limited dexterity, tremor, speech input, alternative pointing devices or mounted devices. 2.5.1 2.5.2 2.5.4 2.5.7 2.5.8 pointer gestures pointer cancellation motion actuation dragging movements target size (minimum)">
+        <article class="test-picker-card theme-interaction" data-test-card data-test-id="TC-10" data-test-kind="wcag" data-test-theme="interaction" data-test-target="#test-pointer-touch-and-motion" data-test-criteria="2.5.1,2.5.2,2.5.4,2.5.7,2.5.8" data-search-text="tc-10 pointer, touch, dragging and motion confirm that pointer and touch interactions can be completed without complex gestures, accidental activation, dragging or device motion. people with limited dexterity, tremor, speech input, alternative pointing devices or mounted devices. 2.5.1 2.5.2 2.5.4 2.5.7 2.5.8 pointer gestures pointer cancellation motion actuation dragging movements target size (minimum)">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-10</span>
             <div>
@@ -588,7 +641,7 @@
             <a class="open-test" href="#test-pointer-touch-and-motion">Open test<span class="visually-hidden"> TC-10 Pointer, touch, dragging and motion</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-forms" data-test-card data-test-id="TC-11" data-test-kind="wcag" data-test-theme="forms" data-test-target="#test-form-names-and-instructions" data-search-text="tc-11 form names, instructions and autocomplete confirm that form controls have understandable visible and programmatic labels, instructions and recognised input purposes. people using screen readers, speech input, memory support, autofill or alternative input. 1.3.5 2.5.3 3.3.2 4.1.2 identify input purpose label in name labels or instructions name, role, value">
+        <article class="test-picker-card theme-forms" data-test-card data-test-id="TC-11" data-test-kind="wcag" data-test-theme="forms" data-test-target="#test-form-names-and-instructions" data-test-criteria="1.3.5,2.5.3,3.3.2,4.1.2" data-search-text="tc-11 form names, instructions and autocomplete confirm that form controls have understandable visible and programmatic labels, instructions and recognised input purposes. people using screen readers, speech input, memory support, autofill or alternative input. 1.3.5 2.5.3 3.3.2 4.1.2 identify input purpose label in name labels or instructions name, role, value">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-11</span>
             <div>
@@ -608,7 +661,7 @@
             <a class="open-test" href="#test-form-names-and-instructions">Open test<span class="visually-hidden"> TC-11 Form names, instructions and autocomplete</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-forms" data-test-card data-test-id="TC-12" data-test-kind="wcag" data-test-theme="forms" data-test-target="#test-form-errors-and-status" data-search-text="tc-12 form errors, unexpected changes and status messages confirm that forms do not change context unexpectedly and that errors and status updates are visible, specific and programmatically available. people using screen readers, magnification, keyboard navigation or cognitive support. 3.2.1 3.2.2 3.3.1 3.3.3 4.1.3 on focus on input error identification error suggestion status messages">
+        <article class="test-picker-card theme-forms" data-test-card data-test-id="TC-12" data-test-kind="wcag" data-test-theme="forms" data-test-target="#test-form-errors-and-status" data-test-criteria="3.2.1,3.2.2,3.3.1,3.3.3,4.1.3" data-search-text="tc-12 form errors, unexpected changes and status messages confirm that forms do not change context unexpectedly and that errors and status updates are visible, specific and programmatically available. people using screen readers, magnification, keyboard navigation or cognitive support. 3.2.1 3.2.2 3.3.1 3.3.3 4.1.3 on focus on input error identification error suggestion status messages">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-12</span>
             <div>
@@ -628,7 +681,7 @@
             <a class="open-test" href="#test-form-errors-and-status">Open test<span class="visually-hidden"> TC-12 Form errors, unexpected changes and status messages</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-forms" data-test-card data-test-id="TC-13" data-test-kind="wcag" data-test-theme="forms" data-test-target="#test-timeouts-data-and-authentication" data-search-text="tc-13 timeouts, repeated data and authentication confirm that users can extend time, avoid re-entering information and complete authentication without unnecessary cognitive tests. people who need more time, have memory or cognitive disabilities, use assistive technology or experience interruptions. 2.2.1 3.3.4 3.3.7 3.3.8 timing adjustable error prevention (legal, financial, data) redundant entry accessible authentication (minimum)">
+        <article class="test-picker-card theme-forms" data-test-card data-test-id="TC-13" data-test-kind="wcag" data-test-theme="forms" data-test-target="#test-timeouts-data-and-authentication" data-test-criteria="2.2.1,3.3.4,3.3.7,3.3.8" data-search-text="tc-13 timeouts, repeated data and authentication confirm that users can extend time, avoid re-entering information and complete authentication without unnecessary cognitive tests. people who need more time, have memory or cognitive disabilities, use assistive technology or experience interruptions. 2.2.1 3.3.4 3.3.7 3.3.8 timing adjustable error prevention (legal, financial, data) redundant entry accessible authentication (minimum)">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-13</span>
             <div>
@@ -648,7 +701,7 @@
             <a class="open-test" href="#test-timeouts-data-and-authentication">Open test<span class="visually-hidden"> TC-13 Timeouts, repeated data and authentication</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-14" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-automatic-audio-and-moving-content" data-search-text="tc-14 automatic audio and moving content confirm that users can control automatic sound, movement, blinking, scrolling and updates. screen-reader users, people with attention, vestibular or cognitive disabilities and people who need more time to read. 1.4.2 2.2.2 audio control pause, stop, hide">
+        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-14" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-automatic-audio-and-moving-content" data-test-criteria="1.4.2,2.2.2" data-search-text="tc-14 automatic audio and moving content confirm that users can control automatic sound, movement, blinking, scrolling and updates. screen-reader users, people with attention, vestibular or cognitive disabilities and people who need more time to read. 1.4.2 2.2.2 audio control pause, stop, hide">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-14</span>
             <div>
@@ -668,7 +721,7 @@
             <a class="open-test" href="#test-automatic-audio-and-moving-content">Open test<span class="visually-hidden"> TC-14 Automatic audio and moving content</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-15" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-prerecorded-media" data-search-text="tc-15 prerecorded audio and video confirm that prerecorded media has accurate alternatives for speech, sounds and important visual information. deaf and hard-of-hearing people, blind and low-vision people and people who cannot play audio or video. 1.2.1 1.2.2 1.2.3 1.2.5 audio-only and video-only (prerecorded) captions (prerecorded) audio description or media alternative (prerecorded) audio description (prerecorded)">
+        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-15" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-prerecorded-media" data-test-criteria="1.2.1,1.2.2,1.2.3,1.2.5" data-search-text="tc-15 prerecorded audio and video confirm that prerecorded media has accurate alternatives for speech, sounds and important visual information. deaf and hard-of-hearing people, blind and low-vision people and people who cannot play audio or video. 1.2.1 1.2.2 1.2.3 1.2.5 audio-only and video-only (prerecorded) captions (prerecorded) audio description or media alternative (prerecorded) audio description (prerecorded)">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-15</span>
             <div>
@@ -688,7 +741,7 @@
             <a class="open-test" href="#test-prerecorded-media">Open test<span class="visually-hidden"> TC-15 Prerecorded audio and video</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-16" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-live-media" data-search-text="tc-16 live media captions confirm that live synchronised media provides accurate captions. deaf and hard-of-hearing people and anyone who cannot use the audio stream. 1.2.4 captions (live)">
+        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-16" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-live-media" data-test-criteria="1.2.4" data-search-text="tc-16 live media captions confirm that live synchronised media provides accurate captions. deaf and hard-of-hearing people and anyone who cannot use the audio stream. 1.2.4 captions (live)">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-16</span>
             <div>
@@ -708,7 +761,7 @@
             <a class="open-test" href="#test-live-media">Open test<span class="visually-hidden"> TC-16 Live media captions</span></a>
           </div>
         </article>
-        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-17" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-flashing-content" data-search-text="tc-17 flashing content identify content that may flash more than three times per second and route it for objective analysis. people with photosensitive seizure disorders and people who experience physical reactions to flashing content. 2.3.1 three flashes or below threshold">
+        <article class="test-picker-card theme-media" data-test-card data-test-id="TC-17" data-test-kind="wcag" data-test-theme="media" data-test-target="#test-flashing-content" data-test-criteria="2.3.1" data-search-text="tc-17 flashing content identify content that may flash more than three times per second and route it for objective analysis. people with photosensitive seizure disorders and people who experience physical reactions to flashing content. 2.3.1 three flashes or below threshold">
           <div class="picker-card-identity">
             <span class="test-id" aria-hidden="true">TC-17</span>
             <div>
@@ -735,30 +788,46 @@
       <noscript><p class="callout">Search and test-plan selection require JavaScript. The complete test catalogue remains available in the disclosure panels below.</p></noscript>
     </section>
 
-    <section class="before-testing" id="before-testing" aria-labelledby="before-testing-title">
-      <h2 id="before-testing-title">Before testing</h2>
-      <ol>
-        <li>Agree the website or web application, release, languages, pages, components, states and user journeys in scope.</li>
-        <li>Record the real browsers, devices, viewport sizes, input methods and assistive technologies available.</li>
-        <li>Use safe test data. Do not put real user information, credentials or unnecessary personal data in evidence.</li>
-        <li>Run an automated pre-check, then complete every applicable manual procedure below.</li>
-        <li>Save enough evidence for another tester to identify the target and repeat the result.</li>
-      </ol>
-      <div class="source-guidance">
-        <h3>Requirements and guidance</h3>
-        <p><a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> contains the normative requirements. W3C <a href="https://www.w3.org/WAI/WCAG22/Understanding/">Understanding documents</a>, <a href="https://www.w3.org/WAI/WCAG22/quickref/">How to Meet WCAG</a> and the <a href="https://www.w3.org/WAI/ARIA/apg/">ARIA Authoring Practices Guide</a> are informative guidance.</p>
-        <p>Use the actions in this manager to collect evidence. They are not the only valid test methods, and completing one technique does not by itself prove that a success criterion passes. Assign the result from the success criterion's requirement and all applicable content in the recorded test scope.</p>
+    <section class="test-runner" id="run-test-plan" aria-labelledby="run-test-plan-title">
+      <header class="section-introduction">
+        <p class="eyebrow">Selected test workflow</p>
+        <h2 id="run-test-plan-title">Run your test plan</h2>
+        <p id="run-plan-summary">Choose at least one test to start a guided run.</p>
+      </header>
+      <div class="runner-empty" id="runner-empty">
+        <p>Your selected tests will appear here in a repeatable sequence.</p>
+        <a class="secondary-action" href="#choose-tests">Choose tests</a>
       </div>
-      <div class="result-guidance">
-        <h3>Record outcome and progress separately</h3>
-        <dl>
-          <div><dt>Pass — criterion outcome</dt><dd>Every applicable target and state completed for that criterion met the requirement.</dd></div>
-          <div><dt>Fail — criterion outcome</dt><dd>At least one applicable target failed. Record the exact target, state, action and result.</dd></div>
-          <div><dt>Not applicable — criterion outcome</dt><dd>The completed inventory contains no content or function to which the criterion applies. Do not use this when testing was blocked or incomplete.</dd></div>
-          <div><dt>Needs specialist review — execution status</dt><dd>Do not assign a completed criterion outcome until the evidence has been reviewed.</dd></div>
-          <div><dt>Not started, in progress or blocked — execution status</dt><dd>Use the status that describes the unfinished work. Do not assign a criterion outcome.</dd></div>
-        </dl>
-        <p><a href="04-templates/test-results.csv">Open the results CSV template</a></p>
+      <div class="runner-workspace" id="runner-workspace" hidden>
+        <nav class="runner-navigation" aria-label="Test run navigation">
+          <button class="secondary-action" type="button" id="previous-run-test">Previous</button>
+          <label for="current-run-test">Current test</label>
+          <select id="current-run-test"></select>
+          <button class="secondary-action" type="button" id="next-run-test">Next</button>
+        </nav>
+        <article class="runner-card">
+          <p class="runner-position" id="runner-position"></p>
+          <h3 id="runner-test-title" tabindex="-1"></h3>
+          <p><a id="runner-procedure-link" href="#page-title">Open the full procedure</a></p>
+          <label for="runner-status">Execution status</label>
+          <select id="runner-status">
+            <option value="not_started">Not started</option>
+            <option value="in_progress">In progress</option>
+            <option value="blocked">Blocked</option>
+            <option value="needs_review">Needs specialist review</option>
+            <option value="complete">Complete</option>
+          </select>
+          <fieldset class="criterion-outcomes" id="criterion-outcomes">
+            <legend>Criterion outcomes</legend>
+          </fieldset>
+          <div class="runner-fields">
+            <label for="runner-actual-result">Actual result<textarea id="runner-actual-result" rows="4"></textarea></label>
+            <label for="runner-evidence-reference">Evidence reference<input type="text" id="runner-evidence-reference"></label>
+            <label for="runner-issue-id">Issue ID<input type="text" id="runner-issue-id"></label>
+            <label for="runner-limitation">Limitation or blocker<textarea id="runner-limitation" rows="2"></textarea></label>
+          </div>
+          <p class="runner-feedback" id="runner-feedback" role="status" aria-live="polite"></p>
+        </article>
       </div>
     </section>
 

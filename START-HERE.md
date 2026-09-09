@@ -12,9 +12,11 @@ Use this manager when testing a website, web application, shared component or co
 
 ## During testing
 
-- Use the sidebar to move between the test catalogue, preparation guidance, component procedures and WCAG groups.
+- Use the sidebar to move between preparation guidance, the test catalogue, guided test run, component procedures and WCAG groups.
 - Use search, test-type filters and theme chips to find the procedures relevant to the page, component or journey.
-- Add applicable procedures to **My test plan**. The sidebar shows selection progress; the list is saved in the current browser and can be copied as test IDs and names.
+- Complete **Set up this test run**, then add applicable procedures to **My test plan**. The sidebar shows selection and WCAG-criterion coverage; the plan and results are saved in the current browser.
+- Use **Start testing** to move through the selected tests in sequence. Record execution status, criterion outcomes, the actual result, evidence reference, issue ID and any limitation.
+- Use **Export CSV** to save or share the complete run, and **Import CSV** to restore it in another browser. Treat the exported file as test evidence and store it according to the project's data-handling rules.
 - Use **Open test** in a catalogue row, or open a selected test from the sidebar plan. Use the numbered step tabs to work through one action card at a time; Left Arrow, Right Arrow, Home and End move between tabs.
 - In each step card, complete the **Action**, confirm the **Expected result**, and save the item named under **Record** or **Evidence to save** before moving to the next step.
 - Record the items listed under **What to record**, including the exact control, state, key sequence and observed result.

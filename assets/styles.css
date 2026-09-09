@@ -72,6 +72,8 @@ a:hover {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
 [tabindex="-1"]:focus-visible {
   outline: 0.2rem solid var(--accent);
   outline-offset: 0.2rem;
@@ -2215,11 +2217,201 @@ body {
 }
 
 .test-disclosure[open] {
-  box-shadow: 0 0.7rem 1.8rem rgba(54, 20, 82, 0.12);
+  box-shadow: 0 0.7rem 1.8rem rgba(26, 115, 232, 0.12);
 }
 
 .test-disclosure > summary {
   padding: 0.8rem 0.9rem;
+}
+
+.visible-selection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.9rem;
+}
+
+.coverage-summary {
+  margin-bottom: 0.45rem;
+  color: var(--paper);
+  font-weight: 750;
+}
+
+.coverage-gaps {
+  margin-bottom: 0.9rem;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  color: #d2e3fc;
+  font-size: 0.8rem;
+}
+
+.coverage-gaps summary {
+  cursor: pointer;
+  color: var(--paper);
+  font-weight: 700;
+}
+
+.coverage-gaps ul {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 8rem;
+  margin-block: 0.6rem;
+  padding: 0;
+  gap: 0.35rem;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.coverage-gaps li {
+  border-radius: 999rem;
+  padding: 0.1rem 0.45rem;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.start-testing,
+.import-test-plan {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.45rem;
+  border: 0.0625rem solid var(--paper);
+  border-radius: 0.55rem;
+  padding: 0.45rem 0.7rem;
+  color: var(--accent-strong);
+  background: var(--paper);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 750;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.start-testing:hover,
+.import-test-plan:hover,
+.import-test-plan:has(+ input:focus-visible) {
+  outline: 0.2rem solid var(--paper);
+  outline-offset: 0.15rem;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.start-testing.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.run-metadata,
+.test-runner {
+  margin-block: 1.5rem;
+  border: 0.0625rem solid var(--line);
+  border-radius: 0.95rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: var(--paper);
+  box-shadow: var(--shadow-small);
+}
+
+.run-metadata h3,
+.run-metadata > p {
+  margin-top: 0;
+}
+
+.metadata-grid,
+.runner-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.run-metadata label,
+.runner-card > label,
+.runner-fields label,
+.criterion-outcomes label,
+.runner-navigation label {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.run-metadata input,
+.runner-card input,
+.runner-card select,
+.runner-card textarea,
+.runner-navigation select {
+  min-width: 0;
+  width: 100%;
+  border: 0.0625rem solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  color: var(--ink);
+  background: var(--paper);
+  font: inherit;
+}
+
+.test-runner {
+  scroll-margin-top: 6.5rem;
+}
+
+.runner-empty {
+  border: 0.0625rem dashed var(--line);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: var(--surface);
+}
+
+.runner-empty p {
+  margin-top: 0;
+}
+
+.runner-navigation {
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 1fr) minmax(14rem, 2fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.runner-card {
+  border-top: 0.25rem solid var(--accent);
+  border-radius: 0.75rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: var(--surface);
+}
+
+.runner-position,
+.runner-feedback {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.runner-card h3 {
+  margin-block: 0.2rem 0.4rem;
+  color: var(--accent-strong);
+}
+
+.criterion-outcomes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.8rem;
+  margin-block: 1rem;
+  border: 0;
+  padding: 0;
+}
+
+.criterion-outcomes legend {
+  grid-column: 1 / -1;
+  margin-bottom: 0.25rem;
+  font-weight: 800;
+}
+
+.runner-feedback {
+  min-height: 1.5em;
+  margin-bottom: 0;
 }
 
 @media (max-width: 72rem) {
@@ -2325,6 +2517,16 @@ body {
 
   .library-introduction .scope-note {
     grid-column: auto;
+  }
+
+  .metadata-grid,
+  .runner-fields,
+  .runner-navigation {
+    grid-template-columns: 1fr;
+  }
+
+  .runner-navigation button {
+    width: 100%;
   }
 }
 

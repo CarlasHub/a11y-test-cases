@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added test-run metadata, WCAG coverage feedback and a sequential guided runner with saved status, outcomes, evidence, issues and limitations.
+- Added results CSV export/import for cross-browser handoff, richer copied plans, add/remove-shown controls and undo after clearing a plan.
+- Fixed same-hash test links so closed procedure disclosures reopen and receive focus, and moved preparation guidance before test selection.
 - Configured Carla Gonçalves, Michael Spellacy and Rebecca Hammer as repository co-owners and CODEOWNERS reviewers.
 - Removed individual contact details from the README and configured repository owners and accessibility review through GitHub permissions and CODEOWNERS.
 - Replaced the README contact section with public contribution guidance and removed the repeated two-line page footer.

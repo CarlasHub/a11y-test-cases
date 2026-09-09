@@ -142,6 +142,8 @@ try {
   await send("Accessibility.enable");
 
   await navigate(`${baseUrl}/index.html`);
+  await evaluate("localStorage.clear()");
+  await navigate(`${baseUrl}/index.html`);
   await send("Emulation.setDeviceMetricsOverride", {
     width: 1440,
     height: 1000,
@@ -162,6 +164,11 @@ try {
     pickerHeadings: document.querySelectorAll("[data-test-card] h3[data-test-title]").length,
     selectionControls: document.querySelectorAll("[data-test-select]").length,
     copyButtonLabel: document.querySelector("#copy-test-plan")?.textContent.trim(),
+    exportButtonLabel: document.querySelector("#export-test-plan")?.textContent.trim(),
+    importControlPresent: Boolean(document.querySelector("#import-test-plan")),
+    coverageText: document.querySelector("#coverage-summary")?.textContent.trim(),
+    runnerPresent: Boolean(document.querySelector("#run-test-plan")),
+    metadataFields: document.querySelectorAll("[data-run-meta]").length,
     planProgressMaximum: document.querySelector("#plan-progress")?.max,
     planProgressValue: document.querySelector("#plan-progress")?.value,
     planPanelOpen: document.querySelector(".selection-panel")?.open,
@@ -199,6 +206,11 @@ try {
   assert(desktop.pickerHeadings === 31, `Expected 31 level-three picker headings, found ${desktop.pickerHeadings}`);
   assert(desktop.selectionControls === 31, `Expected 31 test selection controls, found ${desktop.selectionControls}`);
   assert(desktop.copyButtonLabel === "Copy test plan", `Unexpected copy action label: ${desktop.copyButtonLabel}`);
+  assert(desktop.exportButtonLabel === "Export CSV", `Unexpected export action label: ${desktop.exportButtonLabel}`);
+  assert(desktop.importControlPresent === true, "Results CSV import control is missing");
+  assert(desktop.coverageText === "0 of 55 criteria represented", `Unexpected empty coverage text: ${desktop.coverageText}`);
+  assert(desktop.runnerPresent === true, "Guided test runner is missing");
+  assert(desktop.metadataFields === 5, `Expected 5 test-run metadata fields, found ${desktop.metadataFields}`);
   assert(desktop.planProgressMaximum === 31, `Expected test-plan progress maximum 31, found ${desktop.planProgressMaximum}`);
   assert(desktop.planProgressValue === 0, `Expected empty test-plan progress, found ${desktop.planProgressValue}`);
   assert(desktop.planPanelOpen === true, "Desktop test-plan panel should start open");
@@ -254,6 +266,12 @@ try {
     const firstRemove = document.querySelector("#selection-list [data-remove-test]");
     const firstRemoveLabel = firstRemove?.getAttribute("aria-label") || "";
     const copyEnabled = !document.querySelector("#copy-test-plan").disabled;
+    const exportEnabled = !document.querySelector("#export-test-plan").disabled;
+    const startEnabled = document.querySelector("#start-testing").getAttribute("aria-disabled") === "false";
+    const removeShownEnabled = !document.querySelector("#remove-visible-tests").disabled;
+    const coverageText = document.querySelector("#coverage-summary").textContent.trim();
+    const runnerOptions = document.querySelectorAll("#current-run-test option").length;
+    const runnerVisible = !document.querySelector("#runner-workspace").hidden;
     const storedCount = JSON.parse(localStorage.getItem("carlashub-a11y-selected-tests") || "[]").length;
     const progressValue = document.querySelector("#plan-progress").value;
     const progressText = document.querySelector("#plan-progress-text").textContent.trim();
@@ -266,6 +284,10 @@ try {
     document.querySelector("#clear-test-plan").click();
     const clearedCount = document.querySelector("#selection-count").textContent.trim();
     const clearedProgress = document.querySelector("#plan-progress").value;
+    const undoVisible = !document.querySelector("#undo-clear-test-plan").hidden;
+    document.querySelector("#undo-clear-test-plan").click();
+    const restoredCount = document.querySelector("#selection-count").textContent.trim();
+    const undoHiddenAfterRestore = document.querySelector("#undo-clear-test-plan").hidden;
     document.querySelector('[data-filter-kind="all"]').click();
     document.querySelector('[data-filter-theme="all"]').click();
     return {
@@ -278,6 +300,12 @@ try {
       removeButtons,
       firstRemoveLabel,
       copyEnabled,
+      exportEnabled,
+      startEnabled,
+      removeShownEnabled,
+      coverageText,
+      runnerOptions,
+      runnerVisible,
       storedCount,
       progressValue,
       progressText,
@@ -286,6 +314,9 @@ try {
       removeFocusRetained,
       clearedCount,
       clearedProgress,
+      undoVisible,
+      restoredCount,
+      undoHiddenAfterRestore,
       restoredMatches: document.querySelectorAll("[data-test-card]:not([hidden])").length
     };
   })()`);
@@ -298,15 +329,71 @@ try {
   assert(filtering.removeButtons === 3, `Expected 3 remove controls, found ${filtering.removeButtons}`);
   assert(filtering.firstRemoveLabel.endsWith("from test plan"), `Unexpected remove label: ${filtering.firstRemoveLabel}`);
   assert(filtering.copyEnabled === true, "Copy action should be enabled for a non-empty plan");
+  assert(filtering.exportEnabled === true, "CSV export should be enabled for a non-empty plan");
+  assert(filtering.startEnabled === true, "Start testing should be enabled for a non-empty plan");
+  assert(filtering.removeShownEnabled === true, "Remove shown should be enabled when shown tests are selected");
+  assert(filtering.coverageText !== "0 of 55 criteria represented", "Selecting tests did not update coverage");
+  assert(filtering.runnerOptions === 3, `Expected 3 guided-run options, found ${filtering.runnerOptions}`);
+  assert(filtering.runnerVisible === true, "Guided test runner did not appear for a non-empty plan");
   assert(filtering.storedCount === 3, `Expected 3 stored test selections, found ${filtering.storedCount}`);
   assert(filtering.progressValue === 3, `Expected progress value 3, found ${filtering.progressValue}`);
-  assert(filtering.progressText === "3 of 31 selected", `Unexpected progress text: ${filtering.progressText}`);
+  assert(filtering.progressText === "3 of 31 selected · 0 complete", `Unexpected progress text: ${filtering.progressText}`);
   assert(filtering.countAfterRemove === "2", `Expected 2 tests after individual removal, found ${filtering.countAfterRemove}`);
   assert(filtering.removedCheckboxChecked === false, "Removing a plan item did not clear its catalogue checkbox");
   assert(filtering.removeFocusRetained === true, "Focus was not retained after removing a plan item");
   assert(filtering.clearedCount === "0", "Clear action did not empty the test plan");
   assert(filtering.clearedProgress === 0, "Clear action did not reset test-plan progress");
+  assert(filtering.undoVisible === true, "Clear action did not offer Undo clear");
+  assert(filtering.restoredCount === "2", `Undo clear restored ${filtering.restoredCount} tests instead of 2`);
+  assert(filtering.undoHiddenAfterRestore === true, "Undo clear remained visible after restoring the plan");
   assert(filtering.restoredMatches === 31, "Reset filters did not restore all picker cards");
+
+  const runnerWorkflow = await evaluate(`(() => {
+    const metadata = document.querySelector('[data-run-meta="testRunId"]');
+    metadata.value = "SMOKE-RUN-1";
+    metadata.dispatchEvent(new Event("input", { bubbles: true }));
+    const initialId = document.querySelector("#current-run-test").value;
+    const status = document.querySelector("#runner-status");
+    status.value = "complete";
+    status.dispatchEvent(new Event("change", { bubbles: true }));
+    const completionBlocked = status.value !== "complete" && document.querySelector("#runner-feedback").textContent.includes("Choose an outcome");
+    let blankOutcome = document.querySelector('[data-criterion-outcome] option[value=""]:checked')?.parentElement;
+    while (blankOutcome) {
+      blankOutcome.value = "pass";
+      blankOutcome.dispatchEvent(new Event("change", { bubbles: true }));
+      blankOutcome = document.querySelector('[data-criterion-outcome] option[value=""]:checked')?.parentElement;
+    }
+    document.querySelector("#runner-actual-result").value = "Observed expected behaviour.";
+    document.querySelector("#runner-actual-result").dispatchEvent(new Event("input", { bubbles: true }));
+    document.querySelector("#runner-evidence-reference").value = "evidence/smoke.png";
+    document.querySelector("#runner-evidence-reference").dispatchEvent(new Event("input", { bubbles: true }));
+    status.value = "complete";
+    status.dispatchEvent(new Event("change", { bubbles: true }));
+    const completed = document.querySelector("#runner-status").value === "complete";
+    const progressText = document.querySelector("#plan-progress-text").textContent.trim();
+    const storedMeta = JSON.parse(localStorage.getItem("carlashub-a11y-run-metadata") || "{}");
+    const storedResults = JSON.parse(localStorage.getItem("carlashub-a11y-run-results") || "{}");
+    document.querySelector("#next-run-test").click();
+    const advanced = document.querySelector("#current-run-test").value !== initialId;
+    const focusMoved = document.activeElement?.id === "runner-test-title";
+    return {
+      completionBlocked,
+      completed,
+      progressText,
+      metadataStored: storedMeta.testRunId === "SMOKE-RUN-1",
+      resultStored: storedResults[initialId]?.status === "complete" && storedResults[initialId]?.actualResult === "Observed expected behaviour.",
+      advanced,
+      focusMoved
+    };
+  })()`);
+  assert(runnerWorkflow.completionBlocked === true, "Runner allowed completion without criterion outcomes");
+  assert(runnerWorkflow.completed === true, "Runner could not mark a fully recorded test complete");
+  assert(runnerWorkflow.progressText.includes("1 complete"), `Completed progress was not reported: ${runnerWorkflow.progressText}`);
+  assert(runnerWorkflow.metadataStored === true, "Test-run metadata was not saved");
+  assert(runnerWorkflow.resultStored === true, "Guided-run result evidence was not saved");
+  assert(runnerWorkflow.advanced === true, "Next did not advance the guided run");
+  assert(runnerWorkflow.focusMoved === true, "Next did not move focus to the new test heading");
+  await evaluate('document.querySelector("#clear-test-plan").click()');
 
   await evaluate(`(() => {
     window.location.hash = "procedure-dialogs-modals-popovers-and-tooltips";
@@ -320,6 +407,14 @@ try {
   assert(openedFromHash.open === true, "Direct test link did not open its disclosure");
   assert(openedFromHash.visibleSteps === 1, `Expected one visible dialog step card, found ${openedFromHash.visibleSteps}`);
   assert(openedFromHash.selectedTabs === 1, "Dialog procedure does not have exactly one selected step tab");
+
+  const sameHashReopened = await evaluate(`(() => {
+    const disclosure = document.querySelector("#procedure-dialogs-modals-popovers-and-tooltips");
+    disclosure.open = false;
+    document.querySelector('.open-test[href="#procedure-dialogs-modals-popovers-and-tooltips"]').click();
+    return disclosure.open && disclosure.querySelector(":scope > summary") === document.activeElement;
+  })()`);
+  assert(sameHashReopened === true, "Clicking an unchanged hash did not reopen and focus its disclosure");
 
   const tabKeyboard = await evaluate(`(() => {
     const deck = document.querySelector("#procedure-dialogs-modals-popovers-and-tooltips [data-step-deck]");
@@ -444,7 +539,7 @@ try {
   assert(Array.isArray(accessibilityTree.nodes) && accessibilityTree.nodes.length > 0, "Accessibility tree is empty");
   assert(runtimeErrors.length === 0, `Runtime errors: ${runtimeErrors.join("; ")}`);
 
-  console.log("Browser smoke passed: framed desktop/mobile layout, sidebar navigation, compact test rows, plan progress and responsive collapse, tabbed step cards, keyboard navigation, focused disclosures, overflow, accessibility tree and axe checks completed.");
+  console.log("Browser smoke passed: responsive navigation, coverage-aware planning, undo, guided results, persistent metadata, same-hash disclosures, tabbed procedures, overflow, accessibility tree and axe checks completed.");
 } finally {
   socket.close();
   await fetch(`${cdpUrl}/json/close/${target.id}`).catch(() => {});
