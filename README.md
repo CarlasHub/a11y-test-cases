@@ -15,7 +15,8 @@ Use the manager to select, organise and run accessibility test cases for website
 - 165 structured manual steps, each with an action, expected result and evidence instruction.
 - Search, type filters and colour-coded theme filters.
 - A browser-saved, coverage-aware test plan with a guided runner, result fields and direct links to each test.
-- CSV export and import for sharing a plan or continuing a test run in another browser.
+- A working CSV export and import for continuing a test run in another browser.
+- WCAG-EM-inspired scope, sampling and review fields, plus readable HTML and structured JSON evaluation reports.
 - Reusable scope, result, issue and summary templates.
 
 Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
@@ -24,12 +25,13 @@ Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
 
 1. Open the [published manager](https://carlashub.github.io/a11y-test-cases/).
 2. Agree the pages, components, states, languages, environments and complete user journeys in scope.
-3. Complete **Set up this test run** so copied and exported results identify the target, state and environment.
+3. Complete the essential fields in **Set up this test run** so results identify the target, state and environment. Open the scope and sampling groups when preparing a formal evaluation.
 4. Search or filter the catalogue for components present in the test target.
 5. Add the relevant component procedures and WCAG groups to **My test plan**, then review its criterion coverage.
 6. Choose **Start testing** and follow each selected procedure's numbered steps in order.
 7. Record an actual result, evidence and a separate outcome for every applicable WCAG success criterion.
-8. Export the results CSV to share, review or continue the run in another browser; use **Import CSV** to restore it.
+8. Export the working CSV to continue the run in another browser; use **Import working CSV** to restore it.
+9. Open **Review and report** to check gaps, then export a readable HTML report or the complete structured JSON data.
 
 Read [Start here](START-HERE.md) before beginning a formal test run. Use [Choose pages and journeys](01-test-setup/choose-pages-and-journeys.md) to define the sample and [Test environments](01-test-setup/test-environments.md) to record reproducible browser, device and assistive-technology coverage.
 
@@ -42,7 +44,7 @@ Execution status and WCAG outcome are deliberately separate.
 | Execution status | Not started, In progress, Blocked, Needs specialist review, Completed | Describes the progress of the test. |
 | Criterion outcome | Pass, Fail, Not applicable | Records the decision after all required testing for the defined sample is complete. |
 
-Do not assign a completed criterion outcome while testing is unfinished or waiting for specialist review. See [Result definitions](05-reference/result-definitions.md) and use the [results CSV template](04-templates/test-results.csv).
+Do not assign a completed criterion outcome while testing is unfinished or waiting for specialist review. See [Result definitions](05-reference/result-definitions.md) and use the [working results CSV template](04-templates/test-results.csv).
 
 ## Accessibility and assessment boundary
 
@@ -125,7 +127,7 @@ Pushes to `main` run the quality workflow and publish the generated static manag
 - [Understanding WCAG 2.2](https://www.w3.org/WAI/WCAG22/Understanding/)
 - [Techniques for WCAG 2.2](https://www.w3.org/WAI/WCAG22/Techniques/)
 - [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
-- [WCAG-EM overview](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/)
+- [WCAG-EM 2.0](https://www.w3.org/TR/wcag-em-2/)
 - [Selecting Web Accessibility Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/)
 
 ## Contributing

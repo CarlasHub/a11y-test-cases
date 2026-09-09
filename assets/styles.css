@@ -2305,7 +2305,8 @@ body {
 }
 
 .run-metadata,
-.test-runner {
+.test-runner,
+.evaluation-report {
   margin-block: 1.5rem;
   border: 0.0625rem solid var(--line);
   border-radius: 0.95rem;
@@ -2339,6 +2340,8 @@ body {
 }
 
 .run-metadata input,
+.run-metadata select,
+.run-metadata textarea,
 .runner-card input,
 .runner-card select,
 .runner-card textarea,
@@ -2351,6 +2354,64 @@ body {
   color: var(--ink);
   background: var(--paper);
   font: inherit;
+}
+
+.run-metadata textarea {
+  resize: vertical;
+}
+
+.metadata-wide {
+  grid-column: 1 / -1;
+}
+
+.evaluation-details {
+  margin-top: 1rem;
+  border-top: 0.0625rem solid var(--line);
+  padding-top: 1rem;
+}
+
+.evaluation-details summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.evaluation-details[open] summary {
+  margin-bottom: 1rem;
+}
+
+.evaluation-report {
+  scroll-margin-top: 6.5rem;
+}
+
+.report-readiness-card {
+  border-left: 0.3rem solid var(--accent);
+  border-radius: 0.65rem;
+  padding: 1rem 1.15rem;
+  background: var(--accent-soft);
+}
+
+.report-readiness-card h3,
+.report-readiness-card > p:first-of-type {
+  margin-top: 0;
+}
+
+.report-readiness-card ul {
+  columns: 2 18rem;
+}
+
+.report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.report-note {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 .test-runner {

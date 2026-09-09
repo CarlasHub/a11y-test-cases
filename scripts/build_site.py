@@ -15,7 +15,7 @@ DATA_PATH = ROOT / "content" / "test-cases.json"
 PROCEDURES_PATH = ROOT / "content" / "component-procedures.json"
 MANUAL_CHECKS_PATH = ROOT / "content" / "criterion-manual-checks.json"
 INDEX_PATH = ROOT / "index.html"
-ASSET_VERSION = "20260909-workflow"
+ASSET_VERSION = "20260909-reporting"
 
 
 THEMES = {
@@ -297,9 +297,10 @@ def page_shell(content: str) -> str:
               <li><a href="#before-testing">Before testing</a></li>
               <li><a href="#choose-tests">Choose tests <span>31</span></a></li>
               <li><a href="#run-test-plan">Run test plan</a></li>
+              <li><a href="#evaluation-report">Review and report</a></li>
               <li><a href="#component-procedures">Component procedures <span>14</span></a></li>
               <li><a href="#wcag-test-groups">WCAG test groups <span>17</span></a></li>
-              <li><a href="04-templates/test-results.csv">Results CSV</a></li>
+              <li><a href="04-templates/test-results.csv">Working results CSV</a></li>
             </ul>
           </nav>
           <details class="selection-panel" aria-labelledby="selection-title" open>
@@ -321,8 +322,8 @@ def page_shell(content: str) -> str:
             <div class="selection-actions">
               <a class="start-testing is-disabled" id="start-testing" href="#run-test-plan" aria-disabled="true">Start testing</a>
               <button type="button" id="copy-test-plan" disabled>Copy test plan</button>
-              <button class="secondary-action" type="button" id="export-test-plan" disabled>Export CSV</button>
-              <label class="import-test-plan" for="import-test-plan">Import CSV</label>
+              <button class="secondary-action" type="button" id="export-test-plan" disabled>Export working CSV</button>
+              <label class="import-test-plan" for="import-test-plan">Import working CSV</label>
               <input class="visually-hidden" type="file" id="import-test-plan" accept=".csv,text/csv">
               <button class="secondary-action" type="button" id="clear-test-plan" disabled>Clear plan</button>
               <button class="text-action" type="button" id="undo-clear-test-plan" hidden>Undo clear</button>
@@ -628,14 +629,56 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
       </div>
       <form class="run-metadata" id="run-metadata">
         <h3>Set up this test run</h3>
-        <p>These details are saved only in this browser and included in copied or exported results.</p>
+        <p>These details are saved only in this browser and included in your exports. The extra reporting fields follow the five WCAG-EM 2.0 steps without changing the guided testing workflow.</p>
         <div class="metadata-grid">
           <label>Test run ID<input type="text" data-run-meta="testRunId" autocomplete="off"></label>
+          <label>Target name<input type="text" data-run-meta="targetName" autocomplete="organization"></label>
           <label>Target ID or URL<input type="text" data-run-meta="targetId" autocomplete="url"></label>
           <label>Release, state or scope<input type="text" data-run-meta="state" autocomplete="off"></label>
           <label>Environment<input type="text" data-run-meta="environment" placeholder="Browser, device, input and assistive technology"></label>
           <label>Tester<input type="text" data-run-meta="tester" autocomplete="name"></label>
         </div>
+        <details class="evaluation-details">
+          <summary>Define the evaluation scope</summary>
+          <div class="metadata-grid">
+            <label>Commissioner or owner<input type="text" data-run-meta="commissioner" autocomplete="organization"></label>
+            <label>Evaluation start date<input type="date" data-run-meta="evaluationStart"></label>
+            <label>Evaluation end date<input type="date" data-run-meta="evaluationEnd"></label>
+            <label>WCAG version<input type="text" data-run-meta="wcagVersion" autocomplete="off"></label>
+            <label>Conformance target
+              <select data-run-meta="conformanceTarget">
+                <option value="A">Level A</option>
+                <option value="AA">Level AA</option>
+                <option value="AAA">Level AAA</option>
+                <option value="No conformance target">No conformance target</option>
+              </select>
+            </label>
+            <label class="metadata-wide">Scope description<textarea rows="3" data-run-meta="scopeDescription" placeholder="What is included, such as journeys, pages, components and releases"></textarea></label>
+            <label class="metadata-wide">Excluded from scope<textarea rows="2" data-run-meta="excludedScope" placeholder="Anything deliberately excluded and why"></textarea></label>
+            <label class="metadata-wide">Accessibility support baseline<textarea rows="2" data-run-meta="accessibilitySupport" placeholder="Browsers, assistive technologies and user settings the evaluation relies on"></textarea></label>
+          </div>
+        </details>
+        <details class="evaluation-details">
+          <summary>Explore the target website and select a sample</summary>
+          <div class="metadata-grid">
+            <label class="metadata-wide">Technologies relied on<textarea rows="2" data-run-meta="technologies" placeholder="For example HTML, CSS, JavaScript, PDF or native platform APIs"></textarea></label>
+            <label class="metadata-wide">Common views and states<textarea rows="2" data-run-meta="commonViews" placeholder="Templates, page types, authenticated states, errors and responsive variants"></textarea></label>
+            <label class="metadata-wide">Essential functions and journeys<textarea rows="3" data-run-meta="essentialFunctions" placeholder="Tasks a user must be able to complete"></textarea></label>
+            <label class="metadata-wide">Sampling method<textarea rows="2" data-run-meta="sampleMethod" placeholder="How representative targets were selected"></textarea></label>
+            <label class="metadata-wide">Structured sample<textarea rows="3" data-run-meta="structuredSample" placeholder="Target IDs or URLs selected to represent the scope"></textarea></label>
+            <label class="metadata-wide">Random sample<textarea rows="2" data-run-meta="randomSample" placeholder="Any randomly selected targets, or state that none were used"></textarea></label>
+            <label class="metadata-wide">Complete processes<textarea rows="2" data-run-meta="completeProcesses" placeholder="End-to-end journeys included in the sample"></textarea></label>
+          </div>
+        </details>
+        <details class="evaluation-details">
+          <summary>Summarise and review the findings</summary>
+          <div class="metadata-grid">
+            <label class="metadata-wide">Evaluation summary<textarea rows="3" data-run-meta="evaluationSummary" placeholder="Main strengths, barriers, patterns and priorities"></textarea></label>
+            <label class="metadata-wide">Report limitations<textarea rows="2" data-run-meta="reportLimitations" placeholder="Known gaps, constraints or evidence still awaiting review"></textarea></label>
+            <label>Reviewer<input type="text" data-run-meta="reviewer" autocomplete="name"></label>
+            <label>Review date<input type="date" data-run-meta="reviewDate"></label>
+          </div>
+        </details>
       </form>
       <div class="result-guidance">
         <h3>Record outcome and progress separately</h3>
@@ -646,7 +689,7 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
           <div><dt>Needs specialist review — execution status</dt><dd>Do not assign a completed criterion outcome until the evidence has been reviewed.</dd></div>
           <div><dt>Not started, in progress or blocked — execution status</dt><dd>Use the status that describes the unfinished work. Do not assign a criterion outcome.</dd></div>
         </dl>
-        <p><a href="04-templates/test-results.csv">Open the results CSV template</a></p>
+        <p><a href="04-templates/test-results.csv">Open the working results CSV template</a></p>
       </div>
     </section>
 
@@ -692,6 +735,24 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
           </div>
           <p class="runner-feedback" id="runner-feedback" role="status" aria-live="polite"></p>
         </article>
+      </div>
+    </section>
+
+    <section class="evaluation-report" id="evaluation-report" aria-labelledby="evaluation-report-title">
+      <header class="section-introduction">
+        <p class="eyebrow">WCAG-EM-inspired reporting</p>
+        <h2 id="evaluation-report-title">Review and export the evaluation</h2>
+        <p>Turn the working test data into a readable report or structured data file. The report is organised around <a href="https://www.w3.org/TR/wcag-em-2/">WCAG-EM 2.0</a>; it is not a W3C conformance claim, certification or endorsement.</p>
+      </header>
+      <div class="report-readiness-card">
+        <h3>Report readiness</h3>
+        <p id="report-readiness" role="status" aria-live="polite">Choose at least one test to prepare a report.</p>
+        <ul id="report-readiness-gaps"></ul>
+        <div class="report-actions">
+          <button type="button" id="download-evaluation-report" disabled>Download HTML report</button>
+          <button class="secondary-action" type="button" id="download-evaluation-data" disabled>Download report data (JSON)</button>
+        </div>
+        <p class="report-note">The working CSV is for continuing a test run. The HTML report is for people; the JSON file preserves the complete evaluation data for reuse.</p>
       </div>
     </section>
 

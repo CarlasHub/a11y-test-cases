@@ -72,7 +72,7 @@ const evaluate = async (expression) => {
     returnByValue: true,
   });
   if (result.exceptionDetails) {
-    throw new Error(result.exceptionDetails.text || "Browser evaluation failed");
+    throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text || "Browser evaluation failed");
   }
   return result.result?.value;
 };
@@ -168,6 +168,8 @@ try {
     importControlPresent: Boolean(document.querySelector("#import-test-plan")),
     coverageText: document.querySelector("#coverage-summary")?.textContent.trim(),
     runnerPresent: Boolean(document.querySelector("#run-test-plan")),
+    reportPresent: Boolean(document.querySelector("#evaluation-report")),
+    reportActions: document.querySelectorAll("#evaluation-report .report-actions button").length,
     metadataFields: document.querySelectorAll("[data-run-meta]").length,
     planProgressMaximum: document.querySelector("#plan-progress")?.max,
     planProgressValue: document.querySelector("#plan-progress")?.value,
@@ -206,11 +208,13 @@ try {
   assert(desktop.pickerHeadings === 31, `Expected 31 level-three picker headings, found ${desktop.pickerHeadings}`);
   assert(desktop.selectionControls === 31, `Expected 31 test selection controls, found ${desktop.selectionControls}`);
   assert(desktop.copyButtonLabel === "Copy test plan", `Unexpected copy action label: ${desktop.copyButtonLabel}`);
-  assert(desktop.exportButtonLabel === "Export CSV", `Unexpected export action label: ${desktop.exportButtonLabel}`);
-  assert(desktop.importControlPresent === true, "Results CSV import control is missing");
+  assert(desktop.exportButtonLabel === "Export working CSV", `Unexpected export action label: ${desktop.exportButtonLabel}`);
+  assert(desktop.importControlPresent === true, "Working CSV import control is missing");
   assert(desktop.coverageText === "0 of 55 criteria represented", `Unexpected empty coverage text: ${desktop.coverageText}`);
   assert(desktop.runnerPresent === true, "Guided test runner is missing");
-  assert(desktop.metadataFields === 5, `Expected 5 test-run metadata fields, found ${desktop.metadataFields}`);
+  assert(desktop.reportPresent === true, "Evaluation report stage is missing");
+  assert(desktop.reportActions === 2, `Expected 2 evaluation report actions, found ${desktop.reportActions}`);
+  assert(desktop.metadataFields === 25, `Expected 25 test-run metadata fields, found ${desktop.metadataFields}`);
   assert(desktop.planProgressMaximum === 31, `Expected test-plan progress maximum 31, found ${desktop.planProgressMaximum}`);
   assert(desktop.planProgressValue === 0, `Expected empty test-plan progress, found ${desktop.planProgressValue}`);
   assert(desktop.planPanelOpen === true, "Desktop test-plan panel should start open");
@@ -267,6 +271,9 @@ try {
     const firstRemoveLabel = firstRemove?.getAttribute("aria-label") || "";
     const copyEnabled = !document.querySelector("#copy-test-plan").disabled;
     const exportEnabled = !document.querySelector("#export-test-plan").disabled;
+    const reportActionsEnabled = Array.from(document.querySelectorAll("#download-evaluation-report, #download-evaluation-data"))
+      .every((button) => !button.disabled);
+    const reportReadiness = document.querySelector("#report-readiness").textContent.trim();
     const startEnabled = document.querySelector("#start-testing").getAttribute("aria-disabled") === "false";
     const removeShownEnabled = !document.querySelector("#remove-visible-tests").disabled;
     const coverageText = document.querySelector("#coverage-summary").textContent.trim();
@@ -301,6 +308,8 @@ try {
       firstRemoveLabel,
       copyEnabled,
       exportEnabled,
+      reportActionsEnabled,
+      reportReadiness,
       startEnabled,
       removeShownEnabled,
       coverageText,
@@ -330,6 +339,8 @@ try {
   assert(filtering.firstRemoveLabel.endsWith("from test plan"), `Unexpected remove label: ${filtering.firstRemoveLabel}`);
   assert(filtering.copyEnabled === true, "Copy action should be enabled for a non-empty plan");
   assert(filtering.exportEnabled === true, "CSV export should be enabled for a non-empty plan");
+  assert(filtering.reportActionsEnabled === true, "Report downloads should be enabled for a non-empty plan");
+  assert(filtering.reportReadiness.includes("draft report"), `Unexpected report readiness: ${filtering.reportReadiness}`);
   assert(filtering.startEnabled === true, "Start testing should be enabled for a non-empty plan");
   assert(filtering.removeShownEnabled === true, "Remove shown should be enabled when shown tests are selected");
   assert(filtering.coverageText !== "0 of 55 criteria represented", "Selecting tests did not update coverage");
@@ -352,6 +363,12 @@ try {
     const metadata = document.querySelector('[data-run-meta="testRunId"]');
     metadata.value = "SMOKE-RUN-1";
     metadata.dispatchEvent(new Event("input", { bubbles: true }));
+    const targetName = document.querySelector('[data-run-meta="targetName"]');
+    targetName.value = "Smoke test target";
+    targetName.dispatchEvent(new Event("input", { bubbles: true }));
+    const scopeDescription = document.querySelector('[data-run-meta="scopeDescription"]');
+    scopeDescription.value = "Selected form controls and their keyboard journey.";
+    scopeDescription.dispatchEvent(new Event("input", { bubbles: true }));
     const initialId = document.querySelector("#current-run-test").value;
     const status = document.querySelector("#runner-status");
     status.value = "complete";
@@ -393,6 +410,61 @@ try {
   assert(runnerWorkflow.resultStored === true, "Guided-run result evidence was not saved");
   assert(runnerWorkflow.advanced === true, "Next did not advance the guided run");
   assert(runnerWorkflow.focusMoved === true, "Next did not move focus to the new test heading");
+
+  const reportDownloads = await evaluate(`(async () => {
+    const originalClick = HTMLAnchorElement.prototype.click;
+    const originalSetTimeout = window.setTimeout;
+    let capturedDownload;
+    HTMLAnchorElement.prototype.click = function captureDownload() {
+      capturedDownload = { filename: this.download, url: this.href };
+    };
+    window.setTimeout = () => 0;
+    try {
+      document.querySelector("#download-evaluation-report").click();
+      const htmlDownload = capturedDownload;
+      const html = await fetch(htmlDownload.url).then((response) => response.text());
+      URL.revokeObjectURL(htmlDownload.url);
+
+      document.querySelector("#download-evaluation-data").click();
+      const jsonDownload = capturedDownload;
+      const json = JSON.parse(await fetch(jsonDownload.url).then((response) => response.text()));
+      URL.revokeObjectURL(jsonDownload.url);
+
+      return {
+        htmlFilename: htmlDownload.filename,
+        jsonFilename: jsonDownload.filename,
+        htmlHasTitle: html.includes("CarlasHub accessibility evaluation"),
+        htmlHasRun: html.includes("SMOKE-RUN-1"),
+        htmlHasMethod: html.includes("structured around WCAG-EM 2.0"),
+        htmlHasSample: html.includes("Selected test sample"),
+        htmlHasLegacyBrand: html.toLowerCase().includes("radancy"),
+        jsonSchemaVersion: json.schemaVersion,
+        jsonMethodologyUri: json.methodology?.uri,
+        jsonRunId: json.evaluation?.testRunId,
+        jsonTargetName: json.evaluation?.targetName,
+        jsonSampleCount: json.sample?.length,
+        jsonFindingCount: json.findings?.length,
+        jsonCompletedCount: json.summary?.completedTests
+      };
+    } finally {
+      HTMLAnchorElement.prototype.click = originalClick;
+      window.setTimeout = originalSetTimeout;
+    }
+  })()`);
+  assert(reportDownloads.htmlFilename.endsWith(".html"), `Unexpected HTML report filename: ${reportDownloads.htmlFilename}`);
+  assert(reportDownloads.jsonFilename.endsWith(".json"), `Unexpected JSON report filename: ${reportDownloads.jsonFilename}`);
+  assert(reportDownloads.htmlHasTitle === true, "HTML report is missing its title");
+  assert(reportDownloads.htmlHasRun === true, "HTML report is missing the test-run ID");
+  assert(reportDownloads.htmlHasMethod === true, "HTML report is missing the WCAG-EM methodology statement");
+  assert(reportDownloads.htmlHasSample === true, "HTML report is missing the selected test sample");
+  assert(reportDownloads.htmlHasLegacyBrand === false, "HTML report contains a legacy brand reference");
+  assert(reportDownloads.jsonSchemaVersion === "1.0", `Unexpected report schema: ${reportDownloads.jsonSchemaVersion}`);
+  assert(reportDownloads.jsonMethodologyUri === "https://www.w3.org/TR/wcag-em-2/", "JSON report has the wrong methodology URI");
+  assert(reportDownloads.jsonRunId === "SMOKE-RUN-1", "JSON report is missing the test-run ID");
+  assert(reportDownloads.jsonTargetName === "Smoke test target", "JSON report is missing the target name");
+  assert(reportDownloads.jsonSampleCount === 2, `Expected 2 sampled tests, found ${reportDownloads.jsonSampleCount}`);
+  assert(reportDownloads.jsonFindingCount >= 2, `Expected at least 2 report findings, found ${reportDownloads.jsonFindingCount}`);
+  assert(reportDownloads.jsonCompletedCount === 1, `Expected 1 completed report finding, found ${reportDownloads.jsonCompletedCount}`);
   await evaluate('document.querySelector("#clear-test-plan").click()');
 
   await evaluate(`(() => {

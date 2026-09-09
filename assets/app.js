@@ -4,6 +4,7 @@
   const SELECTION_STORAGE_KEY = "carlashub-a11y-selected-tests";
   const RUN_META_STORAGE_KEY = "carlashub-a11y-run-metadata";
   const RUN_RESULTS_STORAGE_KEY = "carlashub-a11y-run-results";
+  const REPORT_SCHEMA_VERSION = "1.0";
   const EXECUTION_STATUSES = new Set([
     "not_started",
     "in_progress",
@@ -13,16 +14,17 @@
   ]);
   const CRITERION_OUTCOMES = new Set(["pass", "fail", "not_applicable"]);
   const CSV_HEADERS = [
+    "schema_version",
     "test_run_id",
     "test_case_id",
+    "test_case_title",
     "wcag_sc",
+    "target_name",
     "target_id",
     "state",
     "environment",
     "execution_status",
     "criterion_outcome",
-    "action",
-    "expected_result",
     "actual_result",
     "evidence_reference",
     "issue_id",
@@ -31,6 +33,7 @@
     "test_date",
     "reviewer",
     "review_date",
+    "procedure_url",
   ];
 
   const cards = Array.from(document.querySelectorAll("[data-test-card]"));
@@ -75,6 +78,10 @@
   const runnerIssueId = document.querySelector("#runner-issue-id");
   const runnerLimitation = document.querySelector("#runner-limitation");
   const runnerFeedback = document.querySelector("#runner-feedback");
+  const reportReadiness = document.querySelector("#report-readiness");
+  const reportReadinessGaps = document.querySelector("#report-readiness-gaps");
+  const downloadReportButton = document.querySelector("#download-evaluation-report");
+  const downloadDataButton = document.querySelector("#download-evaluation-data");
   const mobilePlanMedia = window.matchMedia("(max-width: 36rem)");
 
   let activeKind = "all";
@@ -95,6 +102,8 @@
   if (!runMeta.testRunId) {
     runMeta.testRunId = `A11Y-${localDate()}`;
   }
+  runMeta.wcagVersion ||= "WCAG 2.2";
+  runMeta.conformanceTarget ||= "AA";
 
   function safeRead(key, fallback) {
     try {
@@ -231,6 +240,7 @@
     startTestingLink.setAttribute("aria-disabled", String(count === 0));
     renderCoverage(chosenCards);
     renderRunner(chosenCards);
+    updateReportReadiness(chosenCards);
 
     cards.forEach((card) => {
       const isSelected = selected.has(card.dataset.testId);
@@ -410,8 +420,12 @@
   function metadataText() {
     const labels = {
       testRunId: "Test run ID",
+      targetName: "Target name",
       targetId: "Target",
       state: "Release, state or scope",
+      wcagVersion: "Standard",
+      conformanceTarget: "Conformance target",
+      scopeDescription: "Evaluation scope",
       environment: "Environment",
       tester: "Tester",
     };
@@ -448,50 +462,411 @@
     return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
   }
 
+  function procedureUrl(card) {
+    return new URL(card.dataset.testTarget, window.location.href).href;
+  }
+
   function exportRows() {
     const rows = [CSV_HEADERS];
     selectedCards().forEach((card) => {
       const result = resultFor(card.dataset.testId);
       getCriteria(card).forEach((criterion) => {
         rows.push([
+          REPORT_SCHEMA_VERSION,
           runMeta.testRunId || "",
           card.dataset.testId,
+          testTitle(card),
           criterion,
+          runMeta.targetName || "",
           runMeta.targetId || "",
           runMeta.state || "",
           runMeta.environment || "",
           result.status,
           result.outcomes[criterion] || "",
-          "",
-          "",
           result.actualResult,
           result.evidenceReference,
           result.issueId,
           result.limitation,
           runMeta.tester || "",
           result.testDate || (result.status === "complete" ? localDate() : ""),
-          "",
-          "",
+          runMeta.reviewer || "",
+          runMeta.reviewDate || "",
+          procedureUrl(card),
         ]);
       });
     });
     return rows;
   }
 
+  function downloadFile(contents, filename, type) {
+    const blob = new Blob([contents], { type });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
+  function exportFileBase() {
+    return (runMeta.testRunId || "accessibility-test-results")
+      .replace(/[^a-z0-9._-]+/gi, "-")
+      .replace(/^-+|-+$/g, "") || "accessibility-test-results";
+  }
+
   function exportCsv() {
     const csv = exportRows()
       .map((row) => row.map(csvEscape).join(","))
       .join("\r\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${runMeta.testRunId || "accessibility-test-results"}.csv`;
-    document.body.append(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-    announce("Results CSV exported.");
+    downloadFile(csv, `${exportFileBase()}.csv`, "text/csv;charset=utf-8");
+    announce("Working results CSV exported.");
+  }
+
+  function humanStatus(value) {
+    return String(value || "not recorded")
+      .replaceAll("_", " ")
+      .replace(/^./, (character) => character.toUpperCase());
+  }
+
+  function buildReportData() {
+    const chosenCards = selectedCards();
+    const findings = chosenCards.flatMap((card) => {
+      const result = resultFor(card.dataset.testId);
+      return getCriteria(card).map((criterion) => ({
+        testCaseId: card.dataset.testId,
+        testCaseTitle: testTitle(card),
+        testKind: card.dataset.testKind,
+        procedureUrl: procedureUrl(card),
+        wcagSuccessCriterion: criterion,
+        executionStatus: result.status,
+        criterionOutcome: result.outcomes[criterion] || "not_recorded",
+        actualResult: result.actualResult || "",
+        evidenceReference: result.evidenceReference || "",
+        issueId: result.issueId || "",
+        limitation: result.limitation || "",
+        tester: runMeta.tester || "",
+        testDate: result.testDate || (result.status === "complete" ? localDate() : ""),
+      }));
+    });
+    const statusCounts = Object.fromEntries(
+      Array.from(EXECUTION_STATUSES, (status) => [
+        status,
+        chosenCards.filter((card) => resultFor(card.dataset.testId).status === status).length,
+      ]),
+    );
+    const outcomeCounts = {
+      pass: findings.filter((finding) => finding.criterionOutcome === "pass").length,
+      fail: findings.filter((finding) => finding.criterionOutcome === "fail").length,
+      notApplicable: findings.filter(
+        (finding) => finding.criterionOutcome === "not_applicable",
+      ).length,
+      notRecorded: findings.filter(
+        (finding) => finding.criterionOutcome === "not_recorded",
+      ).length,
+    };
+
+    return {
+      schemaVersion: REPORT_SCHEMA_VERSION,
+      generatedAt: new Date().toISOString(),
+      generator: "CarlasHub Accessibility Test Case Manager",
+      methodology: {
+        name: "Website Accessibility Conformance Evaluation Methodology (WCAG-EM) 2.0",
+        version: "W3C Group Note, 23 July 2026",
+        uri: "https://www.w3.org/TR/wcag-em-2/",
+        statement:
+          "This CarlasHub report is structured around WCAG-EM 2.0. It is not a W3C conformance claim, certification or endorsement.",
+      },
+      evaluation: {
+        testRunId: runMeta.testRunId || "",
+        targetName: runMeta.targetName || "",
+        targetId: runMeta.targetId || "",
+        state: runMeta.state || "",
+        commissioner: runMeta.commissioner || "",
+        evaluationStart: runMeta.evaluationStart || "",
+        evaluationEnd: runMeta.evaluationEnd || "",
+        wcagVersion: runMeta.wcagVersion || "WCAG 2.2",
+        conformanceTarget: runMeta.conformanceTarget || "AA",
+        scopeDescription: runMeta.scopeDescription || "",
+        excludedScope: runMeta.excludedScope || "",
+        accessibilitySupport: runMeta.accessibilitySupport || "",
+        environment: runMeta.environment || "",
+        technologies: runMeta.technologies || "",
+        commonViews: runMeta.commonViews || "",
+        essentialFunctions: runMeta.essentialFunctions || "",
+        sampleMethod: runMeta.sampleMethod || "",
+        structuredSample: runMeta.structuredSample || "",
+        randomSample: runMeta.randomSample || "",
+        completeProcesses: runMeta.completeProcesses || "",
+        evaluationSummary: runMeta.evaluationSummary || "",
+        reportLimitations: runMeta.reportLimitations || "",
+        tester: runMeta.tester || "",
+        reviewer: runMeta.reviewer || "",
+        reviewDate: runMeta.reviewDate || "",
+      },
+      summary: {
+        selectedTests: chosenCards.length,
+        completedTests: statusCounts.complete,
+        criterionChecks: findings.length,
+        statusCounts,
+        outcomeCounts,
+      },
+      sample: chosenCards.map((card) => ({
+        testCaseId: card.dataset.testId,
+        title: testTitle(card),
+        kind: card.dataset.testKind,
+        wcagSuccessCriteria: getCriteria(card),
+        procedureUrl: procedureUrl(card),
+      })),
+      findings,
+    };
+  }
+
+  function htmlEscape(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function reportText(value) {
+    return htmlEscape(value || "Not recorded").replaceAll("\n", "<br>");
+  }
+
+  function definitionList(entries) {
+    return `<dl>${entries
+      .map(
+        ([term, value]) =>
+          `<div><dt>${htmlEscape(term)}</dt><dd>${reportText(value)}</dd></div>`,
+      )
+      .join("")}</dl>`;
+  }
+
+  function buildReportHtml(data) {
+    const { evaluation, summary, sample, findings, methodology } = data;
+    const sampleRows = sample
+      .map(
+        (item) => `<tr>
+          <th scope="row"><a href="${htmlEscape(item.procedureUrl)}">${htmlEscape(item.testCaseId)}</a><span>${htmlEscape(item.title)}</span></th>
+          <td>${htmlEscape(humanStatus(item.kind))}</td>
+          <td>${htmlEscape(item.wcagSuccessCriteria.join(", "))}</td>
+        </tr>`,
+      )
+      .join("");
+    const findingRows = findings
+      .map(
+        (finding) => `<tr>
+          <th scope="row"><a href="${htmlEscape(finding.procedureUrl)}">${htmlEscape(finding.testCaseId)}</a><span>${htmlEscape(finding.testCaseTitle)}</span></th>
+          <td>${htmlEscape(finding.wcagSuccessCriterion)}</td>
+          <td>${htmlEscape(humanStatus(finding.executionStatus))}</td>
+          <td>${htmlEscape(humanStatus(finding.criterionOutcome))}</td>
+          <td>${reportText(finding.actualResult)}</td>
+          <td>${reportText(finding.evidenceReference)}</td>
+          <td>${reportText(finding.issueId)}</td>
+          <td>${reportText(finding.limitation)}</td>
+        </tr>`,
+      )
+      .join("");
+
+    return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${htmlEscape(evaluation.testRunId || "Accessibility evaluation")} — CarlasHub</title>
+  <style>
+    :root { color-scheme: light; font: 100%/1.55 Arial, sans-serif; color: #202124; background: #f8f9fa; }
+    body { margin: 0; }
+    main { width: min(76rem, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0 5rem; }
+    header, section { background: #fff; border: 1px solid #dadce0; border-radius: .75rem; margin-block: 1rem; padding: clamp(1rem, 3vw, 2rem); }
+    header { border-top: .4rem solid #1a73e8; }
+    h1, h2 { line-height: 1.2; color: #174ea6; }
+    a { color: #1967d2; }
+    .notice { border-left: .3rem solid #f9ab00; padding-left: 1rem; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .75rem; padding: 0; list-style: none; }
+    .summary li { padding: 1rem; background: #e8f0fe; border-radius: .5rem; }
+    .summary strong { display: block; font-size: 1.7rem; color: #174ea6; }
+    dl { display: grid; grid-template-columns: minmax(12rem, 1fr) 3fr; }
+    dl div { display: contents; }
+    dt, dd { margin: 0; padding: .65rem; border-top: 1px solid #e8eaed; }
+    dt { font-weight: 700; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    caption { text-align: left; font-weight: 700; padding-block: 0 1rem; }
+    th, td { text-align: left; vertical-align: top; border: 1px solid #dadce0; padding: .65rem; }
+    thead th { background: #e8f0fe; }
+    tbody th span { display: block; font-weight: 400; min-width: 12rem; }
+    footer { color: #5f6368; margin-top: 2rem; }
+    @media (max-width: 42rem) { dl { display: block; } dl div { display: block; } dd { padding-top: 0; border-top: 0; } }
+    @media print { :root { background: #fff; font-size: 10pt; } main { width: 100%; padding: 0; } header, section { break-inside: avoid; border-radius: 0; } a { color: inherit; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p>CarlasHub accessibility evaluation</p>
+    <h1>${reportText(evaluation.targetName || evaluation.targetId || "Accessibility evaluation")}</h1>
+    <p>Test run ${reportText(evaluation.testRunId)} · generated ${htmlEscape(data.generatedAt)}</p>
+    <p class="notice">${htmlEscape(methodology.statement)}</p>
+  </header>
+  <section aria-labelledby="summary-title">
+    <h2 id="summary-title">Evaluation summary</h2>
+    <ul class="summary">
+      <li><strong>${summary.selectedTests}</strong> selected tests</li>
+      <li><strong>${summary.completedTests}</strong> completed tests</li>
+      <li><strong>${summary.outcomeCounts.pass}</strong> pass outcomes</li>
+      <li><strong>${summary.outcomeCounts.fail}</strong> fail outcomes</li>
+      <li><strong>${summary.outcomeCounts.notApplicable}</strong> not applicable</li>
+      <li><strong>${summary.outcomeCounts.notRecorded}</strong> not recorded</li>
+    </ul>
+    <h3>Evaluator summary</h3>
+    <p>${reportText(evaluation.evaluationSummary)}</p>
+  </section>
+  <section aria-labelledby="scope-title">
+    <h2 id="scope-title">1. Define the evaluation scope</h2>
+    ${definitionList([
+      ["Target", evaluation.targetName],
+      ["Target ID or URL", evaluation.targetId],
+      ["Release, state or scope", evaluation.state],
+      ["Scope description", evaluation.scopeDescription],
+      ["Excluded from scope", evaluation.excludedScope],
+      ["Standard", `${evaluation.wcagVersion} — ${evaluation.conformanceTarget === "No conformance target" ? evaluation.conformanceTarget : `Level ${evaluation.conformanceTarget}`}`],
+      ["Accessibility support baseline", evaluation.accessibilitySupport],
+      ["Commissioner or owner", evaluation.commissioner],
+      ["Evaluation dates", [evaluation.evaluationStart, evaluation.evaluationEnd].filter(Boolean).join(" to ")],
+    ])}
+  </section>
+  <section aria-labelledby="explore-title">
+    <h2 id="explore-title">2. Explore the target website</h2>
+    ${definitionList([
+      ["Technologies relied on", evaluation.technologies],
+      ["Common views and states", evaluation.commonViews],
+      ["Essential functions and journeys", evaluation.essentialFunctions],
+      ["Test environment", evaluation.environment],
+    ])}
+  </section>
+  <section aria-labelledby="sample-title">
+    <h2 id="sample-title">3. Select a representative sample</h2>
+    ${definitionList([
+      ["Sampling method", evaluation.sampleMethod],
+      ["Structured sample", evaluation.structuredSample],
+      ["Random sample", evaluation.randomSample],
+      ["Complete processes", evaluation.completeProcesses],
+    ])}
+    <h3>Selected test sample</h3>
+    <div class="table-wrap"><table>
+      <caption>${summary.selectedTests} tests selected for this evaluation</caption>
+      <thead><tr><th scope="col">Test</th><th scope="col">Type</th><th scope="col">WCAG success criteria</th></tr></thead>
+      <tbody>${sampleRows}</tbody>
+    </table></div>
+  </section>
+  <section aria-labelledby="findings-title">
+    <h2 id="findings-title">4. Evaluate the sample</h2>
+    <div class="table-wrap"><table>
+      <caption>Recorded findings for ${summary.criterionChecks} criterion checks</caption>
+      <thead><tr><th scope="col">Test</th><th scope="col">WCAG SC</th><th scope="col">Status</th><th scope="col">Outcome</th><th scope="col">Actual result</th><th scope="col">Evidence</th><th scope="col">Issue</th><th scope="col">Limitation</th></tr></thead>
+      <tbody>${findingRows}</tbody>
+    </table></div>
+  </section>
+  <section aria-labelledby="report-title">
+    <h2 id="report-title">5. Report the findings</h2>
+    ${definitionList([
+      ["Report limitations", evaluation.reportLimitations],
+      ["Tester", evaluation.tester],
+      ["Reviewer", evaluation.reviewer],
+      ["Review date", evaluation.reviewDate],
+      ["Methodology", methodology.name],
+      ["Methodology version", methodology.version],
+    ])}
+    <p><a href="${htmlEscape(methodology.uri)}">Read WCAG-EM 2.0</a></p>
+  </section>
+  <footer><p>Generated by CarlasHub Accessibility Test Case Manager. Review the scope, evidence and incomplete results before sharing.</p></footer>
+</main>
+</body>
+</html>`;
+  }
+
+  function downloadEvaluationReport() {
+    const data = buildReportData();
+    downloadFile(
+      buildReportHtml(data),
+      `${exportFileBase()}-evaluation-report.html`,
+      "text/html;charset=utf-8",
+    );
+    announce("Readable HTML evaluation report exported.");
+  }
+
+  function downloadEvaluationData() {
+    downloadFile(
+      `${JSON.stringify(buildReportData(), null, 2)}\n`,
+      `${exportFileBase()}-evaluation-report.json`,
+      "application/json;charset=utf-8",
+    );
+    announce("Structured evaluation data exported as JSON.");
+  }
+
+  function updateReportReadiness(chosenCards = selectedCards()) {
+    const gaps = [];
+    if (!chosenCards.length) {
+      reportReadiness.textContent = "Choose at least one test to prepare a report.";
+      reportReadinessGaps.replaceChildren();
+      reportReadinessGaps.hidden = true;
+      downloadReportButton.disabled = true;
+      downloadDataButton.disabled = true;
+      return;
+    }
+    if (!runMeta.targetName && !runMeta.targetId) {
+      gaps.push("Add a target name or URL.");
+    }
+    [
+      ["scopeDescription", "Describe the evaluation scope."],
+      ["accessibilitySupport", "Record the accessibility support baseline."],
+      ["environment", "Record the test environment."],
+      ["sampleMethod", "Explain how the sample was selected."],
+      ["structuredSample", "List the structured sample."],
+      ["completeProcesses", "Record complete processes, or state that none apply."],
+      ["tester", "Name the tester."],
+    ].forEach(([key, message]) => {
+      if (!runMeta[key]) {
+        gaps.push(message);
+      }
+    });
+    const unfinished = chosenCards.filter(
+      (card) => resultFor(card.dataset.testId).status !== "complete",
+    ).length;
+    const missingOutcomes = chosenCards.reduce(
+      (total, card) =>
+        total +
+        getCriteria(card).filter(
+          (criterion) => !resultFor(card.dataset.testId).outcomes[criterion],
+        ).length,
+      0,
+    );
+    if (unfinished) {
+      gaps.push(`Finish ${unfinished} selected ${unfinished === 1 ? "test" : "tests"}.`);
+    }
+    if (missingOutcomes) {
+      gaps.push(
+        `Record ${missingOutcomes} criterion ${missingOutcomes === 1 ? "outcome" : "outcomes"}.`,
+      );
+    }
+
+    reportReadiness.textContent = gaps.length
+      ? `This is a draft report with ${gaps.length} ${gaps.length === 1 ? "gap" : "gaps"}. You can export it now and complete it later.`
+      : "The selected tests and core reporting details are complete. Review the summary and limitations before sharing.";
+    reportReadinessGaps.replaceChildren(
+      ...gaps.map((message) => {
+        const item = document.createElement("li");
+        item.textContent = message;
+        return item;
+      }),
+    );
+    reportReadinessGaps.hidden = gaps.length === 0;
+    downloadReportButton.disabled = false;
+    downloadDataButton.disabled = false;
   }
 
   function parseCsv(text) {
@@ -536,7 +911,7 @@
     const headers = rows.shift() || [];
     const indexes = Object.fromEntries(headers.map((header, index) => [header.trim(), index]));
     if (!("test_case_id" in indexes) || !("wcag_sc" in indexes)) {
-      announce("Import failed: use the CarlasHub results CSV columns.");
+      announce("Import failed: use the CarlasHub working CSV columns.");
       return;
     }
     const importedIds = new Set();
@@ -570,10 +945,13 @@
       result.testDate = row[indexes.test_date]?.trim() || result.testDate;
       [
         ["test_run_id", "testRunId"],
+        ["target_name", "targetName"],
         ["target_id", "targetId"],
         ["state", "state"],
         ["environment", "environment"],
         ["tester", "tester"],
+        ["reviewer", "reviewer"],
+        ["review_date", "reviewDate"],
       ].forEach(([column, key]) => {
         const value = row[indexes[column]]?.trim();
         if (importedRows === 1 && value) {
@@ -840,6 +1218,8 @@
 
   copyButton.addEventListener("click", copyPlan);
   exportButton.addEventListener("click", exportCsv);
+  downloadReportButton.addEventListener("click", downloadEvaluationReport);
+  downloadDataButton.addEventListener("click", downloadEvaluationData);
   importInput.addEventListener("change", async () => {
     const [file] = importInput.files;
     if (file) {
@@ -852,6 +1232,7 @@
     input.addEventListener("input", () => {
       runMeta[input.dataset.runMeta] = input.value.trim();
       safeWrite(RUN_META_STORAGE_KEY, runMeta);
+      updateReportReadiness();
     });
   });
 

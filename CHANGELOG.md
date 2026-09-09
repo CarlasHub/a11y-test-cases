@@ -3,7 +3,9 @@
 ## Unreleased
 
 - Added test-run metadata, WCAG coverage feedback and a sequential guided runner with saved status, outcomes, evidence, issues and limitations.
-- Added results CSV export/import for cross-browser handoff, richer copied plans, add/remove-shown controls and undo after clearing a plan.
+- Added a WCAG-EM 2.0-inspired review stage with evaluation scope, sample, findings, limitations and reviewer details.
+- Added readable HTML evaluation reports and structured JSON report data for sharing and reuse.
+- Added working CSV export/import for cross-browser handoff, richer copied plans, add/remove-shown controls and undo after clearing a plan.
 - Fixed same-hash test links so closed procedure disclosures reopen and receive focus, and moved preparation guidance before test selection.
 - Configured Carla Gonçalves, Michael Spellacy and Rebecca Hammer as repository co-owners and CODEOWNERS reviewers.
 - Removed individual contact details from the README and configured repository owners and accessibility review through GitHub permissions and CODEOWNERS.
