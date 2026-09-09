@@ -1,0 +1,29 @@
+name: WCAG accessibility audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Audit the live test-case site
+        id: audit
+        uses: CarlasHub/accessibility-audit-plugin@v1
+        with:
+          urls: https://carlashub.github.io/a11y-test-cases/
+          allowed-hosts: carlashub.github.io
+          fail-on: none
+          comment-on-pr: 'false'
+
+      - name: Upload audit evidence
+        if: always() && steps.audit.outputs.output-dir != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: accessibility-audit
+          path: ${{ steps.audit.outputs.output-dir }}
+          retention-days: 14
