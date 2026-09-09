@@ -1,11 +1,11 @@
-# Radancy accessibility test case manager
+# CarlasHub accessibility test case manager
 
-[![Quality checks](https://github.com/radancy-pe/a11y-test-cases/actions/workflows/quality.yml/badge.svg)](https://github.com/radancy-pe/a11y-test-cases/actions/workflows/quality.yml)
-[![GitHub Pages](https://github.com/radancy-pe/a11y-test-cases/actions/workflows/pages.yml/badge.svg)](https://github.com/radancy-pe/a11y-test-cases/actions/workflows/pages.yml)
+[![Quality checks](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/quality.yml/badge.svg)](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/quality.yml)
+[![GitHub Pages](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/pages.yml/badge.svg)](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/pages.yml)
 
 Use the manager to select, organise and run accessibility test cases for websites and web applications.
 
-**[Open the Radancy accessibility test case manager](https://cuddly-happiness-wny73jk.pages.github.io/)**
+**[Open the CarlasHub accessibility test case manager](https://carlashub.github.io/a11y-test-cases/)**
 
 ## What this repository provides
 
@@ -21,7 +21,7 @@ Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
 
 ## How to use the manager
 
-1. Open the [published manager](https://cuddly-happiness-wny73jk.pages.github.io/).
+1. Open the [published manager](https://carlashub.github.io/a11y-test-cases/).
 2. Agree the pages, components, states, languages, environments and complete user journeys in scope.
 3. Search or filter the catalogue for components present in the test target.
 4. Add the relevant component procedures and WCAG groups to **My test plan**.
@@ -126,6 +126,6 @@ Pushes to `main` run the quality workflow and publish the generated static manag
 - [WCAG-EM overview](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/)
 - [Selecting Web Accessibility Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/)
 
-## Accessibility at Radancy
+## Contributing
 
-For internal standards, delivery guidance and supporting material, see [Accessibility at Radancy](https://tmpww.sharepoint.com/sites/delivery/SitePages/Accessibility.aspx).
+For improvements, corrections or new test cases, [open an issue in the CarlasHub repository](https://github.com/CarlasHub/a11y-test-cases/issues).

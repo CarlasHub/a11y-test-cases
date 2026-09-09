@@ -158,8 +158,11 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn('class="library-workspace"', homepage)
         self.assertIn('id="plan-progress" max="31" value="0"', homepage)
         self.assertIn('<details class="selection-panel" aria-labelledby="selection-title" open>', homepage)
-        self.assertIn('href="assets/styles.css?v=20260827-footer-cleanup"', homepage)
-        self.assertIn('src="assets/app.js?v=20260827-footer-cleanup"', homepage)
+        self.assertIn('<span class="brand-name">CarlasHub</span>', homepage)
+        self.assertIn('<meta name="theme-color" content="#174ea6">', homepage)
+        self.assertIn('<link rel="canonical" href="https://carlashub.github.io/a11y-test-cases/">', homepage)
+        self.assertIn('href="assets/styles.css?v=20260909-carlashub-blue"', homepage)
+        self.assertIn('src="assets/app.js?v=20260909-carlashub-blue"', homepage)
         self.assertNotIn('class="site-footer"', homepage)
         self.assertIn("WCAG 2.2</a> contains the normative requirements", homepage)
         self.assertEqual(31, homepage.count("data-test-card"))
@@ -245,29 +248,22 @@ class LibraryValidationTests(unittest.TestCase):
         self.assertIn("uses: actions/upload-pages-artifact@v5", workflow)
         self.assertIn("uses: actions/deploy-pages@v5", workflow)
         self.assertIn("path: _site", workflow)
-        self.assertIn("https://cuddly-happiness-wny73jk.pages.github.io/", readme)
+        self.assertIn("https://carlashub.github.io/a11y-test-cases/", readme)
         self.assertTrue(
             readme.rstrip().endswith(
-                "[Accessibility at Radancy](https://tmpww.sharepoint.com/sites/delivery/SitePages/Accessibility.aspx)."
+                "[open an issue in the CarlasHub repository](https://github.com/CarlasHub/a11y-test-cases/issues)."
             )
         )
-        self.assertNotIn("michael.spellacy@radancy.com", readme)
-        self.assertNotIn("Rebecca.Hammer@radancy.com", readme)
+        self.assertNotIn("cuddly-happiness-wny73jk.pages.github.io", readme)
+        self.assertNotIn("tmpww.sharepoint.com", readme)
 
     def test_repository_codeowners_are_configured(self) -> None:
         codeowners = (ROOT / ".github" / "CODEOWNERS").read_text(encoding="utf-8")
         self.assertIn(
-            "# Repository co-owners and reviewers:",
+            "# Repository owner and reviewer:",
             codeowners,
         )
-        self.assertIn(
-            "# @carla-goncalves_radancy, @mspellac_radancy and @rhammer_radancy",
-            codeowners,
-        )
-        self.assertIn(
-            "* @carla-goncalves_radancy @mspellac_radancy @rhammer_radancy",
-            codeowners,
-        )
+        self.assertIn("* @CarlasHub", codeowners)
 
     def test_component_procedure_references_are_valid(self) -> None:
         criteria = {

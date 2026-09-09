@@ -15,7 +15,7 @@ DATA_PATH = ROOT / "content" / "test-cases.json"
 PROCEDURES_PATH = ROOT / "content" / "component-procedures.json"
 MANUAL_CHECKS_PATH = ROOT / "content" / "criterion-manual-checks.json"
 INDEX_PATH = ROOT / "index.html"
-ASSET_VERSION = "20260827-footer-cleanup"
+ASSET_VERSION = "20260909-carlashub-blue"
 
 
 THEMES = {
@@ -257,8 +257,15 @@ def page_shell(content: str) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Radancy accessibility test case manager for WCAG 2.2 Level A and Level AA testing.">
-  <title>Accessibility test case manager | Radancy</title>
+  <meta name="description" content="CarlasHub accessibility test case manager for WCAG 2.2 Level A and Level AA testing.">
+  <meta name="theme-color" content="#174ea6">
+  <meta property="og:title" content="Accessibility test case manager | CarlasHub">
+  <meta property="og:description" content="Choose, organise and run WCAG 2.2 Level A and Level AA accessibility test cases.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://carlashub.github.io/a11y-test-cases/">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://carlashub.github.io/a11y-test-cases/">
+  <title>Accessibility test case manager | CarlasHub</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">
   <script src="assets/app.js?v={ASSET_VERSION}" defer></script>
@@ -269,8 +276,8 @@ def page_shell(content: str) -> str:
     <div class="app-frame">
       <aside class="library-sidebar" aria-label="Test case navigation and test plan">
         <div class="sidebar-inner">
-          <a class="brand" href="#page-title" aria-label="Radancy accessibility test case manager home">
-            <span class="brand-name">Radancy</span>
+          <a class="brand" href="#page-title" aria-label="CarlasHub accessibility test case manager home">
+            <span class="brand-name">CarlasHub</span>
             <span class="brand-subtitle">Accessibility test case manager</span>
           </a>
           <nav class="sidebar-group" aria-labelledby="library-nav-title">
@@ -570,7 +577,7 @@ def render_index(library: dict, component_library: dict, manual_check_library: d
     )
     content = f"""    <section class="library-introduction" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">Radancy QA</p>
+        <p class="eyebrow">CarlasHub QA</p>
         <h1 id="page-title">Accessibility test case manager</h1>
         <p class="lede">WCAG 2.2 Level A and Level AA test cases for websites and web applications.</p>
       </div>

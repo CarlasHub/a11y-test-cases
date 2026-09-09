@@ -1,8 +1,8 @@
 {
-  "name": "radancy-a11y-test-case-manager",
+  "name": "carlashub-a11y-test-case-manager",
   "version": "1.0.0",
   "private": true,
-  "description": "Radancy WCAG 2.2 Level A and AA test case manager for website and web-application QA",
+  "description": "CarlasHub WCAG 2.2 Level A and AA test case manager for website and web-application QA",
   "scripts": {
     "build": "python3 scripts/build_site.py",
     "check:build": "python3 scripts/build_site.py --check",

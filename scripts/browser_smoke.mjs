@@ -184,7 +184,7 @@ try {
     width: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth
   })`);
-  assert(desktop.title === "Accessibility test case manager | Radancy", "Unexpected home title");
+  assert(desktop.title === "Accessibility test case manager | CarlasHub", "Unexpected home title");
   assert(desktop.h1 === "Accessibility test case manager", "Unexpected home heading");
   assert(desktop.appFrameColumns === 2, `Expected a two-column checklist frame, found ${desktop.appFrameColumns} column(s)`);
   assert(desktop.sidebarPresent === true, "Checklist navigation sidebar is missing");
@@ -247,7 +247,7 @@ try {
     const selectedCount = document.querySelector("#selection-count").textContent.trim();
     const selectedLinks = document.querySelectorAll("#selection-list a").length;
     const copyEnabled = !document.querySelector("#copy-test-plan").disabled;
-    const storedCount = JSON.parse(localStorage.getItem("radancy-a11y-selected-tests") || "[]").length;
+    const storedCount = JSON.parse(localStorage.getItem("carlashub-a11y-selected-tests") || "[]").length;
     const progressValue = document.querySelector("#plan-progress").value;
     const progressText = document.querySelector("#plan-progress-text").textContent.trim();
     document.querySelector("#clear-test-plan").click();

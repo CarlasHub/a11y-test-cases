@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const STORAGE_KEY = "radancy-a11y-selected-tests";
+  const STORAGE_KEY = "carlashub-a11y-selected-tests";
   const picker = document.querySelector("#test-picker-form");
   const cards = picker ? Array.from(picker.querySelectorAll("[data-test-card]")) : [];
   const search = document.querySelector("#test-search");

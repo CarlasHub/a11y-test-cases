@@ -1,6 +1,6 @@
-# Internal use
+# Responsible use
 
-This repository is intended for Radancy internal quality-assurance work.
+This public repository is intended for accessibility quality-assurance work.
 
 It contains original internal guidance based on publicly available W3C standards and supporting documents. Do not add customer credentials, private user information, live-system exports, confidential screenshots or evidence files to the repository.
 

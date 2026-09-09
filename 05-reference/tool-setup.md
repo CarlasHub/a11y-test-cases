@@ -1,6 +1,6 @@
 # Tool setup
 
-Use tools approved by the Radancy project or customer environment. Record exact versions because rule coverage and output can change.
+Use tools approved for the project or customer environment. Record exact versions because rule coverage and output can change.
 
 ## Browser preparation
 

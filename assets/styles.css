@@ -1,7 +1,7 @@
 :root {
-  --accent: #5b2a86;
-  --accent-strong: #361452;
-  --accent-soft: #f2eaf8;
+  --accent: #1a73e8;
+  --accent-strong: #174ea6;
+  --accent-soft: #e8f0fe;
   --ink: #172033;
   --muted: #515a6b;
   --line: #c7cbd6;
@@ -59,7 +59,7 @@ a {
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent-strong);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
 }
@@ -637,7 +637,7 @@ button {
   border: 0.0625rem solid var(--accent);
   border-radius: 0.1rem;
   padding: 0.62rem 0.85rem;
-  color: var(--accent);
+  color: var(--accent-strong);
   background: var(--paper);
   font: inherit;
   font-weight: 700;
@@ -1129,9 +1129,9 @@ button.filter-chip[aria-pressed="true"] {
 }
 
 .theme-visual {
-  --theme-bg: #f3eaf8;
-  --theme-ink: #5c267f;
-  --theme-line: #b796ca;
+  --theme-bg: #e8f0fe;
+  --theme-ink: #174ea6;
+  --theme-line: #8ab4f8;
 }
 
 .theme-media {
@@ -1220,7 +1220,7 @@ button.filter-chip[aria-pressed="true"] {
 }
 
 .test-picker-card h4 a:hover {
-  color: var(--accent);
+  color: var(--accent-strong);
   text-decoration: underline;
 }
 
@@ -1326,7 +1326,7 @@ button.filter-chip[aria-pressed="true"] {
 .text-action {
   border: 0;
   padding: 0.3rem 0;
-  color: var(--accent);
+  color: var(--accent-strong);
   background: transparent;
   text-decoration: underline;
   text-underline-offset: 0.18em;
@@ -1700,7 +1700,7 @@ button:disabled {
 /* Framed checklist workspace, adapted from the referenced checklist layout. */
 
 body {
-  background: #eeeaf2;
+  background: #e8f0fe;
 }
 
 .site-shell {
@@ -1712,10 +1712,10 @@ body {
   grid-template-columns: 20rem minmax(0, 1fr);
   width: min(100%, 92rem);
   margin-inline: auto;
-  border: 0.0625rem solid #cfc5d8;
+  border: 0.0625rem solid #aecbfa;
   border-radius: 1.35rem;
   background: var(--accent-strong);
-  box-shadow: 0 1.5rem 4rem rgba(54, 20, 82, 0.18);
+  box-shadow: 0 1.5rem 4rem rgba(23, 78, 166, 0.18);
 }
 
 .library-sidebar {
@@ -1760,7 +1760,7 @@ body {
 .library-sidebar .brand-subtitle {
   border: 0;
   padding: 0;
-  color: #eee4f4;
+  color: #d2e3fc;
   font-family: inherit;
   font-size: 0.9rem;
 }
@@ -1777,7 +1777,7 @@ body {
   margin: 0;
   border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.18);
   padding: 0.65rem 0.8rem;
-  color: #f4eef8;
+  color: #e8f0fe;
   background: rgba(0, 0, 0, 0.12);
   font-size: 0.75rem;
   letter-spacing: 0.07em;
@@ -1820,7 +1820,7 @@ body {
 }
 
 .library-sidebar .site-nav a span {
-  color: #e0cee9;
+  color: #d2e3fc;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1875,7 +1875,7 @@ body {
   margin-top: 0.75rem;
   border: 0;
   border-radius: 999rem;
-  color: #d6b5e7;
+  color: #8ab4f8;
   background: rgba(255, 255, 255, 0.16);
   overflow: hidden;
 }
@@ -1887,12 +1887,12 @@ body {
 
 #plan-progress::-webkit-progress-value {
   border-radius: 999rem;
-  background: #d6b5e7;
+  background: #8ab4f8;
 }
 
 #plan-progress::-moz-progress-bar {
   border-radius: 999rem;
-  background: #d6b5e7;
+  background: #8ab4f8;
 }
 
 .library-sidebar .selection-panel .progress-text {
@@ -1903,12 +1903,12 @@ body {
 }
 
 .library-sidebar .selection-panel > p:not(.selection-feedback, .progress-text) {
-  color: #eadff0;
+  color: #d2e3fc;
 }
 
 .library-sidebar .selection-list {
   max-height: 13rem;
-  color: #eadff0;
+  color: #d2e3fc;
 }
 
 .library-sidebar .selection-list a {
@@ -1931,7 +1931,7 @@ body {
 .library-sidebar .selection-actions button:hover {
   border-color: var(--paper);
   color: var(--accent-strong);
-  background: #f1e8f6;
+  background: #e8f0fe;
 }
 
 .library-sidebar .selection-feedback {
@@ -1941,7 +1941,7 @@ body {
 .library-workspace {
   min-width: 0;
   border-radius: 0 1.3rem 1.3rem 0;
-  background: #fbfafc;
+  background: #f8faff;
 }
 
 .library-workspace main {
@@ -1958,7 +1958,7 @@ body {
   grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr);
   gap: 1rem 2rem;
   align-items: end;
-  border: 0.0625rem solid #d5c8df;
+  border: 0.0625rem solid #aecbfa;
   border-top: 0.3rem solid var(--accent);
   border-radius: 0.95rem;
   padding: clamp(1.25rem, 3vw, 2rem);
@@ -1993,7 +1993,7 @@ body {
 
 .library-introduction .coverage-stats li {
   justify-content: space-between;
-  border-color: #d5c8df;
+  border-color: #aecbfa;
   padding: 0.55rem 0.7rem;
   color: var(--accent-strong);
   background: var(--accent-soft);
