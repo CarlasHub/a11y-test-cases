@@ -2,9 +2,14 @@
 
 ## Unreleased
 
+- Restored CarlasHub branding links with accessible website, LinkedIn and GitHub icons, and added a complete project footer.
+- Marked the manager as a work in progress in the README and on the published page.
+- Stabilised test selector names so assistive technology and voice control can track a choice as it changes state.
+- Tightened repository validation so virtual environments and ordinary implementation identifiers are not mistaken for page content.
 - Added test-run metadata, WCAG coverage feedback and a sequential guided runner with saved status, outcomes, evidence, issues and limitations.
 - Added a WCAG-EM 2.0-inspired review stage with evaluation scope, sample, findings, limitations and reviewer details.
 - Added readable HTML evaluation reports and structured JSON report data for sharing and reuse.
+- Made CSV exports and the working template open reliably in spreadsheet apps, and replaced the report's wide findings table with clear, responsive finding cards.
 - Added working CSV export/import for cross-browser handoff, richer copied plans, add/remove-shown controls and undo after clearing a plan.
 - Fixed same-hash test links so closed procedure disclosures reopen and receive focus, and moved preparation guidance before test selection.
 - Configured Carla Gonçalves, Michael Spellacy and Rebecca Hammer as repository co-owners and CODEOWNERS reviewers.

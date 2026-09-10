@@ -1,2 +1,2 @@
-schema_version,test_run_id,test_case_id,test_case_title,wcag_sc,target_name,target_id,state,environment,execution_status,criterion_outcome,actual_result,evidence_reference,issue_id,limitation,tester,test_date,reviewer,review_date,procedure_url
+﻿schema_version,test_run_id,test_case_id,test_case_title,wcag_sc,target_name,target_id,state,environment,execution_status,criterion_outcome,actual_result,evidence_reference,issue_id,limitation,tester,test_date,reviewer,review_date,procedure_url
 1.0,RUN-001,TC-01,Page title,2.4.2,Example service,PAGE-001,default,Desktop keyboard,not_started,,,,,,Tester name,,,,https://carlashub.github.io/a11y-test-cases/#tc-01

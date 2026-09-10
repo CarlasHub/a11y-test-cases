@@ -192,6 +192,13 @@ try {
     normativeLinks: Array.from(document.querySelectorAll(".criterion a")).filter((link) => link.href.startsWith("https://www.w3.org/TR/WCAG22/")).length,
     separateHtmlPages: Array.from(document.querySelectorAll("a[href]")).filter((link) => link.getAttribute("href").includes(".html")).length,
     skipTarget: document.querySelector(".skip-link")?.getAttribute("href"),
+    socialLinks: document.querySelectorAll(".brand-links a").length,
+    labelledSocialLinks: document.querySelectorAll(".brand-links a .visually-hidden").length,
+    stablePickerNames: Array.from(document.querySelectorAll("[data-test-select]")).every((control) => control.getAttribute("aria-label")?.startsWith("Include ")),
+    footerPresent: Boolean(document.querySelector(".site-footer")),
+    footerLinks: document.querySelectorAll(".site-footer nav a").length,
+    repositoryLink: document.querySelector('.site-footer a[href="https://github.com/CarlasHub/a11y-test-cases"]')?.textContent.trim(),
+    workInProgressVisible: document.querySelector(".site-footer .project-status")?.textContent.includes("Work in progress."),
     width: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth
   })`);
@@ -236,6 +243,13 @@ try {
   assert(desktop.normativeLinks === 55, `Expected 55 normative WCAG links, found ${desktop.normativeLinks}`);
   assert(desktop.separateHtmlPages === 0, `Expected no links to separate HTML pages, found ${desktop.separateHtmlPages}`);
   assert(desktop.skipTarget === "#main-content", "Skip link does not target main content");
+  assert(desktop.socialLinks === 3, `Expected 3 social icon links, found ${desktop.socialLinks}`);
+  assert(desktop.labelledSocialLinks === 3, "Every social icon link must have an accessible name");
+  assert(desktop.stablePickerNames === true, "Test selectors must keep a stable accessible name when their state changes");
+  assert(desktop.footerPresent === true, "CarlasHub footer is missing");
+  assert(desktop.footerLinks === 4, `Expected 4 footer links, found ${desktop.footerLinks}`);
+  assert(desktop.repositoryLink === "Project repository", "Footer repository link is missing or unclear");
+  assert(desktop.workInProgressVisible === true, "Work-in-progress status is missing from the page");
   assert(desktop.scrollWidth <= desktop.width, `Desktop horizontal overflow: ${desktop.scrollWidth}/${desktop.width}`);
 
   await evaluate("document.activeElement?.blur()");
@@ -420,6 +434,13 @@ try {
     };
     window.setTimeout = () => 0;
     try {
+      document.querySelector("#export-test-plan").click();
+      const csvDownload = capturedDownload;
+      const csvResponse = await fetch(csvDownload.url);
+      const csvBytes = new Uint8Array(await csvResponse.arrayBuffer());
+      const csv = new TextDecoder("utf-8").decode(csvBytes);
+      URL.revokeObjectURL(csvDownload.url);
+
       document.querySelector("#download-evaluation-report").click();
       const htmlDownload = capturedDownload;
       const html = await fetch(htmlDownload.url).then((response) => response.text());
@@ -431,12 +452,19 @@ try {
       URL.revokeObjectURL(jsonDownload.url);
 
       return {
+        csvFilename: csvDownload.filename,
+        csvHasUtf8Bom: csvBytes[0] === 0xef && csvBytes[1] === 0xbb && csvBytes[2] === 0xbf,
+        csvHasHeader: csv.replace(/^\uFEFF/, "").startsWith("schema_version,test_run_id,test_case_id,test_case_title"),
+        csvHasPublicProcedureUrl: csv.includes("https://carlashub.github.io/a11y-test-cases/#"),
         htmlFilename: htmlDownload.filename,
         jsonFilename: jsonDownload.filename,
         htmlHasTitle: html.includes("CarlasHub accessibility evaluation"),
         htmlHasRun: html.includes("SMOKE-RUN-1"),
         htmlHasMethod: html.includes("structured around WCAG-EM 2.0"),
         htmlHasSample: html.includes("Selected test sample"),
+        htmlHasFindingCards: html.includes('class="finding-list"') && html.includes('class="finding"'),
+        htmlHasPlainResultLabel: html.includes("What happened"),
+        htmlHasPublicProcedureUrl: html.includes("https://carlashub.github.io/a11y-test-cases/#"),
         jsonSchemaVersion: json.schemaVersion,
         jsonMethodologyUri: json.methodology?.uri,
         jsonRunId: json.evaluation?.testRunId,
@@ -450,12 +478,19 @@ try {
       window.setTimeout = originalSetTimeout;
     }
   })()`);
+  assert(reportDownloads.csvFilename.endsWith(".csv"), `Unexpected CSV filename: ${reportDownloads.csvFilename}`);
+  assert(reportDownloads.csvHasUtf8Bom === true, "CSV export is missing its UTF-8 spreadsheet marker");
+  assert(reportDownloads.csvHasHeader === true, "CSV export is missing its expected header row");
+  assert(reportDownloads.csvHasPublicProcedureUrl === true, "CSV export does not link to the public test procedures");
   assert(reportDownloads.htmlFilename.endsWith(".html"), `Unexpected HTML report filename: ${reportDownloads.htmlFilename}`);
   assert(reportDownloads.jsonFilename.endsWith(".json"), `Unexpected JSON report filename: ${reportDownloads.jsonFilename}`);
   assert(reportDownloads.htmlHasTitle === true, "HTML report is missing its title");
   assert(reportDownloads.htmlHasRun === true, "HTML report is missing the test-run ID");
   assert(reportDownloads.htmlHasMethod === true, "HTML report is missing the WCAG-EM methodology statement");
   assert(reportDownloads.htmlHasSample === true, "HTML report is missing the selected test sample");
+  assert(reportDownloads.htmlHasFindingCards === true, "HTML report is missing its readable finding cards");
+  assert(reportDownloads.htmlHasPlainResultLabel === true, "HTML report is missing the plain-language result label");
+  assert(reportDownloads.htmlHasPublicProcedureUrl === true, "HTML report does not link to the public test procedures");
   assert(reportDownloads.jsonSchemaVersion === "1.0", `Unexpected report schema: ${reportDownloads.jsonSchemaVersion}`);
   assert(reportDownloads.jsonMethodologyUri === "https://www.w3.org/TR/wcag-em-2/", "JSON report has the wrong methodology URI");
   assert(reportDownloads.jsonRunId === "SMOKE-RUN-1", "JSON report is missing the test-run ID");

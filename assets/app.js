@@ -463,7 +463,8 @@
   }
 
   function procedureUrl(card) {
-    return new URL(card.dataset.testTarget, window.location.href).href;
+    const canonicalUrl = document.querySelector('link[rel="canonical"]')?.href;
+    return new URL(card.dataset.testTarget, canonicalUrl || window.location.href).href;
   }
 
   function exportRows() {
@@ -517,11 +518,11 @@
   }
 
   function exportCsv() {
-    const csv = exportRows()
+    const csv = `\uFEFF${exportRows()
       .map((row) => row.map(csvEscape).join(","))
-      .join("\r\n");
+      .join("\r\n")}`;
     downloadFile(csv, `${exportFileBase()}.csv`, "text/csv;charset=utf-8");
-    announce("Working results CSV exported.");
+    announce("Spreadsheet-ready working results CSV exported.");
   }
 
   function humanStatus(value) {
@@ -656,18 +657,22 @@
         </tr>`,
       )
       .join("");
-    const findingRows = findings
+    const findingCards = findings
       .map(
-        (finding) => `<tr>
-          <th scope="row"><a href="${htmlEscape(finding.procedureUrl)}">${htmlEscape(finding.testCaseId)}</a><span>${htmlEscape(finding.testCaseTitle)}</span></th>
-          <td>${htmlEscape(finding.wcagSuccessCriterion)}</td>
-          <td>${htmlEscape(humanStatus(finding.executionStatus))}</td>
-          <td>${htmlEscape(humanStatus(finding.criterionOutcome))}</td>
-          <td>${reportText(finding.actualResult)}</td>
-          <td>${reportText(finding.evidenceReference)}</td>
-          <td>${reportText(finding.issueId)}</td>
-          <td>${reportText(finding.limitation)}</td>
-        </tr>`,
+        (finding) => `<article class="finding">
+          <div class="finding-heading">
+            <h3><a href="${htmlEscape(finding.procedureUrl)}">${htmlEscape(finding.testCaseId)}</a> — ${htmlEscape(finding.testCaseTitle)}</h3>
+            <p><span class="result-badge result-${htmlEscape(finding.criterionOutcome.replaceAll("_", "-"))}">${htmlEscape(humanStatus(finding.criterionOutcome))}</span></p>
+          </div>
+          ${definitionList([
+            ["WCAG success criterion", finding.wcagSuccessCriterion],
+            ["Test status", humanStatus(finding.executionStatus)],
+            ["What happened", finding.actualResult],
+            ["Evidence", finding.evidenceReference],
+            ["Issue reference", finding.issueId],
+            ["Limitation", finding.limitation],
+          ])}
+        </article>`,
       )
       .join("");
 
@@ -699,8 +704,18 @@
     th, td { text-align: left; vertical-align: top; border: 1px solid #dadce0; padding: .65rem; }
     thead th { background: #e8f0fe; }
     tbody th span { display: block; font-weight: 400; min-width: 12rem; }
+    .finding-list { display: grid; gap: 1rem; }
+    .finding { border: 1px solid #dadce0; border-left: .35rem solid #1a73e8; border-radius: .6rem; padding: 1rem; }
+    .finding h3 { margin: 0; color: #202124; font-size: 1.05rem; }
+    .finding-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+    .finding-heading p { margin: 0; }
+    .finding dl { margin-bottom: 0; }
+    .result-badge { display: inline-block; border-radius: 999px; padding: .25rem .7rem; background: #e8eaed; color: #202124; font-weight: 700; white-space: nowrap; }
+    .result-pass { background: #e6f4ea; color: #137333; }
+    .result-fail { background: #fce8e6; color: #a50e0e; }
+    .result-not-applicable { background: #fef7e0; color: #8d5b00; }
     footer { color: #5f6368; margin-top: 2rem; }
-    @media (max-width: 42rem) { dl { display: block; } dl div { display: block; } dd { padding-top: 0; border-top: 0; } }
+    @media (max-width: 42rem) { dl { display: block; } dl div { display: block; } dd { padding-top: 0; border-top: 0; } .finding-heading { display: block; } .finding-heading p { margin-top: .75rem; } }
     @media print { :root { background: #fff; font-size: 10pt; } main { width: 100%; padding: 0; } header, section { break-inside: avoid; border-radius: 0; } a { color: inherit; } }
   </style>
 </head>
@@ -765,11 +780,8 @@
   </section>
   <section aria-labelledby="findings-title">
     <h2 id="findings-title">4. Evaluate the sample</h2>
-    <div class="table-wrap"><table>
-      <caption>Recorded findings for ${summary.criterionChecks} criterion checks</caption>
-      <thead><tr><th scope="col">Test</th><th scope="col">WCAG SC</th><th scope="col">Status</th><th scope="col">Outcome</th><th scope="col">Actual result</th><th scope="col">Evidence</th><th scope="col">Issue</th><th scope="col">Limitation</th></tr></thead>
-      <tbody>${findingRows}</tbody>
-    </table></div>
+    <p>${summary.criterionChecks} criterion checks across ${summary.selectedTests} selected tests. Each result is shown as a separate finding.</p>
+    <div class="finding-list">${findingCards}</div>
   </section>
   <section aria-labelledby="report-title">
     <h2 id="report-title">5. Report the findings</h2>

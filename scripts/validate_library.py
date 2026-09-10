@@ -449,11 +449,20 @@ def validate_html() -> list[str]:
 def validate_no_prohibited_references() -> list[str]:
     errors: list[str] = []
     checked_extensions = {".md", ".json", ".html", ".css", ".js", ".py", ".csv", ".yml", ".yaml"}
+    content_extensions = {".md", ".json", ".html", ".csv", ".yml", ".yaml"}
+    ignored_directories = {
+        ".git",
+        "node_modules",
+        "__pycache__",
+        ".venv",
+        "venv",
+        ".voice-venv",
+        "tutorial-video",
+    }
     for source in ROOT.rglob("*"):
         if (
             not source.is_file()
-            or ".git" in source.parts
-            or "node_modules" in source.parts
+            or any(part in ignored_directories for part in source.parts)
             or source.suffix.lower() not in checked_extensions
         ):
             continue
@@ -461,7 +470,10 @@ def validate_no_prohibited_references() -> list[str]:
         for prohibited in PROHIBITED_REFERENCES:
             if prohibited.lower() in content.lower():
                 errors.append(f"Prohibited reference {prohibited!r} in {source.relative_to(ROOT)}")
-        if not ({".github", "workflows"} <= set(source.parts)):
+        if (
+            source.suffix.lower() in content_extensions
+            and not ({".github", "workflows"} <= set(source.parts))
+        ):
             for term in PROHIBITED_CONTEXT_TERMS:
                 if re.search(rf"\b{re.escape(term)}(?:s|ing|ed|er|ers)?\b", content, re.IGNORECASE):
                     errors.append(

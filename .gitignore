@@ -1,6 +1,12 @@
 __pycache__/
 *.py[cod]
 node_modules/
+.venv/
+venv/
+.voice-venv/
+tutorial-video/*
+!tutorial-video/carlashub-accessibility-test-case-manager-tutorial-faster.mp4
+!tutorial-video/carlashub-accessibility-test-case-manager-tutorial-transcript.md
 .DS_Store
 .idea/
 .vscode/

@@ -15,7 +15,7 @@ DATA_PATH = ROOT / "content" / "test-cases.json"
 PROCEDURES_PATH = ROOT / "content" / "component-procedures.json"
 MANUAL_CHECKS_PATH = ROOT / "content" / "criterion-manual-checks.json"
 INDEX_PATH = ROOT / "index.html"
-ASSET_VERSION = "20260909-reporting"
+ASSET_VERSION = "20260910-branding"
 
 
 THEMES = {
@@ -144,7 +144,7 @@ def render_picker_card(
           </div>
           <div class="picker-card-actions">
             <label class="picker-select" for="{control_id}">
-              <input id="{control_id}" type="checkbox" name="selected-tests" value="{escape(identifier)}" aria-describedby="{description_id}" data-test-select>
+              <input id="{control_id}" type="checkbox" name="selected-tests" value="{escape(identifier)}" aria-label="Include {escape(identifier)} {escape(title)} in my test plan" aria-describedby="{description_id}" data-test-select>
               <span>Add<span class="visually-hidden"> {escape(identifier)} {escape(title)} to my test plan</span></span>
             </label>
             <a class="open-test" href="#{escape(target)}">Open test<span class="visually-hidden"> {escape(identifier)} {escape(title)}</span></a>
@@ -287,10 +287,32 @@ def page_shell(content: str) -> str:
     <div class="app-frame">
       <aside class="library-sidebar" aria-label="Test case navigation and test plan">
         <div class="sidebar-inner">
-          <a class="brand" href="#page-title" aria-label="CarlasHub accessibility test case manager home">
-            <span class="brand-name">CarlasHub</span>
-            <span class="brand-subtitle">Accessibility test case manager</span>
-          </a>
+          <div class="brand-panel">
+            <a class="brand" href="#page-title" aria-label="CarlasHub accessibility test case manager home">
+              <span class="brand-name">CarlasHub</span>
+              <span class="brand-subtitle">Accessibility test case manager</span>
+            </a>
+            <nav class="brand-links" aria-label="CarlasHub social links">
+              <a href="https://carlashub.com/" rel="me">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-3.1a15.8 15.8 0 0 0-1.4-3.4A8.1 8.1 0 0 1 18.9 8ZM12 4c.9 1.1 1.6 2.4 1.9 4h-3.8c.3-1.6 1-2.9 1.9-4ZM9.6 4.6A15.8 15.8 0 0 0 8.2 8H5.1a8.1 8.1 0 0 1 4.5-3.4ZM4 12c0-.7.1-1.4.3-2h3.6a16.5 16.5 0 0 0 0 4H4.3c-.2-.6-.3-1.3-.3-2Zm1.1 4h3.1a15.8 15.8 0 0 0 1.4 3.4A8.1 8.1 0 0 1 5.1 16Zm6.9 4c-.9-1.1-1.6-2.4-1.9-4h3.8c-.3 1.6-1 2.9-1.9 4Zm2.2-6H9.8a14.5 14.5 0 0 1 0-4h4.4a14.5 14.5 0 0 1 0 4Zm.2 5.4a15.8 15.8 0 0 0 1.4-3.4h3.1a8.1 8.1 0 0 1-4.5 3.4ZM16.1 14a16.5 16.5 0 0 0 0-4h3.6a8 8 0 0 1 0 4h-3.6Z"/>
+                </svg>
+                <span class="visually-hidden">CarlasHub website</span>
+              </a>
+              <a href="https://uk.linkedin.com/in/carla-goncalves-9a01a5164" rel="me">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M6.5 8.4H3.2V19h3.3V8.4ZM4.9 3A1.9 1.9 0 1 0 5 6.8 1.9 1.9 0 0 0 4.9 3ZM19.8 12.9c0-3.2-1.7-4.8-4-4.8a3.5 3.5 0 0 0-3.2 1.8V8.4H9.3V19h3.3v-5.3c0-1.4.3-2.8 2-2.8 1.7 0 1.7 1.6 1.7 2.9V19h3.3l.2-6.1Z"/>
+                </svg>
+                <span class="visually-hidden">Carla Gonçalves on LinkedIn</span>
+              </a>
+              <a href="https://github.com/CarlasHub" rel="me">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill-rule="evenodd" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.9.1-.7.4-1.1.6-1.4-2.3-.3-4.7-1.1-4.7-5a3.9 3.9 0 0 1 1-2.7c-.1-.3-.4-1.3.1-2.7 0 0 .9-.3 2.8 1a9.7 9.7 0 0 1 5.1 0c2-1.3 2.8-1 2.8-1 .6 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1.1 2.7c0 3.9-2.4 4.7-4.7 5 .4.3.7 1 .7 2V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" clip-rule="evenodd"/>
+                </svg>
+                <span class="visually-hidden">CarlasHub on GitHub</span>
+              </a>
+            </nav>
+          </div>
           <nav class="sidebar-group" aria-labelledby="library-nav-title">
             <h2 id="library-nav-title">Test case manager</h2>
             <ul class="site-nav">
@@ -336,6 +358,19 @@ def page_shell(content: str) -> str:
         <main id="main-content" tabindex="-1">
 {content}
         </main>
+        <footer class="site-footer">
+          <div>
+            <p class="footer-brand">CarlasHub</p>
+            <p>Practical accessibility resources for clearer, more consistent testing.</p>
+          </div>
+          <nav aria-label="CarlasHub and project links">
+            <a href="https://carlashub.com/" rel="me">Website</a>
+            <a href="https://uk.linkedin.com/in/carla-goncalves-9a01a5164" rel="me">LinkedIn</a>
+            <a href="https://github.com/CarlasHub" rel="me">GitHub</a>
+            <a href="https://github.com/CarlasHub/a11y-test-cases">Project repository</a>
+          </nav>
+          <p class="project-status"><strong>Work in progress.</strong> The manager is actively maintained and may continue to change.</p>
+        </footer>
       </div>
     </div>
   </div>

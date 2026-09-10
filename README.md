@@ -3,9 +3,19 @@
 [![Quality checks](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/quality.yml/badge.svg)](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/quality.yml)
 [![GitHub Pages](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/pages.yml/badge.svg)](https://github.com/CarlasHub/a11y-test-cases/actions/workflows/pages.yml)
 
+> **Work in progress:** This project is actively being developed. Test coverage, wording, data formats and reporting may change, so review exported results before sharing or relying on them.
+
 Use the manager to select, organise and run accessibility test cases for websites and web applications.
 
 **[Open the CarlasHub accessibility test case manager](https://carlashub.github.io/a11y-test-cases/)**
+
+## Video tutorial
+
+**[Watch the faster step-by-step tutorial (11 minutes, 12 seconds)](tutorial-video/carlashub-accessibility-test-case-manager-tutorial-faster.mp4)**
+
+The tutorial demonstrates the complete workflow: setting up an evaluation, choosing tests, running five checks against Buggyland, recording results and evidence, reviewing coverage, and exporting CSV, HTML and JSON reports. Captions, a visible cursor and keyboard-focus indicators are included.
+
+**[Read the accessible tutorial transcript](tutorial-video/carlashub-accessibility-test-case-manager-tutorial-transcript.md)**
 
 ## What this repository provides
 
@@ -15,8 +25,8 @@ Use the manager to select, organise and run accessibility test cases for website
 - 165 structured manual steps, each with an action, expected result and evidence instruction.
 - Search, type filters and colour-coded theme filters.
 - A browser-saved, coverage-aware test plan with a guided runner, result fields and direct links to each test.
-- A working CSV export and import for continuing a test run in another browser.
-- WCAG-EM-inspired scope, sampling and review fields, plus readable HTML and structured JSON evaluation reports.
+- A spreadsheet-ready UTF-8 CSV export and import for continuing a test run in another browser or opening results in Excel, Numbers or Google Sheets.
+- WCAG-EM-inspired scope, sampling and review fields, plus readable, responsive HTML finding cards and structured JSON evaluation reports.
 - Reusable scope, result, issue and summary templates.
 
 Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
@@ -30,7 +40,7 @@ Level AAA success criteria and obsolete SC 4.1.1 are outside the result set.
 5. Add the relevant component procedures and WCAG groups to **My test plan**, then review its criterion coverage.
 6. Choose **Start testing** and follow each selected procedure's numbered steps in order.
 7. Record an actual result, evidence and a separate outcome for every applicable WCAG success criterion.
-8. Export the working CSV to continue the run in another browser; use **Import working CSV** to restore it.
+8. Export the spreadsheet-ready working CSV to continue the run in another browser, open it in a spreadsheet app, or use **Import working CSV** to restore it.
 9. Open **Review and report** to check gaps, then export a readable HTML report or the complete structured JSON data.
 
 Read [Start here](START-HERE.md) before beginning a formal test run. Use [Choose pages and journeys](01-test-setup/choose-pages-and-journeys.md) to define the sample and [Test environments](01-test-setup/test-environments.md) to record reproducible browser, device and assistive-technology coverage.
