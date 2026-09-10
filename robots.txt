@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://carlashub.github.io/a11y-test-cases/sitemap.xml
