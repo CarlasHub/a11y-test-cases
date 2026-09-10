@@ -38,7 +38,7 @@ jobs:
       - name: Prepare Pages artifact
         run: |
           mkdir -p _site/assets _site/04-templates
-          cp index.html _site/
+          cp index.html robots.txt sitemap.xml _site/
           cp assets/app.js assets/favicon.svg assets/styles.css _site/assets/
           cp 04-templates/test-results.csv _site/04-templates/
 
